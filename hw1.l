@@ -90,8 +90,21 @@ int slove_sparce(){
             break;
     }
     //printf("xd<%s> %d\n",yytext,init);
-    if(init==0|init==12|init==16|init==18)
-        sscanf(yytext, "%d", &yylval.int_types);
+    switch(init)
+    {
+        case 0:
+            yylval.int_types=BOOLTYPE;
+            break;
+        case 12:
+            yylval.int_types=INTTYPE;
+            break;
+        case 16:
+            yylval.int_types=REALTYPE;
+            break;
+        case 18:
+            yylval.int_types=STRINGTYPE;
+            break;
+    }
     return init;
 }
 %}
@@ -173,7 +186,7 @@ error_simple .
 
 {identifier} %{
             //Symbol_Tables.insert(yytext);
-            sscanf(str_temp.c_str(), "%s", &yylval.string_types);
+            sscanf(yytext, "%s", &yylval.string_types);
             return token("identifier",IDENTIFIER);
             %}
 

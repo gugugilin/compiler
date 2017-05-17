@@ -190,12 +190,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "hw1.y" /* yacc.c:1909  */
+#line 45 "hw1.y" /* yacc.c:1909  */
 
     bool bool_types;
     int int_types;
     double real_types;
-    char* string_types;
+    const char* string_types;
 
 #line 201 "y.tab.h" /* yacc.c:1909  */
 };

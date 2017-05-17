@@ -1,7 +1,10 @@
 %{
-#include<list>
-#include<stdio.h>
-#include<string>
+#include <list>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <sstream>  
+#include <math.h>
 #include "lex.yy.c"
 #define Trace(t) {printf("[%d]:%s",linenum,t);}
 using namespace std;
@@ -19,6 +22,23 @@ void insert_scope(string name){
     scope_name.push_front(name);
 }
 
+bool isNum(string str)  
+{  
+    stringstream sin(str);  
+    double d;  
+    char c;  
+    if(!(sin >> d))  
+    {
+        return false;
+    }
+    if (sin >> c) 
+    {
+        return false;
+    }  
+    return true;  
+} 
+
+
 %}
 
 /* tokens */
@@ -26,7 +46,7 @@ void insert_scope(string name){
     bool bool_types;
     int int_types;
     double real_types;
-    char* string_types;
+    const char* string_types;
 }
 %token <int_types>BOOL
 %token BREAK
@@ -110,10 +130,10 @@ void insert_scope(string name){
 %left EXPONENTIATION
 %nonassoc UMINUS
 %nonassoc UADD
-%type<real_types> number_expression rel_expression expression
+%type<real_types> number_expression rel_expression 
 %type<int_types> Int_expression index_expression type
 %type<bool_types> bool_expression
-%type<string_types> commponent constant_exp
+%type<string_types> commponent constant_exp expression arrays_variable
 
 
 %%
@@ -156,13 +176,11 @@ statement:      IDENTIFIER ASSIGNMENT expression|
                 
                 
 //declaration
-type:           BOOL|
-                INT|
-                REAL|
-                STRING
-                {
-                    Trace("Reducing to type\n");
-                };
+type:           BOOL{$$=$1;}|
+                INT{$$=$1;}|
+                REAL{$$=$1;}|
+                STRING{$$=$1;};
+                
                         
 declarations:   declaration declarations|
                 /*empty*/
@@ -177,6 +195,7 @@ declaration:    Variables_declaration|
 
 arrays_variable:IDENTIFIER LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
                 {
+                    $$="5";
                     Trace("Reducing to arrays_variable\n");
                 };
 arrays_declaration:VAR IDENTIFIER LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS type
@@ -200,97 +219,85 @@ Variables_declaration:
                 };
 
 
-constant_exp:   rel_expression|
-                bool_expression|
-                STRING_CONSTANTS
-                {
-                    
-                    Trace("Reducing to constant_exp\n");
-                };
+constant_exp:   rel_expression{$$=std::to_string($1).c_str();}|
+                bool_expression{$$=std::to_string($1).c_str();}|
+                STRING_CONSTANTS{$$=$1;};
+
                 
 // expression                
-expression:     bool_expression|
-                number_expression|
-                Int_expression|
-                rel_expression|
-                STRING_CONSTANTS
-                {
-                    Trace("Reducing to expression\n");
-                };  
+expression:     bool_expression{$$=std::to_string($1).c_str();}|
+                number_expression{$$=std::to_string($1).c_str();}|
+                Int_expression{$$=std::to_string($1).c_str();}|
+                rel_expression{$$=std::to_string($1).c_str();}|
+                STRING_CONSTANTS{$$=$1;};
+                
                 
 
             
 index_expression:
-                Int_expression|
-                IDENTIFIER
-                {
-                //only int;
-                };
+                Int_expression{$$=$1;}|
+                IDENTIFIER{$$=atoi($1);};
+                
                 
             
 number_expression: 
-                LEFT_PARENTHESE number_expression RIGHT_PARENTHESE|
-                number_expression ARITHMETIC_ADD number_expression|
-                number_expression ARITHMETIC_SUB number_expression|
-                number_expression ARITHMETIC_MUL number_expression|
-                number_expression ARITHMETIC_DIV number_expression|
-                number_expression EXPONENTIATION number_expression|
-                ARITHMETIC_SUB number_expression %prec UMINUS|
-                ARITHMETIC_ADD number_expression %prec UADD|
+                LEFT_PARENTHESE number_expression RIGHT_PARENTHESE{$$=$2;}|
+                number_expression ARITHMETIC_ADD number_expression{$$=$1+$3;}|
+                number_expression ARITHMETIC_SUB number_expression{$$=$1-$3;}|
+                number_expression ARITHMETIC_MUL number_expression{$$=$1*$3;}|
+                number_expression ARITHMETIC_DIV number_expression{$$=$1/$3;}|
+                number_expression EXPONENTIATION number_expression{$$=pow($1,$3);}|
+                ARITHMETIC_SUB number_expression %prec UMINUS{$$=-$2;}|
+                ARITHMETIC_ADD number_expression %prec UADD{$$=$2;}|
                 commponent
                 {
-                    //if  not number +-*/    ex:3+"lala"
-                    Trace("Reducing to number_expression\n");
+                    if(isNum($1))
+                         $$ = atof($1);
+                    else
+                    {
+                        Trace("must be a number\n");
+                        //return 1;
+                    }
                 };
-rel_expression: LEFT_PARENTHESE rel_expression RIGHT_PARENTHESE|
-                rel_expression ARITHMETIC_ADD rel_expression|
-                rel_expression ARITHMETIC_SUB rel_expression|
-                rel_expression ARITHMETIC_MUL rel_expression|
-                rel_expression ARITHMETIC_DIV rel_expression|
-                rel_expression EXPONENTIATION rel_expression|
-                ARITHMETIC_SUB rel_expression %prec UMINUS|
-                ARITHMETIC_ADD rel_expression %prec UADD|
-                REAL_CONSTANTS|INTEGER_CONSTANTS
-                {
-                    Trace("Reducing to rel_expression\n");
-                };
+rel_expression: LEFT_PARENTHESE rel_expression RIGHT_PARENTHESE{$$=$2;}|
+                rel_expression ARITHMETIC_ADD rel_expression{$$=$1+$3;}|
+                rel_expression ARITHMETIC_SUB rel_expression{$$=$1-$3;}|
+                rel_expression ARITHMETIC_MUL rel_expression{$$=$1*$3;}|
+                rel_expression ARITHMETIC_DIV rel_expression{$$=$1/$3;}|
+                rel_expression EXPONENTIATION rel_expression{$$=pow($1,$3);}|
+                ARITHMETIC_SUB rel_expression %prec UMINUS{$$=-$2;}|
+                ARITHMETIC_ADD rel_expression %prec UADD{$$=$2;}|
+                REAL_CONSTANTS{$$=$1;}|
+                INTEGER_CONSTANTS{$$=$1;};
                 
-Int_expression: LEFT_PARENTHESE Int_expression RIGHT_PARENTHESE|
-                Int_expression ARITHMETIC_ADD Int_expression|
-                Int_expression ARITHMETIC_SUB Int_expression|
-                Int_expression ARITHMETIC_MUL Int_expression|
-                Int_expression ARITHMETIC_DIV Int_expression|
-                Int_expression EXPONENTIATION Int_expression|
-                ARITHMETIC_SUB Int_expression %prec UMINUS|
-                ARITHMETIC_ADD Int_expression %prec UADD|
-                INTEGER_CONSTANTS
-                {
-                    Trace("Reducing to Int_expression\n");
-                };
+Int_expression: LEFT_PARENTHESE Int_expression RIGHT_PARENTHESE{$$=$2;}|
+                Int_expression ARITHMETIC_ADD Int_expression{$$=$1+$3;}|
+                Int_expression ARITHMETIC_SUB Int_expression{$$=$1-$3;}|
+                Int_expression ARITHMETIC_MUL Int_expression{$$=$1*$3;}|
+                Int_expression ARITHMETIC_DIV Int_expression{$$=$1/$3;}|
+                Int_expression EXPONENTIATION Int_expression{$$=pow($1,$3);}|
+                ARITHMETIC_SUB Int_expression %prec UMINUS{$$=-$2;}|
+                ARITHMETIC_ADD Int_expression %prec UADD{$$=$2;}|
+                INTEGER_CONSTANTS{$$=$1;};
                 
-bool_expression:number_expression RELATIONAL_BIG number_expression|
-                number_expression RELATIONAL_LEAST number_expression|
-                number_expression RELATIONAL_LEAST_EQ number_expression|
-                number_expression RELATIONAL_BIG_EQ number_expression|
-                number_expression RELATIONAL_EQ number_expression|
-                number_expression RELATIONAL_NEQ number_expression|
-                LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE|
-                bool_expression AND bool_expression|
-                bool_expression OR bool_expression|
-                NOT bool_expression|
-                BOOLEAN_CONSTANTS_FALSE|
-                BOOLEAN_CONSTANTS_TRUE
-                {
-                    Trace("Reducing to bool_expression\n");
-                };
-commponent:     INTEGER_CONSTANTS|
-                REAL_CONSTANTS|
-                IDENTIFIER|
-                arrays_variable
-                {
-                    
-                    Trace("Reducing to commponent\n");
-                };
+bool_expression:number_expression RELATIONAL_BIG number_expression{$$=($1>$3);}|
+                number_expression RELATIONAL_LEAST number_expression{$$=($1<$3);}|
+                number_expression RELATIONAL_LEAST_EQ number_expression{$$=($1<=$3);}|
+                number_expression RELATIONAL_BIG_EQ number_expression{$$=($1>=$3);}|
+                number_expression RELATIONAL_EQ number_expression{$$=($1==$3);}|
+                number_expression RELATIONAL_NEQ number_expression{$$=($1!=$3);}|
+                LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE{$$=$2;}|
+                bool_expression AND bool_expression{$$=($1&$3);}|
+                bool_expression OR bool_expression{$$=($1|$3);}|
+                NOT bool_expression{$$=!$2;}|
+                BOOLEAN_CONSTANTS_FALSE{$$=$1;}|
+                BOOLEAN_CONSTANTS_TRUE{$$=$1;};
+                
+commponent:     INTEGER_CONSTANTS{$$=std::to_string($1).c_str();}|
+                REAL_CONSTANTS{$$=std::to_string($1).c_str();}|
+                IDENTIFIER{$$=$1;}|
+                arrays_variable{$$=$1;}
+                
                 
 /*
 //other
