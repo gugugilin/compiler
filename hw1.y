@@ -137,7 +137,7 @@ bool isNum(string str)
 %nonassoc UADD
 %type<real_types> number_expression rel_expression const_number_expression
 %type<int_types> Int_expression index_expression type 
-%type<bool_types> bool_expression
+%type<bool_types> bool_expression const_bool_expression
 %type<string_types> constant_exp expression arrays_variable
 %type<idnode> IDENTIFERS commponent
 
@@ -239,7 +239,7 @@ Variables_declaration:
 
 
 constant_exp:   const_number_expression{$$=std::to_string($1).c_str();}
-                |bool_expression{$$=std::to_string($1).c_str();}|
+                |const_bool_expression{$$=std::to_string($1).c_str();}|
                 STRING_CONSTANTS{$$=$1;};
 
                 
@@ -321,7 +321,20 @@ Int_expression: LEFT_PARENTHESE Int_expression RIGHT_PARENTHESE{$$=$2;}|
                 ARITHMETIC_SUB Int_expression %prec UMINUS{$$=-$2;}|
                 ARITHMETIC_ADD Int_expression %prec UADD{$$=$2;}|
                 INTEGER_CONSTANTS{$$=$1;};
-                
+const_bool_expression:
+                const_number_expression RELATIONAL_BIG const_number_expression{$$=($1>$3);}|
+                const_number_expression RELATIONAL_LEAST const_number_expression{$$=($1<$3);}|
+                const_number_expression RELATIONAL_LEAST_EQ const_number_expression{$$=($1<=$3);}|
+                const_number_expression RELATIONAL_BIG_EQ const_number_expression{$$=($1>=$3);}|
+                const_number_expression RELATIONAL_EQ const_number_expression{$$=($1==$3);}|
+                const_number_expression RELATIONAL_NEQ const_number_expression{$$=($1!=$3);}|
+                LEFT_PARENTHESE const_bool_expression RIGHT_PARENTHESE{$$=$2;}|
+                const_bool_expression AND const_bool_expression{$$=($1&$3);}|
+                const_bool_expression OR const_bool_expression{$$=($1|$3);}|
+                NOT const_bool_expression{$$=!$2;}|
+                BOOLEAN_CONSTANTS_FALSE{$$=$1;}|
+                BOOLEAN_CONSTANTS_TRUE{$$=$1;};
+
 bool_expression:number_expression RELATIONAL_BIG number_expression{$$=($1>$3);}|
                 number_expression RELATIONAL_LEAST number_expression{$$=($1<$3);}|
                 number_expression RELATIONAL_LEAST_EQ number_expression{$$=($1<=$3);}|
