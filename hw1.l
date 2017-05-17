@@ -77,7 +77,7 @@ int token(string name,int TokenIndex){
     LIST;
     if(name.compare("keyword")==0)
         touper(temp);
-    printf("<%s:'%s'>\n",name.c_str(),temp);
+    //printf("<%s:'%s'>\n",name.c_str(),temp);
     clear_linebuf(temp);
     return TokenIndex;
 }
@@ -181,12 +181,12 @@ error_simple .
 
 
 {Integer_Constants} %{sscanf(yytext, "%d", &yylval.int_types);return token("Integer_Constants",INTEGER_CONSTANTS);%}     
-{Real_Constants} %{sscanf(yytext, "%f", &yylval.real_types); return token("REAL_CONSTANTS",REAL_CONSTANTS);%}
+{Real_Constants} %{yylval.real_types=atof(yytext); return token("REAL_CONSTANTS",REAL_CONSTANTS);%}
 {Boolean_Constants} %{yylval.bool_types=strcmp(yytext,"true"); return token("Boolean_Constants",slove_sparce());%}
 
 {identifier} %{
             //Symbol_Tables.insert(yytext);
-            sscanf(yytext, "%s", &yylval.string_types);
+            yylval.string_types=str_temp.c_str();
             return token("identifier",IDENTIFIER);
             %}
 
@@ -200,7 +200,7 @@ error_simple .
 <String_Constants>\"\" {str_temp+="\"";LIST;}
 <String_Constants>\n {exit(-1);}
 <String_Constants>\" {printf("<string:\"%s\">\n",str_temp.c_str());BEGIN 0;
-sscanf(str_temp.c_str(), "%s", &yylval.string_types);
+yylval.string_types=str_temp.c_str();
 return STRING_CONSTANTS;LIST;
 }
 <String_Constants>. {str_temp+=yytext;LIST;}

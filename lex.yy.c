@@ -646,7 +646,7 @@ int token(string name,int TokenIndex){
     LIST;
     if(name.compare("keyword")==0)
         touper(temp);
-    printf("<%s:'%s'>\n",name.c_str(),temp);
+    //printf("<%s:'%s'>\n",name.c_str(),temp);
     clear_linebuf(temp);
     return TokenIndex;
 }
@@ -1099,7 +1099,7 @@ sscanf(yytext, "%d", &yylval.int_types);return token("Integer_Constants",INTEGER
 case 27:
 YY_RULE_SETUP
 #line 184 "hw1.l"
-sscanf(yytext, "%f", &yylval.real_types); return token("REAL_CONSTANTS",REAL_CONSTANTS);
+yylval.real_types=atof(yytext); return token("REAL_CONSTANTS",REAL_CONSTANTS);
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
@@ -1111,7 +1111,7 @@ YY_RULE_SETUP
 #line 187 "hw1.l"
 
             //Symbol_Tables.insert(yytext);
-            sscanf(yytext, "%s", &yylval.string_types);
+            yylval.string_types=str_temp.c_str();
             return token("identifier",IDENTIFIER);
 
 	YY_BREAK
@@ -1139,7 +1139,7 @@ case 33:
 YY_RULE_SETUP
 #line 202 "hw1.l"
 {printf("<string:\"%s\">\n",str_temp.c_str());BEGIN 0;
-sscanf(str_temp.c_str(), "%s", &yylval.string_types);
+yylval.string_types=str_temp.c_str();
 return STRING_CONSTANTS;LIST;
 }
 	YY_BREAK

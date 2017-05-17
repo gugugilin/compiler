@@ -182,41 +182,25 @@ type:           BOOL{$$=$1;}|
                 STRING{$$=$1;};
                 
                         
-declarations:   declaration declarations|
-                /*empty*/
-                {
-                    Trace("Reducing to declarations\n");
-                };
+declarations:   declaration declarations|/*empty*/;
+                
 declaration:    Variables_declaration|
-                consts_declaration
-                {
-                    Trace("Reducing to declaration\n");
-                };
+                consts_declaration;
+                
 
-arrays_variable:IDENTIFIER LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
-                {
-                    $$="5";
-                    Trace("Reducing to arrays_variable\n");
-                };
-arrays_declaration:VAR IDENTIFIER LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS type
-                {
-                        
-                        Trace("Reducing to arrays_declaration\n");
-                };
+arrays_variable:IDENTIFIER LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS{$$="5";};
+
+arrays_declaration:VAR IDENTIFIER LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS type;                
                 
 
 consts_declaration:
-                CONST IDENTIFIER ASSIGNMENT constant_exp
-                {
-                    Trace("Reducing to consts\n");
-                };
+                CONST IDENTIFIER ASSIGNMENT constant_exp{printf("Variables_declaration:%s\n",$4);};
+                
 Variables_declaration:
-                VAR IDENTIFIER type ASSIGNMENT constant_exp|
+                VAR IDENTIFIER type ASSIGNMENT constant_exp{printf("Variables_declaration:%s\n",$5);}|
                 VAR IDENTIFIER type|
-                arrays_declaration
-                {
-                    Trace("Reducing to Variables\n");
-                };
+                arrays_declaration;
+                
 
 
 constant_exp:   rel_expression{$$=std::to_string($1).c_str();}|

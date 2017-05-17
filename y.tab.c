@@ -615,13 +615,13 @@ static const yytype_uint16 yyrline[] =
 {
        0,   140,   140,   144,   148,   149,   156,   157,   159,   164,
      165,   166,   167,   168,   169,   170,   179,   180,   181,   182,
-     185,   187,   190,   191,   196,   201,   209,   214,   215,   216,
-     222,   223,   224,   228,   229,   230,   231,   232,   238,   239,
-     244,   245,   246,   247,   248,   249,   250,   251,   252,   262,
-     263,   264,   265,   266,   267,   268,   269,   270,   271,   273,
-     274,   275,   276,   277,   278,   279,   280,   281,   283,   284,
-     285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     296,   297,   298,   299
+     185,   185,   187,   188,   191,   193,   197,   200,   201,   202,
+     206,   207,   208,   212,   213,   214,   215,   216,   222,   223,
+     228,   229,   230,   231,   232,   233,   234,   235,   236,   246,
+     247,   248,   249,   250,   251,   252,   253,   254,   255,   257,
+     258,   259,   260,   261,   262,   263,   264,   265,   267,   268,
+     269,   270,   271,   272,   273,   274,   275,   276,   277,   278,
+     280,   281,   282,   283
 };
 #endif
 
@@ -1609,166 +1609,134 @@ yyreduce:
 #line 1610 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 21:
-#line 187 "hw1.y" /* yacc.c:1646  */
-    {
-                    Trace("Reducing to declarations\n");
-                }
-#line 1618 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 23:
-#line 192 "hw1.y" /* yacc.c:1646  */
-    {
-                    Trace("Reducing to declaration\n");
-                }
-#line 1626 "y.tab.c" /* yacc.c:1646  */
-    break;
-
   case 24:
-#line 197 "hw1.y" /* yacc.c:1646  */
-    {
-                    (yyval.string_types)="5";
-                    Trace("Reducing to arrays_variable\n");
-                }
-#line 1635 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 25:
-#line 202 "hw1.y" /* yacc.c:1646  */
-    {
-                        
-                        Trace("Reducing to arrays_declaration\n");
-                }
-#line 1644 "y.tab.c" /* yacc.c:1646  */
+#line 191 "hw1.y" /* yacc.c:1646  */
+    {(yyval.string_types)="5";}
+#line 1616 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 210 "hw1.y" /* yacc.c:1646  */
-    {
-                    Trace("Reducing to consts\n");
-                }
-#line 1652 "y.tab.c" /* yacc.c:1646  */
+#line 197 "hw1.y" /* yacc.c:1646  */
+    {printf("Variables_declaration:%s\n",(yyvsp[0].string_types));}
+#line 1622 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 29:
-#line 217 "hw1.y" /* yacc.c:1646  */
-    {
-                    Trace("Reducing to Variables\n");
-                }
-#line 1660 "y.tab.c" /* yacc.c:1646  */
+  case 27:
+#line 200 "hw1.y" /* yacc.c:1646  */
+    {printf("Variables_declaration:%s\n",(yyvsp[0].string_types));}
+#line 1628 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 222 "hw1.y" /* yacc.c:1646  */
+#line 206 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=std::to_string((yyvsp[0].real_types)).c_str();}
-#line 1666 "y.tab.c" /* yacc.c:1646  */
+#line 1634 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 223 "hw1.y" /* yacc.c:1646  */
+#line 207 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=std::to_string((yyvsp[0].bool_types)).c_str();}
-#line 1672 "y.tab.c" /* yacc.c:1646  */
+#line 1640 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 224 "hw1.y" /* yacc.c:1646  */
+#line 208 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=(yyvsp[0].string_types);}
-#line 1678 "y.tab.c" /* yacc.c:1646  */
+#line 1646 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 228 "hw1.y" /* yacc.c:1646  */
+#line 212 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=std::to_string((yyvsp[0].bool_types)).c_str();}
-#line 1684 "y.tab.c" /* yacc.c:1646  */
+#line 1652 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 229 "hw1.y" /* yacc.c:1646  */
+#line 213 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=std::to_string((yyvsp[0].real_types)).c_str();}
-#line 1690 "y.tab.c" /* yacc.c:1646  */
+#line 1658 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 230 "hw1.y" /* yacc.c:1646  */
+#line 214 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=std::to_string((yyvsp[0].int_types)).c_str();}
-#line 1696 "y.tab.c" /* yacc.c:1646  */
+#line 1664 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 231 "hw1.y" /* yacc.c:1646  */
+#line 215 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=std::to_string((yyvsp[0].real_types)).c_str();}
-#line 1702 "y.tab.c" /* yacc.c:1646  */
+#line 1670 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 232 "hw1.y" /* yacc.c:1646  */
+#line 216 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=(yyvsp[0].string_types);}
-#line 1708 "y.tab.c" /* yacc.c:1646  */
+#line 1676 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 238 "hw1.y" /* yacc.c:1646  */
+#line 222 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 1714 "y.tab.c" /* yacc.c:1646  */
+#line 1682 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 239 "hw1.y" /* yacc.c:1646  */
+#line 223 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=atoi((yyvsp[0].string_types));}
-#line 1720 "y.tab.c" /* yacc.c:1646  */
+#line 1688 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 244 "hw1.y" /* yacc.c:1646  */
+#line 228 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-1].real_types);}
-#line 1726 "y.tab.c" /* yacc.c:1646  */
+#line 1694 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 245 "hw1.y" /* yacc.c:1646  */
+#line 229 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-2].real_types)+(yyvsp[0].real_types);}
-#line 1732 "y.tab.c" /* yacc.c:1646  */
+#line 1700 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 246 "hw1.y" /* yacc.c:1646  */
+#line 230 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-2].real_types)-(yyvsp[0].real_types);}
-#line 1738 "y.tab.c" /* yacc.c:1646  */
+#line 1706 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 247 "hw1.y" /* yacc.c:1646  */
+#line 231 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-2].real_types)*(yyvsp[0].real_types);}
-#line 1744 "y.tab.c" /* yacc.c:1646  */
+#line 1712 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 248 "hw1.y" /* yacc.c:1646  */
+#line 232 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-2].real_types)/(yyvsp[0].real_types);}
-#line 1750 "y.tab.c" /* yacc.c:1646  */
+#line 1718 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 249 "hw1.y" /* yacc.c:1646  */
+#line 233 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=pow((yyvsp[-2].real_types),(yyvsp[0].real_types));}
-#line 1756 "y.tab.c" /* yacc.c:1646  */
+#line 1724 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 250 "hw1.y" /* yacc.c:1646  */
+#line 234 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=-(yyvsp[0].real_types);}
-#line 1762 "y.tab.c" /* yacc.c:1646  */
+#line 1730 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 251 "hw1.y" /* yacc.c:1646  */
+#line 235 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[0].real_types);}
-#line 1768 "y.tab.c" /* yacc.c:1646  */
+#line 1736 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 253 "hw1.y" /* yacc.c:1646  */
+#line 237 "hw1.y" /* yacc.c:1646  */
     {
                     if(isNum((yyvsp[0].string_types)))
                          (yyval.real_types) = atof((yyvsp[0].string_types));
@@ -1778,221 +1746,221 @@ yyreduce:
                         //return 1;
                     }
                 }
-#line 1782 "y.tab.c" /* yacc.c:1646  */
+#line 1750 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 262 "hw1.y" /* yacc.c:1646  */
+#line 246 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-1].real_types);}
-#line 1788 "y.tab.c" /* yacc.c:1646  */
+#line 1756 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 263 "hw1.y" /* yacc.c:1646  */
+#line 247 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-2].real_types)+(yyvsp[0].real_types);}
-#line 1794 "y.tab.c" /* yacc.c:1646  */
+#line 1762 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 264 "hw1.y" /* yacc.c:1646  */
+#line 248 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-2].real_types)-(yyvsp[0].real_types);}
-#line 1800 "y.tab.c" /* yacc.c:1646  */
+#line 1768 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 265 "hw1.y" /* yacc.c:1646  */
+#line 249 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-2].real_types)*(yyvsp[0].real_types);}
-#line 1806 "y.tab.c" /* yacc.c:1646  */
+#line 1774 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 266 "hw1.y" /* yacc.c:1646  */
+#line 250 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[-2].real_types)/(yyvsp[0].real_types);}
-#line 1812 "y.tab.c" /* yacc.c:1646  */
+#line 1780 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 267 "hw1.y" /* yacc.c:1646  */
+#line 251 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=pow((yyvsp[-2].real_types),(yyvsp[0].real_types));}
-#line 1818 "y.tab.c" /* yacc.c:1646  */
+#line 1786 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 268 "hw1.y" /* yacc.c:1646  */
+#line 252 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=-(yyvsp[0].real_types);}
-#line 1824 "y.tab.c" /* yacc.c:1646  */
+#line 1792 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 269 "hw1.y" /* yacc.c:1646  */
+#line 253 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[0].real_types);}
-#line 1830 "y.tab.c" /* yacc.c:1646  */
+#line 1798 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 270 "hw1.y" /* yacc.c:1646  */
+#line 254 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[0].real_types);}
-#line 1836 "y.tab.c" /* yacc.c:1646  */
+#line 1804 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 271 "hw1.y" /* yacc.c:1646  */
+#line 255 "hw1.y" /* yacc.c:1646  */
     {(yyval.real_types)=(yyvsp[0].int_types);}
-#line 1842 "y.tab.c" /* yacc.c:1646  */
+#line 1810 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 273 "hw1.y" /* yacc.c:1646  */
+#line 257 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[-1].int_types);}
-#line 1848 "y.tab.c" /* yacc.c:1646  */
+#line 1816 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 274 "hw1.y" /* yacc.c:1646  */
+#line 258 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[-2].int_types)+(yyvsp[0].int_types);}
-#line 1854 "y.tab.c" /* yacc.c:1646  */
+#line 1822 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 275 "hw1.y" /* yacc.c:1646  */
+#line 259 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[-2].int_types)-(yyvsp[0].int_types);}
-#line 1860 "y.tab.c" /* yacc.c:1646  */
+#line 1828 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 276 "hw1.y" /* yacc.c:1646  */
+#line 260 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[-2].int_types)*(yyvsp[0].int_types);}
-#line 1866 "y.tab.c" /* yacc.c:1646  */
+#line 1834 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 277 "hw1.y" /* yacc.c:1646  */
+#line 261 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[-2].int_types)/(yyvsp[0].int_types);}
-#line 1872 "y.tab.c" /* yacc.c:1646  */
+#line 1840 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 278 "hw1.y" /* yacc.c:1646  */
+#line 262 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=pow((yyvsp[-2].int_types),(yyvsp[0].int_types));}
-#line 1878 "y.tab.c" /* yacc.c:1646  */
+#line 1846 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 279 "hw1.y" /* yacc.c:1646  */
+#line 263 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=-(yyvsp[0].int_types);}
-#line 1884 "y.tab.c" /* yacc.c:1646  */
+#line 1852 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 280 "hw1.y" /* yacc.c:1646  */
+#line 264 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 1890 "y.tab.c" /* yacc.c:1646  */
+#line 1858 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 281 "hw1.y" /* yacc.c:1646  */
+#line 265 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 1896 "y.tab.c" /* yacc.c:1646  */
+#line 1864 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 283 "hw1.y" /* yacc.c:1646  */
+#line 267 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=((yyvsp[-2].real_types)>(yyvsp[0].real_types));}
-#line 1902 "y.tab.c" /* yacc.c:1646  */
+#line 1870 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 284 "hw1.y" /* yacc.c:1646  */
+#line 268 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=((yyvsp[-2].real_types)<(yyvsp[0].real_types));}
-#line 1908 "y.tab.c" /* yacc.c:1646  */
+#line 1876 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 285 "hw1.y" /* yacc.c:1646  */
+#line 269 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=((yyvsp[-2].real_types)<=(yyvsp[0].real_types));}
-#line 1914 "y.tab.c" /* yacc.c:1646  */
+#line 1882 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 286 "hw1.y" /* yacc.c:1646  */
+#line 270 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=((yyvsp[-2].real_types)>=(yyvsp[0].real_types));}
-#line 1920 "y.tab.c" /* yacc.c:1646  */
+#line 1888 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 287 "hw1.y" /* yacc.c:1646  */
+#line 271 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=((yyvsp[-2].real_types)==(yyvsp[0].real_types));}
-#line 1926 "y.tab.c" /* yacc.c:1646  */
+#line 1894 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 288 "hw1.y" /* yacc.c:1646  */
+#line 272 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=((yyvsp[-2].real_types)!=(yyvsp[0].real_types));}
-#line 1932 "y.tab.c" /* yacc.c:1646  */
+#line 1900 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 289 "hw1.y" /* yacc.c:1646  */
+#line 273 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=(yyvsp[-1].bool_types);}
-#line 1938 "y.tab.c" /* yacc.c:1646  */
+#line 1906 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 290 "hw1.y" /* yacc.c:1646  */
+#line 274 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=((yyvsp[-2].bool_types)&(yyvsp[0].bool_types));}
-#line 1944 "y.tab.c" /* yacc.c:1646  */
+#line 1912 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 291 "hw1.y" /* yacc.c:1646  */
+#line 275 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=((yyvsp[-2].bool_types)|(yyvsp[0].bool_types));}
-#line 1950 "y.tab.c" /* yacc.c:1646  */
+#line 1918 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 292 "hw1.y" /* yacc.c:1646  */
+#line 276 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=!(yyvsp[0].bool_types);}
-#line 1956 "y.tab.c" /* yacc.c:1646  */
+#line 1924 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 293 "hw1.y" /* yacc.c:1646  */
+#line 277 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=(yyvsp[0].bool_types);}
-#line 1962 "y.tab.c" /* yacc.c:1646  */
+#line 1930 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 294 "hw1.y" /* yacc.c:1646  */
+#line 278 "hw1.y" /* yacc.c:1646  */
     {(yyval.bool_types)=(yyvsp[0].bool_types);}
-#line 1968 "y.tab.c" /* yacc.c:1646  */
+#line 1936 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 296 "hw1.y" /* yacc.c:1646  */
+#line 280 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=std::to_string((yyvsp[0].int_types)).c_str();}
-#line 1974 "y.tab.c" /* yacc.c:1646  */
+#line 1942 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 297 "hw1.y" /* yacc.c:1646  */
+#line 281 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=std::to_string((yyvsp[0].real_types)).c_str();}
-#line 1980 "y.tab.c" /* yacc.c:1646  */
+#line 1948 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 298 "hw1.y" /* yacc.c:1646  */
+#line 282 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=(yyvsp[0].string_types);}
-#line 1986 "y.tab.c" /* yacc.c:1646  */
+#line 1954 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 299 "hw1.y" /* yacc.c:1646  */
+#line 283 "hw1.y" /* yacc.c:1646  */
     {(yyval.string_types)=(yyvsp[0].string_types);}
-#line 1992 "y.tab.c" /* yacc.c:1646  */
+#line 1960 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1996 "y.tab.c" /* yacc.c:1646  */
+#line 1964 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2220,7 +2188,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 310 "hw1.y" /* yacc.c:1906  */
+#line 294 "hw1.y" /* yacc.c:1906  */
 
 
 
