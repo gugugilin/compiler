@@ -167,8 +167,12 @@ statements:     declarations statements  |
                 };
                 
                 
-statement:      IDENTIFERS ASSIGNMENT expression|
-                IDENTIFERS LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS ASSIGNMENT expression|
+statement:      IDENTIFERS ASSIGNMENT expression{
+                //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
+                }|
+                IDENTIFERS LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS ASSIGNMENT expression{
+                //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
+                }|
                 PRINT expression|
                 PRINTLN expression|
                 READ IDENTIFERS|
@@ -187,9 +191,14 @@ type:           BOOL{$$=$1;}|
                 REAL{$$=$1;}|
                 STRING{$$=$1;};
        
-       
+SAVE_IDENTIFERS:IDENTIFIER{
+                //if find the Id in table than return 1 to expression error
+                //else not do anything
+                };
        
 IDENTIFERS:    IDENTIFIER{
+                // must find the value and the attrubutes to ASSIGNMENT in table
+                // if not find return 1 to expression error
                 union YYSTYPE temp;
                 temp.idnode.IDAttributes=2;
                 temp.idnode.IDvalue=$1;
@@ -205,15 +214,26 @@ declaration:    Variables_declaration|
 
 arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS{$$="5";};
 
-arrays_declaration:VAR IDENTIFERS LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS type;                
+arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS type
+                {
+                //if SAVE_IDENTIFERS not return 1 to expression error than creat the item in table
+                };                
                 
 
 consts_declaration:
-                CONST IDENTIFERS ASSIGNMENT constant_exp{printf("Variables_declaration:%s\n",$4);};
+                CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp{
+                //if SAVE_IDENTIFERS not return 1 to expression error constant_exp is pass
+                //than creat the item in table
+                printf("Variables_declaration:%s\n",$4);
+                };
                 
 Variables_declaration:
-                VAR IDENTIFERS type ASSIGNMENT constant_exp{printf("Variables_declaration:%s\n",$5);}|
-                VAR IDENTIFERS type|
+                VAR SAVE_IDENTIFERS type ASSIGNMENT constant_exp{
+                //if SAVE_IDENTIFERS not return 1 to expression error constant_exp is pass
+                //than creat the item in table
+                printf("Variables_declaration:%s\n",$5);
+                }|
+                VAR SAVE_IDENTIFERS type|
                 arrays_declaration;
                 
 
