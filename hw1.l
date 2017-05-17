@@ -24,6 +24,40 @@ extern "C"{
         return 1;
     }
 }
+class id_node{
+public:
+    id_node(){
+        IDnumber=0;
+        IDname="none";
+        IDtype=-1;
+        IDAttributes=-1;
+        IDvalue="none";
+    }
+    id_node(int number,string name,int types,int attributes,string value){
+        IDnumber=number;
+        IDname=name;
+        IDtype=types;
+        IDAttributes=attributes;
+        IDvalue=value;
+    }
+    string get_IDname(){return IDname;}
+    int get_IDnumber(){return IDnumber;}
+    int get_IDtype(){return IDtype;}
+    int get_IDAttributes(){return IDAttributes;}
+    string get_IDvalue(){return IDvalue;}
+    string set_IDvalue(string new_value){
+    IDvalue=new_value;
+    return IDvalue;}
+    void print_node(){
+        printf("IDname:%s\nIDtype:%d\n,IDAttributes:%d\nIDvalue:%s\n",IDname.c_str(),IDtype,IDAttributes,IDvalue.c_str());
+    }
+private:
+    int IDnumber;
+    string IDname;
+    int IDtype;
+    int IDAttributes;//function(0) or const(1) or var(2)
+    string IDvalue;
+};
 
 class Hash { 
 public: 
@@ -31,34 +65,32 @@ public:
         counter=0;
     } 
     int lookout(string s){
-        map<string,int>::iterator temp=hash_table_string.find(s);
+        map<string,id_node>::iterator temp=hash_table_string.find(s);
         if (temp==hash_table_string.end())
             return -1;
-        return temp->second;
+        return temp->second.get_IDnumber();
     }
-    int insert(string s){
-        if(lookout(s)==-1){
-            hash_table_string[s]=counter;
-            hash_table_int[counter]=s;
+    int insert(id_node node){
+        if(lookout(node.get_IDname())==-1){
+            hash_table_string[node.get_IDname()]=node;
+            hash_table_int[counter]=node;
             counter++;
             return counter-1;
         }
         return counter;
     }
-    string lookout(int index){
-        map<int,string>::iterator temp=hash_table_int.find(index);
-        if (temp==hash_table_int.end())
-            return "Not found";
-        return temp->second;
-    }
     void dump(){
-        for (map<int,string>::iterator it=hash_table_int.begin(); it!=hash_table_int.end(); ++it)
-            printf("%d => %s \n",it->first,it->second.c_str());
+        for (map<int,id_node>::iterator it=hash_table_int.begin(); it!=hash_table_int.end(); ++it)
+        {
+            printf("------ID print: %d ------ \n ",it->first);
+            it->second.print_node();
+            printf("------------------------- \n ",it->first);
+        }
     }
 private:
     int counter;
-    map<int,string> hash_table_int;
-    map<string,int> hash_table_string;
+    map<int,id_node> hash_table_int;
+    map<string,id_node> hash_table_string;
 };
 
 Hash Symbol_Tables;
