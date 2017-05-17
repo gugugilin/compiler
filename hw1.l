@@ -5,6 +5,10 @@
 #include<list>
 #include "y.tab.h"
 #define MAX_LINE_LENG 1024
+#define BOOLTYPE 1
+#define INTTYPE 2
+#define REALTYPE 3
+#define STRINGTYPE 4
 #define LIST     {strcat(buf,yytext);strcat(temp,yytext);}
 #define tokenInteger(t,i) {LIST; printf("<%s:%d>\n","t",i);}
 #define tokenid(t,s) {LIST; printf("<%s:%s>\n","t",s);}
@@ -86,6 +90,8 @@ int slove_sparce(){
             break;
     }
     //printf("xd<%s> %d\n",yytext,init);
+    if(init==0|init==12|init==16|init==18)
+        sscanf(yytext, "%d", &yylval.int_types);
     return init;
 }
 %}
@@ -161,12 +167,13 @@ error_simple .
 {compound_operators} %{return token("compound_operators", slove_sparce());%}
 
 
-{Integer_Constants} %{return token("Integer_Constants",INTEGER_CONSTANTS);%}     
-{Real_Constants} %{return token("REAL_CONSTANTS",REAL_CONSTANTS);%}
-{Boolean_Constants} %{return token("Boolean_Constants",slove_sparce());%}
+{Integer_Constants} %{sscanf(yytext, "%d", &yylval.int_types);return token("Integer_Constants",INTEGER_CONSTANTS);%}     
+{Real_Constants} %{sscanf(yytext, "%f", &yylval.real_types); return token("REAL_CONSTANTS",REAL_CONSTANTS);%}
+{Boolean_Constants} %{yylval.bool_types=strcmp(yytext,"true"); return token("Boolean_Constants",slove_sparce());%}
 
 {identifier} %{
-            Symbol_Tables.insert(yytext);
+            //Symbol_Tables.insert(yytext);
+            sscanf(str_temp.c_str(), "%s", &yylval.string_types);
             return token("identifier",IDENTIFIER);
             %}
 
@@ -180,6 +187,7 @@ error_simple .
 <String_Constants>\"\" {str_temp+="\"";LIST;}
 <String_Constants>\n {exit(-1);}
 <String_Constants>\" {printf("<string:\"%s\">\n",str_temp.c_str());BEGIN 0;
+sscanf(str_temp.c_str(), "%s", &yylval.string_types);
 return STRING_CONSTANTS;LIST;
 }
 <String_Constants>. {str_temp+=yytext;LIST;}

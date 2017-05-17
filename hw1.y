@@ -1,9 +1,24 @@
 %{
+#include<list>
 #include<stdio.h>
 #include<string>
 #include "lex.yy.c"
 #define Trace(t) {printf("[%d]:%s",linenum,t);}
+using namespace std;
+list<string> scope_name;
 void yyerror(char * msg);
+void scope_init(){
+    string name="goble";
+    scope_name.push_front(name);
+}
+string get_scope(){
+    return scope_name.front();
+}
+
+void insert_scope(string name){
+    scope_name.push_front(name);
+}
+
 %}
 
 /* tokens */
@@ -13,7 +28,7 @@ void yyerror(char * msg);
     double real_types;
     char* string_types;
 }
-%token BOOL
+%token <int_types>BOOL
 %token BREAK
 %token CASE
 %token CONST
@@ -25,13 +40,13 @@ void yyerror(char * msg);
 %token GO
 %token IF
 %token IMPORT
-%token INT
+%token <int_types>INT
 %token NIL
 %token PRINT
 %token PRINTLN
-%token REAL
+%token <int_types>REAL
 %token RETURN
-%token STRING
+%token <int_types>STRING
 %token STRUCT
 %token SWITCH
 %token TYPE
@@ -53,8 +68,8 @@ void yyerror(char * msg);
 %token COMPOUND_OPERATORS_SUB
 %token COMPOUND_OPERATORS_MUL
 %token COMPOUND_OPERATORS_DIV
-%token<bool_types> BOOLEAN_CONSTANTS_FALSE
-%token<bool_types> BOOLEAN_CONSTANTS_TRUE
+%token <bool_types> BOOLEAN_CONSTANTS_FALSE
+%token <bool_types> BOOLEAN_CONSTANTS_TRUE
 %token AND
 %token NOT
 %token OR
@@ -78,10 +93,10 @@ void yyerror(char * msg);
 
 
 
-%token<int_types> INTEGER_CONSTANTS
-%token IDENTIFIER
-%token<real_types> REAL_CONSTANTS
-%token<string_types> STRING_CONSTANTS
+%token <int_types> INTEGER_CONSTANTS
+%token <string_types>IDENTIFIER
+%token <real_types> REAL_CONSTANTS
+%token <string_types> STRING_CONSTANTS
 %token ERROR_SIMPLE
 
 
@@ -95,6 +110,10 @@ void yyerror(char * msg);
 %left EXPONENTIATION
 %nonassoc UMINUS
 %nonassoc UADD
+%type<real_types> number_expression rel_expression expression
+%type<int_types> Int_expression index_expression type
+%type<bool_types> bool_expression
+%type<string_types> commponent constant_exp
 
 
 %%
@@ -102,41 +121,21 @@ start_symbol:   program
                 {
                     Trace("Reducing to start_symbol\n");
                 };
-program:        body|declarations
+program:        body
                 {
                     Trace("Reducing to program\n");
                 };
-body:           statements|declarations
+body:           statements|
+                declarations
                 {
                     Trace("Reducing to body\n");
                 };
 
-function:       FUNC type IDENTIFIER LEFT_PARENTHESE formal_arguments 
-                RIGHT_PARENTHESE LEFT_BRACKETS statements RIGHT_BRACKETS
-                {
-                    Trace("Reducing to function\n");
-                };
-                
-                
-function_invocation:
-                statements|declarations
-                {
-                };
-Compound:       LEFT_BRACKETS body RIGHT_BRACKETS
-                {
-                };
 
-formal_arguments: /*empty*/ | formal_argument
-                {
-                    Trace("Reducing to formal_arguments\n");
-                };
 
-formal_argument: /*empty*/
-                {
-                    Trace("Reducing to formal_argument\n");
-                };
-
-statements:     /*empty*/ | declarations statements  | statement statements
+statements:     declarations statements  |
+                statement statements|
+                /*empty*/ 
                 {
                     Trace("Reducing to statements\n");
                 };
@@ -144,8 +143,11 @@ statements:     /*empty*/ | declarations statements  | statement statements
                 
 statement:      IDENTIFIER ASSIGNMENT expression|
                 IDENTIFIER LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS ASSIGNMENT expression|
-                PRINT expression|PRINTLN expression|
-                READ IDENTIFIER|RETURN | RETURN expression
+                PRINT expression|
+                PRINTLN expression|
+                READ IDENTIFIER|
+                RETURN |
+                RETURN expression
                 {
                     Trace("Reducing to statement\n");
                 };
@@ -154,23 +156,27 @@ statement:      IDENTIFIER ASSIGNMENT expression|
                 
                 
 //declaration
-type:           BOOL|INT|REAL|STRING
+type:           BOOL|
+                INT|
+                REAL|
+                STRING
                 {
                     Trace("Reducing to type\n");
                 };
                         
-declarations:   /*empty*/|declaration declarations
+declarations:   declaration declarations|
+                /*empty*/
                 {
                     Trace("Reducing to declarations\n");
                 };
-declaration:    Variables_declaration|consts_declaration
+declaration:    Variables_declaration|
+                consts_declaration
                 {
                     Trace("Reducing to declaration\n");
                 };
 
-arrays_variable:IDENTIFIER LEFT_SQUARE_BRACKETS number_expression RIGHT_SQUARE_BRACKETS
+arrays_variable:IDENTIFIER LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
                 {
-                    //if number_expression not number >> 88
                     Trace("Reducing to arrays_variable\n");
                 };
 arrays_declaration:VAR IDENTIFIER LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS type
@@ -187,22 +193,80 @@ consts_declaration:
                 };
 Variables_declaration:
                 VAR IDENTIFIER type ASSIGNMENT constant_exp|
-                VAR IDENTIFIER type|arrays_declaration
+                VAR IDENTIFIER type|
+                arrays_declaration
                 {
                     Trace("Reducing to Variables\n");
                 };
 
 
-constant_exp:   rel_expression|bool_expression|STRING_CONSTANTS
+constant_exp:   rel_expression|
+                bool_expression|
+                STRING_CONSTANTS
                 {
+                    
                     Trace("Reducing to constant_exp\n");
                 };
                 
 // expression                
-expression:     bool_expression|number_expression|Int_expression|rel_expression|STRING_CONSTANTS
+expression:     bool_expression|
+                number_expression|
+                Int_expression|
+                rel_expression|
+                STRING_CONSTANTS
                 {
                     Trace("Reducing to expression\n");
                 };  
+                
+
+            
+index_expression:
+                Int_expression|
+                IDENTIFIER
+                {
+                //only int;
+                };
+                
+            
+number_expression: 
+                LEFT_PARENTHESE number_expression RIGHT_PARENTHESE|
+                number_expression ARITHMETIC_ADD number_expression|
+                number_expression ARITHMETIC_SUB number_expression|
+                number_expression ARITHMETIC_MUL number_expression|
+                number_expression ARITHMETIC_DIV number_expression|
+                number_expression EXPONENTIATION number_expression|
+                ARITHMETIC_SUB number_expression %prec UMINUS|
+                ARITHMETIC_ADD number_expression %prec UADD|
+                commponent
+                {
+                    //if  not number +-*/    ex:3+"lala"
+                    Trace("Reducing to number_expression\n");
+                };
+rel_expression: LEFT_PARENTHESE rel_expression RIGHT_PARENTHESE|
+                rel_expression ARITHMETIC_ADD rel_expression|
+                rel_expression ARITHMETIC_SUB rel_expression|
+                rel_expression ARITHMETIC_MUL rel_expression|
+                rel_expression ARITHMETIC_DIV rel_expression|
+                rel_expression EXPONENTIATION rel_expression|
+                ARITHMETIC_SUB rel_expression %prec UMINUS|
+                ARITHMETIC_ADD rel_expression %prec UADD|
+                REAL_CONSTANTS|INTEGER_CONSTANTS
+                {
+                    Trace("Reducing to rel_expression\n");
+                };
+                
+Int_expression: LEFT_PARENTHESE Int_expression RIGHT_PARENTHESE|
+                Int_expression ARITHMETIC_ADD Int_expression|
+                Int_expression ARITHMETIC_SUB Int_expression|
+                Int_expression ARITHMETIC_MUL Int_expression|
+                Int_expression ARITHMETIC_DIV Int_expression|
+                Int_expression EXPONENTIATION Int_expression|
+                ARITHMETIC_SUB Int_expression %prec UMINUS|
+                ARITHMETIC_ADD Int_expression %prec UADD|
+                INTEGER_CONSTANTS
+                {
+                    Trace("Reducing to Int_expression\n");
+                };
                 
 bool_expression:number_expression RELATIONAL_BIG number_expression|
                 number_expression RELATIONAL_LEAST number_expression|
@@ -213,52 +277,29 @@ bool_expression:number_expression RELATIONAL_BIG number_expression|
                 LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE|
                 bool_expression AND bool_expression|
                 bool_expression OR bool_expression|
-                NOT bool_expression|BOOLEAN_CONSTANTS_FALSE|BOOLEAN_CONSTANTS_TRUE
+                NOT bool_expression|
+                BOOLEAN_CONSTANTS_FALSE|
+                BOOLEAN_CONSTANTS_TRUE
                 {
-                    Trace("Reducing to Int_expression\n");
+                    Trace("Reducing to bool_expression\n");
                 };
-            
-number_expression: LEFT_PARENTHESE number_expression RIGHT_PARENTHESE|
-                number_expression ARITHMETIC_ADD number_expression|
-                number_expression ARITHMETIC_SUB number_expression|
-                number_expression ARITHMETIC_MUL number_expression|
-                number_expression ARITHMETIC_DIV number_expression|
-                number_expression EXPONENTIATION number_expression|
-                ARITHMETIC_SUB number_expression %prec UMINUS|
-                ARITHMETIC_ADD number_expression %prec UADD|commponent
+commponent:     INTEGER_CONSTANTS|
+                REAL_CONSTANTS|
+                IDENTIFIER|
+                arrays_variable
                 {
-                    //if  not number +-*/    ex:3+"lala"
-                    Trace("Reducing to Int_expression\n");
-                };
-Int_expression: LEFT_PARENTHESE Int_expression RIGHT_PARENTHESE|
-                Int_expression ARITHMETIC_ADD Int_expression|Int_expression ARITHMETIC_SUB Int_expression|
-                Int_expression ARITHMETIC_MUL Int_expression|Int_expression ARITHMETIC_DIV Int_expression|
-                Int_expression EXPONENTIATION Int_expression|ARITHMETIC_SUB Int_expression %prec UMINUS|
-                ARITHMETIC_ADD Int_expression %prec UADD|INTEGER_CONSTANTS
-                {
-                    Trace("Reducing to Int_expression\n");
-                };
-rel_expression: LEFT_PARENTHESE rel_expression RIGHT_PARENTHESE|
-                rel_expression ARITHMETIC_ADD rel_expression|rel_expression ARITHMETIC_SUB rel_expression|
-                rel_expression ARITHMETIC_MUL rel_expression|rel_expression ARITHMETIC_DIV rel_expression|
-                rel_expression EXPONENTIATION rel_expression|ARITHMETIC_SUB rel_expression %prec UMINUS|
-                ARITHMETIC_ADD rel_expression %prec UADD|REAL_CONSTANTS|INTEGER_CONSTANTS
-                {
-                    Trace("Reducing to Int_expression\n");
-                };
-                
-commponent:     INTEGER_CONSTANTS|REAL_CONSTANTS|IDENTIFIER|arrays_variable
-                {
+                    
                     Trace("Reducing to commponent\n");
                 };
                 
-                
+/*
 //other
 semi:           SEMICOLON
                 {
                 Trace("Reducing to semi\n");
                 }
                 ;
+                */
 %%
 
 
@@ -275,6 +316,7 @@ int main(int argc,char** argv)
         exit(1);
     }
     yyin = fopen(argv[1], "r");         /* open input file */
+    scope_init();
     int count=0;
     /* perform parsing */
     while(1)
@@ -283,7 +325,7 @@ int main(int argc,char** argv)
         {
             count++;
             yyerror("Parsing error !");    /* syntax error */
-            //break;
+            break;
         }
         else
             break;

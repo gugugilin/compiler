@@ -1,0 +1,24 @@
+function:       FUNC type IDENTIFIER LEFT_PARENTHESE formal_arguments 
+                RIGHT_PARENTHESE LEFT_BRACKETS statements RIGHT_BRACKETS
+                {
+                    Trace("Reducing to function\n");
+                };
+                
+                
+function_invocation:
+                statements|declarations
+                {
+                };
+Compound:       LEFT_BRACKETS body RIGHT_BRACKETS
+                {
+                };
+
+formal_arguments: /*empty*/ | formal_argument
+                {
+                    Trace("Reducing to formal_arguments\n");
+                };
+
+formal_argument: /*empty*/
+                {
+                    Trace("Reducing to formal_argument\n");
+                };
