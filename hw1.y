@@ -42,11 +42,16 @@ bool isNum(string str)
 %}
 
 /* tokens */
+
 %union{
     bool bool_types;
     int int_types;
     double real_types;
     const char* string_types;
+    struct node{
+        int IDAttributes;
+        const char* IDvalue;
+    }idnode;
 }
 %token <int_types>BOOL
 %token BREAK
@@ -130,10 +135,11 @@ bool isNum(string str)
 %left EXPONENTIATION
 %nonassoc UMINUS
 %nonassoc UADD
-%type<real_types> number_expression rel_expression 
-%type<int_types> Int_expression index_expression type
+%type<real_types> number_expression rel_expression const_number_expression
+%type<int_types> Int_expression index_expression type 
 %type<bool_types> bool_expression
-%type<string_types> commponent constant_exp expression arrays_variable
+%type<string_types> constant_exp expression arrays_variable
+%type<idnode> IDENTIFERS commponent
 
 
 %%
@@ -161,11 +167,11 @@ statements:     declarations statements  |
                 };
                 
                 
-statement:      IDENTIFIER ASSIGNMENT expression|
-                IDENTIFIER LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS ASSIGNMENT expression|
+statement:      IDENTIFERS ASSIGNMENT expression|
+                IDENTIFERS LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS ASSIGNMENT expression|
                 PRINT expression|
                 PRINTLN expression|
-                READ IDENTIFIER|
+                READ IDENTIFERS|
                 RETURN |
                 RETURN expression
                 {
@@ -180,7 +186,16 @@ type:           BOOL{$$=$1;}|
                 INT{$$=$1;}|
                 REAL{$$=$1;}|
                 STRING{$$=$1;};
-                
+       
+       
+       
+IDENTIFERS:    IDENTIFIER{
+                union YYSTYPE temp;
+                temp.idnode.IDAttributes=2;
+                temp.idnode.IDvalue=$1;
+                $$=temp.idnode;
+                };
+                                
                         
 declarations:   declaration declarations|/*empty*/;
                 
@@ -188,23 +203,23 @@ declaration:    Variables_declaration|
                 consts_declaration;
                 
 
-arrays_variable:IDENTIFIER LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS{$$="5";};
+arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS{$$="5";};
 
-arrays_declaration:VAR IDENTIFIER LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS type;                
+arrays_declaration:VAR IDENTIFERS LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS type;                
                 
 
 consts_declaration:
-                CONST IDENTIFIER ASSIGNMENT constant_exp{printf("Variables_declaration:%s\n",$4);};
+                CONST IDENTIFERS ASSIGNMENT constant_exp{printf("Variables_declaration:%s\n",$4);};
                 
 Variables_declaration:
-                VAR IDENTIFIER type ASSIGNMENT constant_exp{printf("Variables_declaration:%s\n",$5);}|
-                VAR IDENTIFIER type|
+                VAR IDENTIFERS type ASSIGNMENT constant_exp{printf("Variables_declaration:%s\n",$5);}|
+                VAR IDENTIFERS type|
                 arrays_declaration;
                 
 
 
-constant_exp:   rel_expression{$$=std::to_string($1).c_str();}|
-                bool_expression{$$=std::to_string($1).c_str();}|
+constant_exp:   const_number_expression{$$=std::to_string($1).c_str();}
+                |bool_expression{$$=std::to_string($1).c_str();}|
                 STRING_CONSTANTS{$$=$1;};
 
                 
@@ -220,9 +235,32 @@ expression:     bool_expression{$$=std::to_string($1).c_str();}|
             
 index_expression:
                 Int_expression{$$=$1;}|
-                IDENTIFIER{$$=atoi($1);};
+                IDENTIFERS{$$=atoi($1.IDvalue);};
                 
-                
+const_number_expression:
+                LEFT_PARENTHESE number_expression RIGHT_PARENTHESE{$$=$2;}|
+                number_expression ARITHMETIC_ADD number_expression{$$=$1+$3;}|
+                number_expression ARITHMETIC_SUB number_expression{$$=$1-$3;}|
+                number_expression ARITHMETIC_MUL number_expression{$$=$1*$3;}|
+                number_expression ARITHMETIC_DIV number_expression{$$=$1/$3;}|
+                number_expression EXPONENTIATION number_expression{$$=pow($1,$3);}|
+                ARITHMETIC_SUB number_expression %prec UMINUS{$$=-$2;}|
+                ARITHMETIC_ADD number_expression %prec UADD{$$=$2;}|
+                commponent
+                {
+                    if($1.IDAttributes!=1)
+                    {
+                        Trace("must be a const\n");
+                        //return 1;
+                    }
+                    if(isNum($1.IDvalue))
+                         $$ = atof($1.IDvalue);
+                    else
+                    {
+                        Trace("must be a number\n");
+                        //return 1;
+                    }
+                };
             
 number_expression: 
                 LEFT_PARENTHESE number_expression RIGHT_PARENTHESE{$$=$2;}|
@@ -235,8 +273,8 @@ number_expression:
                 ARITHMETIC_ADD number_expression %prec UADD{$$=$2;}|
                 commponent
                 {
-                    if(isNum($1))
-                         $$ = atof($1);
+                    if(isNum($1.IDvalue))
+                         $$ = atof($1.IDvalue);
                     else
                     {
                         Trace("must be a number\n");
@@ -277,10 +315,25 @@ bool_expression:number_expression RELATIONAL_BIG number_expression{$$=($1>$3);}|
                 BOOLEAN_CONSTANTS_FALSE{$$=$1;}|
                 BOOLEAN_CONSTANTS_TRUE{$$=$1;};
                 
-commponent:     INTEGER_CONSTANTS{$$=std::to_string($1).c_str();}|
-                REAL_CONSTANTS{$$=std::to_string($1).c_str();}|
-                IDENTIFIER{$$=$1;}|
-                arrays_variable{$$=$1;}
+commponent:     INTEGER_CONSTANTS{
+                union YYSTYPE temp;
+                temp.idnode.IDAttributes=1;
+                temp.idnode.IDvalue=std::to_string($1).c_str();
+                $$=temp.idnode;
+                }|
+                REAL_CONSTANTS{
+                union YYSTYPE temp;
+                temp.idnode.IDAttributes=1;
+                temp.idnode.IDvalue=std::to_string($1).c_str();
+                $$=temp.idnode;
+                }|
+                IDENTIFERS{$$=$1;}|
+                arrays_variable{
+                union YYSTYPE temp;
+                temp.idnode.IDAttributes=1;
+                temp.idnode.IDvalue=$1;
+                $$=temp.idnode;
+                };
                 
                 
 /*

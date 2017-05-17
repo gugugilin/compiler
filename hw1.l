@@ -93,7 +93,10 @@ private:
     map<string,id_node> hash_table_string;
 };
 
-Hash Symbol_Tables;
+Hash create_table(){
+    Hash temp;
+    return temp;
+}
 void clear_linebuf(char* s){
         memset(s,0,sizeof(buf));
 }
