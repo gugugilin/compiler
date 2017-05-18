@@ -360,7 +360,8 @@ constant_exp:   const_number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYP
 
                 
 // expression                
-expression:     number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str()).idnode;}
+expression:     commponent{$$=$1;}|
+                number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str()).idnode;}
                 |bool_expression{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str()).idnode;}|
                 STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1).idnode;};
                 
@@ -442,11 +443,21 @@ bool_expression:number_expression RELATIONAL_BIG number_expression{$$=($1>$3);}|
                 LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE{$$=$2;}|
                 bool_expression AND bool_expression{$$=($1&$3);}|
                 bool_expression OR bool_expression{$$=($1|$3);}|
-                NOT bool_expression{$$=!$2;}|
-                BOOLEAN_CONSTANTS_FALSE{$$=$1;}|
-                BOOLEAN_CONSTANTS_TRUE{$$=$1;};
+                NOT bool_expression{$$=!$2;}|commponent{
+                    if($1.IDtype!=BOOLTYPE){
+                        yyerror("must be bool");
+                        return 1;
+                    }
+                };
                 
-commponent:     INTEGER_CONSTANTS{
+                
+commponent:     BOOLEAN_CONSTANTS_FALSE{
+                $$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str()).idnode;
+                }|
+                BOOLEAN_CONSTANTS_TRUE{
+                $$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str()).idnode;
+                }|
+                INTEGER_CONSTANTS{
                 $$=create_idnode(CONST_ATTRIBUTE,INTTYPE,1,std::to_string($1).c_str()).idnode;
                 }|
                 REAL_CONSTANTS{
