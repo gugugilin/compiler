@@ -234,7 +234,7 @@ error_simple .
 
 {identifier} %{
             //Symbol_Tables.insert(yytext);
-            yylval.string_types=str_temp.c_str();
+            yylval.string_types=yytext;
             return token("identifier",IDENTIFIER);
             %}
 
@@ -249,7 +249,8 @@ error_simple .
 <String_Constants>\n {exit(-1);}
 <String_Constants>\" {printf("<string:\"%s\">\n",str_temp.c_str());BEGIN 0;
 yylval.string_types=str_temp.c_str();
-return STRING_CONSTANTS;LIST;
+LIST;
+return STRING_CONSTANTS;
 }
 <String_Constants>. {str_temp+=yytext;LIST;}
 

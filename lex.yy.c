@@ -1159,7 +1159,7 @@ YY_RULE_SETUP
 #line 235 "hw1.l"
 
             //Symbol_Tables.insert(yytext);
-            yylval.string_types=str_temp.c_str();
+            yylval.string_types=yytext;
             return token("identifier",IDENTIFIER);
 
 	YY_BREAK
@@ -1188,17 +1188,18 @@ YY_RULE_SETUP
 #line 250 "hw1.l"
 {printf("<string:\"%s\">\n",str_temp.c_str());BEGIN 0;
 yylval.string_types=str_temp.c_str();
-return STRING_CONSTANTS;LIST;
+LIST;
+return STRING_CONSTANTS;
 }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 254 "hw1.l"
+#line 255 "hw1.l"
 {str_temp+=yytext;LIST;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 257 "hw1.l"
+#line 258 "hw1.l"
 
             printf("error[%d]: %s\n",linenum,yytext);
             return ERROR_SIMPLE;
@@ -1206,10 +1207,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 261 "hw1.l"
+#line 262 "hw1.l"
 ECHO;
 	YY_BREAK
-#line 1213 "lex.yy.c"
+#line 1214 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(String_Constants):
 case YY_STATE_EOF(comment):
@@ -2212,7 +2213,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 261 "hw1.l"
+#line 262 "hw1.l"
 
 
 

@@ -1,4 +1,5 @@
 //test statement with int_exp
+var a[100] int
 a[3+8]=10
 a[-3]=10
 a[-3]=a[3+8]

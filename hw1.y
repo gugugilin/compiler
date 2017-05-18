@@ -29,8 +29,10 @@ string get_scope(){
 int inser_data(int idcount,string idname,string idvalue,int idtype, int idattrubutes){
     map<string,Hash>::iterator temp=scope_list.find(current_scop);
     Hash temp1=temp->second;
-    if (temp1.lookout(idname)==-1)
+    if (temp1.lookout(idname)!=-1)
+    {
         return -1;
+    }
     scope_list.erase(temp);
     id_node new_data(idcount,idname,idtype,idattrubutes,idvalue);
     temp1.insert(new_data);
@@ -42,7 +44,9 @@ id_node lookout_data(string name){
     id_node new_data(1,name,-1,-1,"None");
     Hash temp1=temp->second;
     if (temp1.lookout(name)==-1)
+    {
         return new_data;
+    }
     return temp1.get_data(name);
 }
 void insert_scope(string name){
@@ -52,14 +56,15 @@ void insert_scope(string name){
     current_scop=name;
 }
 typedef union YYSTYPE id_union;
-id_union::node create_idnode(int Attrubutes,int IDtype,int IDnumber,const char * IDvalue)
+id_union create_idnode(int Attrubutes,int IDtype,int IDnumber,const char * IDvalue)
 {
+    
     id_union temp;
     temp.idnode.IDAttributes=Attrubutes;
     temp.idnode.IDtype=IDtype;
     temp.idnode.IDnumber=IDnumber;
     temp.idnode.IDvalue=IDvalue;
-    return temp.idnode;
+    return temp;
 }
 
 bool isNum(string str)  
@@ -304,7 +309,7 @@ arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expressi
 consts_declaration:
                 CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp{
                     inser_data(1,$2.IDname,$4.IDvalue,$4.IDtype,CONST_ATTRIBUTE);
-                    printf("Const_declaration:%s\n",$4);
+                    printf("Const_declaration:%s\n",$4.IDvalue);
                 };
                 
 Variables_declaration:
@@ -327,15 +332,15 @@ Variables_declaration:
                 
 
 
-constant_exp:   const_number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str());}
-                |const_bool_expression{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str());}|
-                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1);};
+constant_exp:   const_number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str()).idnode;}
+                |const_bool_expression{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str()).idnode;}|
+                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1).idnode;};
 
                 
 // expression                
-expression:     number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str());}
-                |bool_expression{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str());}|
-                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1);};
+expression:     number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str()).idnode;}
+                |bool_expression{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str()).idnode;}|
+                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1).idnode;};
                 
                 
 
@@ -420,11 +425,10 @@ bool_expression:number_expression RELATIONAL_BIG number_expression{$$=($1>$3);}|
                 BOOLEAN_CONSTANTS_TRUE{$$=$1;};
                 
 commponent:     INTEGER_CONSTANTS{
-                $$=create_idnode(CONST_ATTRIBUTE,INTTYPE,1,std::to_string($1).c_str());
+                $$=create_idnode(CONST_ATTRIBUTE,INTTYPE,1,std::to_string($1).c_str()).idnode;
                 }|
                 REAL_CONSTANTS{
-                union YYSTYPE temp;
-                $$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str());
+                $$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str()).idnode;
                 }|
                 IDENTIFERS{$$=$1;}|
                 arrays_variable{$$=$1;};
