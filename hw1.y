@@ -39,6 +39,11 @@ int inser_data(int idcount,string idname,string idvalue,int idtype, int idattrub
     scope_list[current_scop]=temp1;
     return 1;
 }
+void update_data(string name,string value){
+    map<string,Hash>::iterator temp=scope_list.find(current_scop);
+    Hash temp1=temp->second;
+    temp1.update(name,value);
+}
 id_node lookout_data(string name){
     map<string,Hash>::iterator temp=scope_list.find(current_scop);
     id_node new_data(1,name,-1,-1,"None");
@@ -170,7 +175,7 @@ id_union create_idnode(int Attrubutes,int IDtype,int IDnumber,const char * IDval
 %type<real_types> number_expression const_number_expression
 %type<int_types> index_expression type const_index_expression
 %type<bool_types> bool_expression const_bool_expression
-%type<idnode> IDENTIFERS commponent arrays_variable constant_exp expression SAVE_IDENTIFERS 
+%type<idnode> IDENTIFERS commponent arrays_variable constant_exp expression SAVE_IDENTIFERS statement
 
 
 %%
@@ -199,17 +204,50 @@ statements:     declarations statements  |
                 
                 
 statement:      IDENTIFERS ASSIGNMENT expression{
-                //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
+                    //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
+                    if($1.IDAttributes==CONST_ATTRIBUTE)
+                    {
+                        yyerror("const variables can't change\n");
+                        return 1;
+                    }
+                    if($1.IDAttributes==ARRAY_ATTRIBUTE)
+                    {
+                        yyerror("It's array variables\n");
+                        return 1;
+                    }
+                    if($1.IDtype!=$3.IDtype){
+                        if(!(($1.IDtype==INTTYPE&&$3.IDtype==REALTYPE)||($3.IDtype==INTTYPE&&$1.IDtype==REALTYPE)))
+                        {
+                            yyerror("can't convert the type\n");
+                            return 1;
+                        }
+                    }
+                    update_data($1.IDname,$3.IDvalue);
+                    
                 }|
-                IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS ASSIGNMENT expression{
-                //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
+                arrays_variable ASSIGNMENT expression{
+                    //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
+                    if($1.IDAttributes==CONST_ATTRIBUTE)
+                    {
+                        yyerror("const variables can't change\n");
+                        return 1;
+                    }
+                    if($1.IDtype!=$3.IDtype){
+                        if(!(($1.IDtype==INTTYPE&&$3.IDtype==REALTYPE)||($3.IDtype==INTTYPE&&$1.IDtype==REALTYPE)))
+                        {
+                            yyerror("can't convert the type\n");
+                            return 1;
+                        }
+                    }
+                    update_data($1.IDname,$3.IDvalue);
                 }|
-                PRINT expression|
-                PRINTLN expression|
+                PRINT expression{printf("%s ",$2.IDvalue);}|
+                PRINTLN expression{printf(" %s \n",$2.IDvalue);}|
                 READ IDENTIFERS|
                 RETURN |
                 RETURN expression
                 {
+                    $$=$2;
                     Trace("Reducing to statement\n");
                 };
 
@@ -273,11 +311,11 @@ arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BR
                         yyerror("not ARRAY_type");
                         return 1;
                     }
-                    if ($1.IDnumber<= $3&&$1.IDnumber>=0){
-                        $1.IDAttributes=VAR_ATTRIBUTE;
+                    if ($3<=$1.IDnumber&& $3>=0){
                         $$=$1;
                     }
-                    else{
+                    else{ 
+                        printf("xd:%d %d\n",$1.IDnumber,$3);
                         yyerror("ARRAY index error");
                         return 1;
                     }

@@ -16,7 +16,8 @@ var a13 real =5+3
 var a14 real =+5.5E-2 - -5.5E-2
 var a15 bool = true
 var a16 bool = false&true
-var a17 bool = !false
+const a40 = 5.5
+var a17 bool = a40>2 
 var a18 string = "test"
 var a19 int
 var a20 real

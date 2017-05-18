@@ -190,7 +190,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 75 "hw1.y" /* yacc.c:1909  */
+#line 80 "hw1.y" /* yacc.c:1909  */
 
     bool bool_types;
     int int_types;

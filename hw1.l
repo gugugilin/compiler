@@ -32,6 +32,7 @@ extern "C"{
 class id_node{
 public:
     id_node(){
+        IDtable_count=0;
         IDnumber=1;
         IDname="none";
         IDtype=-1;
@@ -39,6 +40,7 @@ public:
         IDvalue="none";
     }
     id_node(int number,string name,int types,int attributes,string value){
+        IDtable_count=0;
         IDnumber=number;
         IDname=name;
         IDtype=types;
@@ -49,14 +51,17 @@ public:
     int get_IDnumber(){return IDnumber;}
     int get_IDtype(){return IDtype;}
     int get_IDAttributes(){return IDAttributes;}
+    int get_count(){return IDtable_count;}
     string get_IDvalue(){return IDvalue;}
+    void set_count(int index){IDtable_count=index;}
     string set_IDvalue(string new_value){
     IDvalue=new_value;
     return IDvalue;}
     void print_node(){
-        printf("IDname:%s\nIDtype:%d\n,IDAttributes:%d\nIDvalue:%s\n",IDname.c_str(),IDtype,IDAttributes,IDvalue.c_str());
+        printf("IDname:%s\nIDtype:%d\nIDAttributes:%d\nIDvalue:%s\nIDnumber:%d\n",IDname.c_str(),IDtype,IDAttributes,IDvalue.c_str(),IDnumber);
     }
 private:
+    int IDtable_count;
     int IDnumber;
     string IDname;
     int IDtype;
@@ -82,9 +87,20 @@ public:
             return new_data;
         return temp->second;
     }
-    
+    void update(string name,string value){
+        map<string,id_node>::iterator temp1=hash_table_string.find(name);
+        int index=temp1->second.get_count();
+        map<int,id_node>::iterator temp2=hash_table_int.find(index);
+        hash_table_string.erase(temp1);
+        hash_table_int.erase(temp2);
+        id_node temp=temp1->second;
+        temp.set_IDvalue(value);
+        hash_table_string[name]=temp;
+        hash_table_int[index]=temp;
+    }
     int insert(id_node node){
         if(lookout(node.get_IDname())==-1){
+            node.set_count(counter);
             hash_table_string[node.get_IDname()]=node;
             hash_table_int[counter]=node;
             counter++;
