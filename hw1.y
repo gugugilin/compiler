@@ -135,11 +135,11 @@ bool isNum(string str)
 %left EXPONENTIATION
 %nonassoc UMINUS
 %nonassoc UADD
-%type<real_types> number_expression rel_expression const_number_expression
-%type<int_types> Int_expression index_expression type 
+%type<real_types> number_expression const_number_expression
+%type<int_types> index_expression type const_index_expression
 %type<bool_types> bool_expression const_bool_expression
-%type<string_types> constant_exp expression arrays_variable
-%type<idnode> IDENTIFERS commponent
+%type<string_types> constant_exp expression 
+%type<idnode> IDENTIFERS commponent arrays_variable
 
 
 %%
@@ -170,7 +170,7 @@ statements:     declarations statements  |
 statement:      IDENTIFERS ASSIGNMENT expression{
                 //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
                 }|
-                IDENTIFERS LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS ASSIGNMENT expression{
+                IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS ASSIGNMENT expression{
                 //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
                 }|
                 PRINT expression|
@@ -212,9 +212,15 @@ declaration:    Variables_declaration|
                 consts_declaration;
                 
 
-arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS{$$="5";};
+arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
+                {
+                union YYSTYPE temp;
+                temp.idnode.IDAttributes=2;
+                temp.idnode.IDvalue=$1.IDvalue;
+                $$=temp.idnode;
+                };
 
-arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS Int_expression RIGHT_SQUARE_BRACKETS type
+arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
                 {
                 //if SAVE_IDENTIFERS not return 1 to expression error than creat the item in table
                 };                
@@ -246,16 +252,15 @@ constant_exp:   const_number_expression{$$=std::to_string($1).c_str();}
 // expression                
 expression:     bool_expression{$$=std::to_string($1).c_str();}|
                 number_expression{$$=std::to_string($1).c_str();}|
-                Int_expression{$$=std::to_string($1).c_str();}|
-                rel_expression{$$=std::to_string($1).c_str();}|
                 STRING_CONSTANTS{$$=$1;};
                 
                 
 
-            
+const_index_expression:
+                const_number_expression{$$=int($1);};
+                
 index_expression:
-                Int_expression{$$=$1;}|
-                IDENTIFERS{$$=atoi($1.IDvalue);};
+                number_expression{$$=int($1);};
                 
 const_number_expression:
                 LEFT_PARENTHESE number_expression RIGHT_PARENTHESE{$$=$2;}|
@@ -301,26 +306,7 @@ number_expression:
                         //return 1;
                     }
                 };
-rel_expression: LEFT_PARENTHESE rel_expression RIGHT_PARENTHESE{$$=$2;}|
-                rel_expression ARITHMETIC_ADD rel_expression{$$=$1+$3;}|
-                rel_expression ARITHMETIC_SUB rel_expression{$$=$1-$3;}|
-                rel_expression ARITHMETIC_MUL rel_expression{$$=$1*$3;}|
-                rel_expression ARITHMETIC_DIV rel_expression{$$=$1/$3;}|
-                rel_expression EXPONENTIATION rel_expression{$$=pow($1,$3);}|
-                ARITHMETIC_SUB rel_expression %prec UMINUS{$$=-$2;}|
-                ARITHMETIC_ADD rel_expression %prec UADD{$$=$2;}|
-                REAL_CONSTANTS{$$=$1;}|
-                INTEGER_CONSTANTS{$$=$1;};
-                
-Int_expression: LEFT_PARENTHESE Int_expression RIGHT_PARENTHESE{$$=$2;}|
-                Int_expression ARITHMETIC_ADD Int_expression{$$=$1+$3;}|
-                Int_expression ARITHMETIC_SUB Int_expression{$$=$1-$3;}|
-                Int_expression ARITHMETIC_MUL Int_expression{$$=$1*$3;}|
-                Int_expression ARITHMETIC_DIV Int_expression{$$=$1/$3;}|
-                Int_expression EXPONENTIATION Int_expression{$$=pow($1,$3);}|
-                ARITHMETIC_SUB Int_expression %prec UMINUS{$$=-$2;}|
-                ARITHMETIC_ADD Int_expression %prec UADD{$$=$2;}|
-                INTEGER_CONSTANTS{$$=$1;};
+
 const_bool_expression:
                 const_number_expression RELATIONAL_BIG const_number_expression{$$=($1>$3);}|
                 const_number_expression RELATIONAL_LEAST const_number_expression{$$=($1<$3);}|
@@ -361,12 +347,7 @@ commponent:     INTEGER_CONSTANTS{
                 $$=temp.idnode;
                 }|
                 IDENTIFERS{$$=$1;}|
-                arrays_variable{
-                union YYSTYPE temp;
-                temp.idnode.IDAttributes=1;
-                temp.idnode.IDvalue=$1;
-                $$=temp.idnode;
-                };
+                arrays_variable{$$=$1;};
                 
                 
 /*
