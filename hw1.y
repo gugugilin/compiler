@@ -5,21 +5,51 @@
 #include <string>
 #include <sstream>  
 #include <math.h>
+#include <map>
 #include "lex.yy.c"
 #define Trace(t) {printf("[%d]:%s",linenum,t);}
 using namespace std;
 list<string> scope_name;
+map<string,Hash> scope_list;
+string current_scop;
+int idcount;
 void yyerror(char * msg);
 void scope_init(){
     string name="goble";
+    Hash temp;
     scope_name.push_front(name);
+    scope_list[name]=temp;
+    current_scop="goble";
+    idcount=0;
 }
 string get_scope(){
     return scope_name.front();
 }
 
+int inser_data(string idname,string idvalue,int idtype, int idattrubutes){
+    map<string,Hash>::iterator temp=scope_list.find(current_scop);
+    if (temp==scope_list.end())
+        return -1;
+    scope_list.erase(temp);
+    id_node new_data(++idcount,idname,idtype,idattrubutes,idvalue);
+    Hash temp1=temp->second;
+    temp1.insert(new_data);
+    scope_list[current_scop]=temp1;
+    return 1;
+}
+id_node lookout_data(string name){
+    map<string,Hash>::iterator temp=scope_list.find(current_scop);
+    id_node new_data(idcount,name,-1,-1,"None");
+    if (temp==scope_list.end())
+        return new_data;
+    Hash temp1=temp->second;
+    return temp1.get_data(name);
+}
 void insert_scope(string name){
+    Hash temp;
     scope_name.push_front(name);
+    scope_list[name]=temp;
+    current_scop=name;
 }
 
 bool isNum(string str)  
@@ -215,7 +245,7 @@ declaration:    Variables_declaration|
 arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
                 {
                 union YYSTYPE temp;
-                temp.idnode.IDAttributes=2;
+                temp.idnode.IDAttributes=3;
                 temp.idnode.IDvalue=$1.IDvalue;
                 $$=temp.idnode;
                 };

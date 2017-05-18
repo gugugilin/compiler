@@ -70,6 +70,14 @@ public:
             return -1;
         return temp->second.get_IDnumber();
     }
+    id_node get_data(string s){
+        map<string,id_node>::iterator temp=hash_table_string.find(s);
+        id_node new_data(counter,s,-1,-1,"None");
+        if (temp==hash_table_string.end())
+            return new_data;
+        return temp->second;
+    }
+    
     int insert(id_node node){
         if(lookout(node.get_IDname())==-1){
             hash_table_string[node.get_IDname()]=node;

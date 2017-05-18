@@ -639,6 +639,14 @@ public:
             return -1;
         return temp->second.get_IDnumber();
     }
+    id_node get_data(string s){
+        map<string,id_node>::iterator temp=hash_table_string.find(s);
+        id_node new_data(counter,s,-1,-1,"None");
+        if (temp==hash_table_string.end())
+            return new_data;
+        return temp->second;
+    }
+    
     int insert(id_node node){
         if(lookout(node.get_IDname())==-1){
             hash_table_string[node.get_IDname()]=node;
@@ -713,7 +721,7 @@ int slove_sparce(){
 }
 
 
-#line 717 "lex.yy.c"
+#line 725 "lex.yy.c"
 
 #define INITIAL 0
 #define String_Constants 1
@@ -933,9 +941,9 @@ YY_DECL
 		}
 
 	{
-#line 180 "hw1.l"
+#line 188 "hw1.l"
 
-#line 939 "lex.yy.c"
+#line 947 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -994,54 +1002,54 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 181 "hw1.l"
+#line 189 "hw1.l"
 LIST
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 182 "hw1.l"
+#line 190 "hw1.l"
 {BEGIN comment;LIST}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 183 "hw1.l"
+#line 191 "hw1.l"
 {BEGIN 0;LIST}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 184 "hw1.l"
+#line 192 "hw1.l"
 {linenum++;printf("%d: %s\n",linenum,buf);clear_linebuf(buf);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 185 "hw1.l"
+#line 193 "hw1.l"
 {LIST}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 188 "hw1.l"
+#line 196 "hw1.l"
 return token("keyword", slove_sparce());
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 189 "hw1.l"
+#line 197 "hw1.l"
 return token("COMMA", COMMA);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 190 "hw1.l"
+#line 198 "hw1.l"
 return token("COLON", COLON);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 191 "hw1.l"
+#line 199 "hw1.l"
 return token("SEMICOLON", SEMICOLON);
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 192 "hw1.l"
+#line 200 "hw1.l"
 
             linenum++;
             temp_buf.assign(buf);
@@ -1053,97 +1061,97 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 200 "hw1.l"
+#line 208 "hw1.l"
 LIST
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 201 "hw1.l"
+#line 209 "hw1.l"
 LIST
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 202 "hw1.l"
+#line 210 "hw1.l"
 return token("LEFT_PARENTHESE", LEFT_PARENTHESE);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 203 "hw1.l"
+#line 211 "hw1.l"
 return token("RIGHT_PARENTHESE", RIGHT_PARENTHESE);
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 204 "hw1.l"
+#line 212 "hw1.l"
 return token("LEFT_SQUARE_BRACKETS", LEFT_SQUARE_BRACKETS);
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 205 "hw1.l"
+#line 213 "hw1.l"
 return token("RIGHT_SQUARE_BRACKETS", RIGHT_SQUARE_BRACKETS);
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 206 "hw1.l"
+#line 214 "hw1.l"
 return token("LEFT_BRACKETS", LEFT_BRACKETS);
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 207 "hw1.l"
+#line 215 "hw1.l"
 return token("RIGHT_BRACKETS", RIGHT_BRACKETS);
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 209 "hw1.l"
+#line 217 "hw1.l"
 return token("arithmetic", slove_sparce());
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 210 "hw1.l"
+#line 218 "hw1.l"
 return token("EXPONENTIATION", EXPONENTIATION);
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 211 "hw1.l"
+#line 219 "hw1.l"
 return token("REMAINDER", REMAINDER);
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 212 "hw1.l"
+#line 220 "hw1.l"
 return token("relational", slove_sparce());
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 213 "hw1.l"
+#line 221 "hw1.l"
 return token("LOGICAL", slove_sparce());
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 214 "hw1.l"
+#line 222 "hw1.l"
 return token("ASSIGNMENT", ASSIGNMENT);
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 215 "hw1.l"
+#line 223 "hw1.l"
 return token("compound_operators", slove_sparce());
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 218 "hw1.l"
+#line 226 "hw1.l"
 sscanf(yytext, "%d", &yylval.int_types);return token("Integer_Constants",INTEGER_CONSTANTS);
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 219 "hw1.l"
+#line 227 "hw1.l"
 yylval.real_types=atof(yytext); return token("REAL_CONSTANTS",REAL_CONSTANTS);
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 220 "hw1.l"
+#line 228 "hw1.l"
 yylval.bool_types=strcmp(yytext,"true"); return token("Boolean_Constants",slove_sparce());
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 222 "hw1.l"
+#line 230 "hw1.l"
 
             //Symbol_Tables.insert(yytext);
             yylval.string_types=str_temp.c_str();
@@ -1152,7 +1160,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 229 "hw1.l"
+#line 237 "hw1.l"
 {
     BEGIN String_Constants;
     str_temp="";
@@ -1161,18 +1169,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 235 "hw1.l"
+#line 243 "hw1.l"
 {str_temp+="\"";LIST;}
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 236 "hw1.l"
+#line 244 "hw1.l"
 {exit(-1);}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 237 "hw1.l"
+#line 245 "hw1.l"
 {printf("<string:\"%s\">\n",str_temp.c_str());BEGIN 0;
 yylval.string_types=str_temp.c_str();
 return STRING_CONSTANTS;LIST;
@@ -1180,12 +1188,12 @@ return STRING_CONSTANTS;LIST;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 241 "hw1.l"
+#line 249 "hw1.l"
 {str_temp+=yytext;LIST;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 244 "hw1.l"
+#line 252 "hw1.l"
 
             printf("error[%d]: %s\n",linenum,yytext);
             return ERROR_SIMPLE;
@@ -1193,10 +1201,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 248 "hw1.l"
+#line 256 "hw1.l"
 ECHO;
 	YY_BREAK
-#line 1200 "lex.yy.c"
+#line 1208 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(String_Constants):
 case YY_STATE_EOF(comment):
@@ -2199,7 +2207,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 248 "hw1.l"
+#line 256 "hw1.l"
 
 
 
