@@ -102,8 +102,8 @@
    32             | const_bool_expression
    33             | STRING_CONSTANTS
 
-   34 expression: bool_expression
-   35           | number_expression
+   34 expression: number_expression
+   35           | bool_expression
    36           | STRING_CONSTANTS
 
    37 const_index_expression: const_number_expression
@@ -280,13 +280,13 @@ const_number_expression (90)
     於左側： 39 40 41 42 43 44 45 46 47,於右側： 31 37 57 58
     59 60 61 62
 number_expression (91)
-    於左側： 48 49 50 51 52 53 54 55 56,於右側： 35 38 39 40
+    於左側： 48 49 50 51 52 53 54 55 56,於右側： 34 38 39 40
     41 42 43 44 45 46 48 49 50 51 52 53 54 55 69 70 71 72 73 74
 const_bool_expression (92)
     於左側： 57 58 59 60 61 62 63 64 65 66 67 68,於右側： 32
     63 64 65 66
 bool_expression (93)
-    於左側： 69 70 71 72 73 74 75 76 77 78 79 80,於右側： 34
+    於左側： 69 70 71 72 73 74 75 76 77 78 79 80,於右側： 35
     75 76 77 78
 commponent (94)
     於左側： 81 82 83 84,於右側： 47 56
@@ -733,7 +733,7 @@ commponent (94)
 
 狀態 33
 
-   35 expression: number_expression .
+   34 expression: number_expression .
    49 number_expression: number_expression . ARITHMETIC_ADD number_expression
    50                  | number_expression . ARITHMETIC_SUB number_expression
    51                  | number_expression . ARITHMETIC_MUL number_expression
@@ -758,19 +758,19 @@ commponent (94)
     RELATIONAL_NEQ       偏移，並進入狀態 65
     EXPONENTIATION       偏移，並進入狀態 66
 
-    $預設  使用規則 35 以縮減 (expression)
+    $預設  使用規則 34 以縮減 (expression)
 
 
 狀態 34
 
-   34 expression: bool_expression .
+   35 expression: bool_expression .
    76 bool_expression: bool_expression . AND bool_expression
    77                | bool_expression . OR bool_expression
 
     AND  偏移，並進入狀態 67
     OR   偏移，並進入狀態 68
 
-    $預設  使用規則 34 以縮減 (expression)
+    $預設  使用規則 35 以縮減 (expression)
 
 
 狀態 35

@@ -9,6 +9,11 @@
 #define INTTYPE 2
 #define REALTYPE 3
 #define STRINGTYPE 4
+#define ERROR_ATTRIBUTE -1
+#define FUNC_ATTRIBUTE 0
+#define CONST_ATTRIBUTE 1
+#define VAR_ATTRIBUTE 2
+#define ARRAY_ATTRIBUTE 3
 #define LIST     {strcat(buf,yytext);strcat(temp,yytext);}
 #define tokenInteger(t,i) {LIST; printf("<%s:%d>\n","t",i);}
 #define tokenid(t,s) {LIST; printf("<%s:%s>\n","t",s);}
@@ -27,7 +32,7 @@ extern "C"{
 class id_node{
 public:
     id_node(){
-        IDnumber=0;
+        IDnumber=1;
         IDname="none";
         IDtype=-1;
         IDAttributes=-1;
@@ -135,16 +140,16 @@ int slove_sparce(){
     //printf("xd<%s> %d\n",yytext,init);
     switch(init)
     {
-        case 0:
+        case 0+258:
             yylval.int_types=BOOLTYPE;
             break;
-        case 12:
-            yylval.int_types=INTTYPE;
-            break;
-        case 16:
+        case 12+258:
             yylval.int_types=REALTYPE;
             break;
-        case 18:
+        case 16+258:
+            yylval.int_types=REALTYPE;
+            break;
+        case 18+258:
             yylval.int_types=STRINGTYPE;
             break;
     }

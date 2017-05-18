@@ -190,7 +190,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 76 "hw1.y" /* yacc.c:1909  */
+#line 86 "hw1.y" /* yacc.c:1909  */
 
     bool bool_types;
     int int_types;
@@ -198,10 +198,13 @@ union YYSTYPE
     const char* string_types;
     struct node{
         int IDAttributes;
+        int IDtype;
+        int IDnumber;
         const char* IDvalue;
+        const char* IDname;
     }idnode;
 
-#line 205 "y.tab.h" /* yacc.c:1909  */
+#line 208 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

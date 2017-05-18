@@ -26,23 +26,23 @@ string get_scope(){
     return scope_name.front();
 }
 
-int inser_data(string idname,string idvalue,int idtype, int idattrubutes){
+int inser_data(int idcount,string idname,string idvalue,int idtype, int idattrubutes){
     map<string,Hash>::iterator temp=scope_list.find(current_scop);
-    if (temp==scope_list.end())
+    Hash temp1=temp->second;
+    if (temp1.lookout(idname)==-1)
         return -1;
     scope_list.erase(temp);
-    id_node new_data(++idcount,idname,idtype,idattrubutes,idvalue);
-    Hash temp1=temp->second;
+    id_node new_data(idcount,idname,idtype,idattrubutes,idvalue);
     temp1.insert(new_data);
     scope_list[current_scop]=temp1;
     return 1;
 }
 id_node lookout_data(string name){
     map<string,Hash>::iterator temp=scope_list.find(current_scop);
-    id_node new_data(idcount,name,-1,-1,"None");
-    if (temp==scope_list.end())
-        return new_data;
+    id_node new_data(1,name,-1,-1,"None");
     Hash temp1=temp->second;
+    if (temp1.lookout(name)==-1)
+        return new_data;
     return temp1.get_data(name);
 }
 void insert_scope(string name){
@@ -50,6 +50,16 @@ void insert_scope(string name){
     scope_name.push_front(name);
     scope_list[name]=temp;
     current_scop=name;
+}
+typedef union YYSTYPE id_union;
+id_union::node create_idnode(int Attrubutes,int IDtype,int IDnumber,const char * IDvalue)
+{
+    id_union temp;
+    temp.idnode.IDAttributes=Attrubutes;
+    temp.idnode.IDtype=IDtype;
+    temp.idnode.IDnumber=IDnumber;
+    temp.idnode.IDvalue=IDvalue;
+    return temp.idnode;
 }
 
 bool isNum(string str)  
@@ -80,7 +90,10 @@ bool isNum(string str)
     const char* string_types;
     struct node{
         int IDAttributes;
+        int IDtype;
+        int IDnumber;
         const char* IDvalue;
+        const char* IDname;
     }idnode;
 }
 %token <int_types>BOOL
@@ -168,8 +181,7 @@ bool isNum(string str)
 %type<real_types> number_expression const_number_expression
 %type<int_types> index_expression type const_index_expression
 %type<bool_types> bool_expression const_bool_expression
-%type<string_types> constant_exp expression 
-%type<idnode> IDENTIFERS commponent arrays_variable
+%type<idnode> IDENTIFERS commponent arrays_variable constant_exp expression SAVE_IDENTIFERS 
 
 
 %%
@@ -224,14 +236,38 @@ type:           BOOL{$$=$1;}|
 SAVE_IDENTIFERS:IDENTIFIER{
                 //if find the Id in table than return 1 to expression error
                 //else not do anything
+                union YYSTYPE temp;
+                id_node temp_id = lookout_data($1);
+                if (temp_id.get_IDAttributes()==ERROR_ATTRIBUTE)
+                {
+                    temp.idnode.IDAttributes=CONST_ATTRIBUTE;
+                    temp.idnode.IDtype=0;
+                    temp.idnode.IDnumber=1;
+                    temp.idnode.IDvalue="None";
+                    temp.idnode.IDname=temp_id.get_IDname().c_str();
+                    $$=temp.idnode;
+                }
+                else{
+                    yyerror("redeclaration error");
+                    return 1;
+                }
                 };
        
 IDENTIFERS:    IDENTIFIER{
                 // must find the value and the attrubutes to ASSIGNMENT in table
                 // if not find return 1 to expression error
                 union YYSTYPE temp;
-                temp.idnode.IDAttributes=2;
-                temp.idnode.IDvalue=$1;
+                id_node temp_id = lookout_data($1);
+                if (temp_id.get_IDAttributes()==ERROR_ATTRIBUTE)
+                {
+                    yyerror("not define declaration");
+                    return 1;
+                }
+                temp.idnode.IDAttributes=temp_id.get_IDAttributes();
+                temp.idnode.IDtype=temp_id.get_IDtype();
+                temp.idnode.IDnumber=temp_id.get_IDnumber();
+                temp.idnode.IDvalue=temp_id.get_IDvalue().c_str();
+                temp.idnode.IDname=temp_id.get_IDname().c_str();
                 $$=temp.idnode;
                 };
                                 
@@ -244,45 +280,62 @@ declaration:    Variables_declaration|
 
 arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
                 {
-                union YYSTYPE temp;
-                temp.idnode.IDAttributes=3;
-                temp.idnode.IDvalue=$1.IDvalue;
-                $$=temp.idnode;
+                    if ($1.IDAttributes!=ARRAY_ATTRIBUTE){
+                        yyerror("not ARRAY_type");
+                        return 1;
+                    }
+                    if ($1.IDnumber<= $3){
+                        $1.IDAttributes=VAR_ATTRIBUTE;
+                        $$=$1;
+                    }
+                    else{
+                        yyerror("ARRAY index error");
+                        return 1;
+                    }
                 };
 
 arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
                 {
                 //if SAVE_IDENTIFERS not return 1 to expression error than creat the item in table
+                    inser_data($4,$2.IDname,"None",$6,VAR_ATTRIBUTE);
                 };                
                 
 
 consts_declaration:
                 CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp{
-                //if SAVE_IDENTIFERS not return 1 to expression error constant_exp is pass
-                //than creat the item in table
-                printf("Variables_declaration:%s\n",$4);
+                    inser_data(1,$2.IDname,$4.IDvalue,$4.IDtype,CONST_ATTRIBUTE);
+                    printf("Const_declaration:%s\n",$4);
                 };
                 
 Variables_declaration:
                 VAR SAVE_IDENTIFERS type ASSIGNMENT constant_exp{
-                //if SAVE_IDENTIFERS not return 1 to expression error constant_exp is pass
-                //than creat the item in table
-                printf("Variables_declaration:%s\n",$5);
+                    //if SAVE_IDENTIFERS not return 1 to expression error constant_exp is pass
+                    //than creat the item in table
+                    if ($3!=$5.IDtype)
+                    {
+                        yyerror("type not match");
+                        return 1;
+                    }
+                    inser_data(1,$2.IDname,$5.IDvalue,$3,VAR_ATTRIBUTE);
+                    printf("Variables_declaration:%s\n",$5.IDvalue);
                 }|
-                VAR SAVE_IDENTIFERS type|
+                VAR SAVE_IDENTIFERS type{
+                    inser_data(1,$2.IDname,"None",$3,VAR_ATTRIBUTE);
+                    printf("Const_declaration:%s\n",$2);
+                }|
                 arrays_declaration;
                 
 
 
-constant_exp:   const_number_expression{$$=std::to_string($1).c_str();}
-                |const_bool_expression{$$=std::to_string($1).c_str();}|
-                STRING_CONSTANTS{$$=$1;};
+constant_exp:   const_number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str());}
+                |const_bool_expression{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str());}|
+                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1);};
 
                 
 // expression                
-expression:     bool_expression{$$=std::to_string($1).c_str();}|
-                number_expression{$$=std::to_string($1).c_str();}|
-                STRING_CONSTANTS{$$=$1;};
+expression:     number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str());}
+                |bool_expression{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str());}|
+                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1);};
                 
                 
 
@@ -303,17 +356,18 @@ const_number_expression:
                 ARITHMETIC_ADD number_expression %prec UADD{$$=$2;}|
                 commponent
                 {
-                    if($1.IDAttributes!=1)
+                    if($1.IDAttributes!=CONST_ATTRIBUTE)
                     {
-                        Trace("must be a const\n");
-                        //return 1;
+                        yyerror("must be a const\n");
+                        return 1;
                     }
-                    if(isNum($1.IDvalue))
+                    if(isNum($1.IDvalue)){
                          $$ = atof($1.IDvalue);
+                    }
                     else
                     {
-                        Trace("must be a number\n");
-                        //return 1;
+                        yyerror("must be a number\n");
+                        return 1;
                     }
                 };
             
@@ -328,12 +382,13 @@ number_expression:
                 ARITHMETIC_ADD number_expression %prec UADD{$$=$2;}|
                 commponent
                 {
-                    if(isNum($1.IDvalue))
+                    if(isNum($1.IDvalue)){
                          $$ = atof($1.IDvalue);
+                    }
                     else
                     {
-                        Trace("must be a number\n");
-                        //return 1;
+                        yyerror("must be a number\n");
+                        return 1;
                     }
                 };
 
@@ -365,16 +420,11 @@ bool_expression:number_expression RELATIONAL_BIG number_expression{$$=($1>$3);}|
                 BOOLEAN_CONSTANTS_TRUE{$$=$1;};
                 
 commponent:     INTEGER_CONSTANTS{
-                union YYSTYPE temp;
-                temp.idnode.IDAttributes=1;
-                temp.idnode.IDvalue=std::to_string($1).c_str();
-                $$=temp.idnode;
+                $$=create_idnode(CONST_ATTRIBUTE,INTTYPE,1,std::to_string($1).c_str());
                 }|
                 REAL_CONSTANTS{
                 union YYSTYPE temp;
-                temp.idnode.IDAttributes=1;
-                temp.idnode.IDvalue=std::to_string($1).c_str();
-                $$=temp.idnode;
+                $$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str());
                 }|
                 IDENTIFERS{$$=$1;}|
                 arrays_variable{$$=$1;};
