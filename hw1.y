@@ -67,22 +67,6 @@ id_union create_idnode(int Attrubutes,int IDtype,int IDnumber,const char * IDval
     return temp;
 }
 
-bool isNum(string str)  
-{  
-    stringstream sin(str);  
-    double d;  
-    char c;  
-    if(!(sin >> d))  
-    {
-        return false;
-    }
-    if (sin >> c) 
-    {
-        return false;
-    }  
-    return true;  
-} 
-
 
 %}
 
@@ -289,7 +273,7 @@ arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BR
                         yyerror("not ARRAY_type");
                         return 1;
                     }
-                    if ($1.IDnumber<= $3){
+                    if ($1.IDnumber<= $3&&$1.IDnumber>=0){
                         $1.IDAttributes=VAR_ATTRIBUTE;
                         $$=$1;
                     }
@@ -302,7 +286,7 @@ arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BR
 arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
                 {
                 //if SAVE_IDENTIFERS not return 1 to expression error than creat the item in table
-                    inser_data($4,$2.IDname,"None",$6,VAR_ATTRIBUTE);
+                    inser_data($4,$2.IDname,"None",$6,ARRAY_ATTRIBUTE);
                 };                
                 
 
@@ -366,7 +350,7 @@ const_number_expression:
                         yyerror("must be a const\n");
                         return 1;
                     }
-                    if(isNum($1.IDvalue)){
+                    if($1.IDtype==INTTYPE||$1.IDtype==REALTYPE){
                          $$ = atof($1.IDvalue);
                     }
                     else
@@ -387,7 +371,7 @@ number_expression:
                 ARITHMETIC_ADD number_expression %prec UADD{$$=$2;}|
                 commponent
                 {
-                    if(isNum($1.IDvalue)){
+                    if($1.IDtype==INTTYPE||$1.IDtype==REALTYPE){
                          $$ = atof($1.IDvalue);
                     }
                     else

@@ -26,7 +26,7 @@ var a23 string
 const a24  = 5000000
 const a25  = -a24
 const a26  = 5.5E+5
-const a27  = -5.5E+5
+const a27  = -5.5E+10
 const a28  = +1.0E+6
 const a29  = 5.5E-2
 const a30  = -5.5E-2
