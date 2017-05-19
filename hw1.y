@@ -11,6 +11,7 @@
 const int MINUS=500;
 const int PLAUS=501;
 using namespace std;
+Hash out_scope_table;
 list<string> scope_name;
 list<Hash> scope_list;
 string current_scop;
@@ -26,6 +27,9 @@ void scope_init(){
 }
 string get_scope(){
     return scope_name.front();
+}
+void dump_table(){
+    out_scope_table.dump();
 }
 void add_scope(string name){
     Hash temp;
@@ -45,8 +49,9 @@ int inser_data(int idcount,string idname,string idvalue,int idtype, int idattrub
         return -1;
     }
     scope_list.pop_front();
-    id_node new_data(idcount,idname,idtype,idattrubutes,idvalue);
+    id_node new_data(idcount,idname,idtype,idattrubutes,idvalue,current_scop);
     temp.insert(new_data);
+    out_scope_table.insert(new_data);
     scope_list.push_front(temp);
     return 1;
 }
@@ -65,7 +70,7 @@ void update_data(string name,string value){
 
 id_node current_lookout_data(string name){
     Hash temp=scope_list.front();
-    id_node new_data(1,name,-1,-1,"0");
+    id_node new_data(1,name,-1,-1,"0",current_scop);
     if (temp.lookout(name)==-1)
     {
         return new_data;
@@ -82,7 +87,8 @@ id_node lookout_data(string name){
     if(it->lookout(name)){
         return it->get_data(name);
     }
-    id_node new_data(1,name,-1,-1,"0");
+    id_node new_data(1,name,-1,-1,"0",current_scop);
+    new_data.print_node();
     return new_data;
 }
 void insert_scope(string name){
@@ -406,7 +412,7 @@ statements:     declarations statements  |
                 };
                 
                 
-statement:      Compound|LOOP|function|Conditional|
+statement:      Compound|LOOP|function|Conditional|Procedure|
                 IDENTIFERS ASSIGNMENT expression{
                     //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
                     if($1.IDAttributes==CONST_ATTRIBUTE)
@@ -663,5 +669,6 @@ int main(int argc,char** argv)
         yyerror("\nsave pass!!\n");
     else
         fprintf(stderr,"\nParsing error:%d \n",count);
+    dump_table();
 }
 

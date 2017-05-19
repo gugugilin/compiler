@@ -41,14 +41,14 @@ public:
         IDvalue="none";
         Scope="gobal";
     }
-    id_node(int number,string name,int types,int attributes,string value,string scope){
+    id_node(int number,string name,int types,int attributes,string value){
         IDtable_count=0;
         IDnumber=number;
         IDname=name;
         IDtype=types;
         IDAttributes=attributes;
         IDvalue=value;
-        Scope=scope;
+        Scope="gobal";
     }
     string get_IDname(){return IDname;}
     int get_IDnumber(){return IDnumber;}

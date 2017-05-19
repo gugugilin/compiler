@@ -4,11 +4,12 @@
 
 // variables
 var a int = 5
+a=5
 var c int
 
 // function declaration
 func int add(b int) {
-  //a=a+b
+  a=a+b
 }
 
 // main function
