@@ -12,7 +12,7 @@ const int MINUS=500;
 const int PLAUS=501;
 using namespace std;
 list<string> scope_name;
-map<string,Hash> scope_list;
+list<Hash> scope_list;
 string current_scop;
 int idcount;
 void yyerror(char * msg);
@@ -20,7 +20,7 @@ void scope_init(){
     string name="goble";
     Hash temp;
     scope_name.push_front(name);
-    scope_list[name]=temp;
+    scope_list.push_front(temp);
     current_scop="goble";
     idcount=0;
 }
@@ -29,37 +29,46 @@ string get_scope(){
 }
 
 int inser_data(int idcount,string idname,string idvalue,int idtype, int idattrubutes){
-    map<string,Hash>::iterator temp=scope_list.find(current_scop);
-    Hash temp1=temp->second;
-    if (temp1.lookout(idname)!=-1)
+    Hash temp=scope_list.front();
+    if (temp.lookout(idname)!=-1)
     {
         return -1;
     }
-    scope_list.erase(temp);
+    scope_list.pop_front();
     id_node new_data(idcount,idname,idtype,idattrubutes,idvalue);
-    temp1.insert(new_data);
-    scope_list[current_scop]=temp1;
+    temp.insert(new_data);
+    scope_list.push_front(temp);
     return 1;
 }
 void update_data(string name,string value){
-    map<string,Hash>::iterator temp=scope_list.find(current_scop);
-    Hash temp1=temp->second;
-    temp1.update(name,value);
+    Hash temp=scope_list.front();
+    temp.update(name,value);
+    scope_list.pop_front();
+    scope_list.push_front(temp);
 }
-id_node lookout_data(string name){
-    map<string,Hash>::iterator temp=scope_list.find(current_scop);
+
+id_node current_lookout_data(string name){
+    Hash temp=scope_list.front();
     id_node new_data(1,name,-1,-1,"None");
-    Hash temp1=temp->second;
-    if (temp1.lookout(name)==-1)
+    if (temp.lookout(name)==-1)
     {
         return new_data;
     }
-    return temp1.get_data(name);
+    return temp.get_data(name);
+}
+id_node lookout_data(string name){
+    list<Hash>::iterator it=scope_list.begin();
+    for(it;it!=scope_list.end();++it)
+        if(it->lookout(name))
+            return it->get_data(name);
+    return current_lookout_data(name);
+    id_node new_data(1,name,-1,-1,"None");
+    return new_data;
 }
 void insert_scope(string name){
     Hash temp;
     scope_name.push_front(name);
-    scope_list[name]=temp;
+    scope_list.push_front(temp);
     current_scop=name;
 }
 typedef union YYSTYPE id_union;
@@ -265,7 +274,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
 %token SWITCH
 %token TYPE
 %token VAR
-%token VOID
+%token <int_types>VOID
 %token WHILE
 %token READ
 %token ARITHMETIC_ADD
@@ -337,6 +346,21 @@ program:        body
                 {
                     Trace("Reducing to program\n");
                 };
+                
+function:       FUNC type SAVE_IDENTIFERS LEFT_PARENTHESE formal_arguments RIGHT_PARENTHESE LEFT_BRACKETS body RIGHT_BRACKETS{};
+
+formal_arguments:/*empty*/|formal_argument{};
+
+formal_argument: IDENTIFERS type{}|IDENTIFERS type COMMA formal_argument{};
+
+func_invo:      IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{};
+
+comm_expression:/*empty*/|expression|comm_expression COMMA comm_expression{};
+
+
+
+
+
 body:           statements|
                 declarations
                 {
@@ -405,7 +429,8 @@ statement:      IDENTIFERS ASSIGNMENT expression{
                 
                 
 //declaration
-type:           BOOL{$$=$1;}|
+type:           VOID{$$=$1;}|
+                BOOL{$$=$1;}|
                 INT{$$=$1;}|
                 REAL{$$=$1;}|
                 STRING{$$=$1;};
@@ -414,7 +439,7 @@ SAVE_IDENTIFERS:IDENTIFIER{
                 //if find the Id in table than return 1 to expression error
                 //else not do anything
                 union YYSTYPE temp;
-                id_node temp_id = lookout_data($1->c_str());
+                id_node temp_id = current_lookout_data($1->c_str());
                 if (temp_id.get_IDAttributes()==ERROR_ATTRIBUTE)
                 {
                     temp.idnode.IDAttributes=CONST_ATTRIBUTE;

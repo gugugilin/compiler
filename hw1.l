@@ -9,6 +9,7 @@
 #define INTTYPE 2
 #define REALTYPE 3
 #define STRINGTYPE 4
+#define VOIDTYPE 5
 #define ERROR_ATTRIBUTE -1
 #define FUNC_ATTRIBUTE 0
 #define CONST_ATTRIBUTE 1
@@ -95,7 +96,6 @@ public:
         hash_table_int.erase(temp2);
         id_node temp=temp1->second;
         temp.set_IDvalue(value);
-        printf("v(%s):%s %s\n",name.c_str(),temp.get_IDname().c_str(),temp.get_IDvalue().c_str());
         hash_table_string[name]=temp;
         hash_table_int[index]=temp;
     }
@@ -169,6 +169,10 @@ int slove_sparce(){
         case 18+258:
             yylval.int_types=STRINGTYPE;
             break;
+        case 23+258:
+            yylval.int_types=VOIDTYPE;
+            break;
+            
     }
     return init;
 }
@@ -247,7 +251,7 @@ error_simple .
 
 {Integer_Constants} %{sscanf(yytext, "%d", &yylval.int_types);return token("Integer_Constants",INTEGER_CONSTANTS);%}     
 {Real_Constants} %{yylval.real_types=atof(yytext); return token("REAL_CONSTANTS",REAL_CONSTANTS);%}
-{Boolean_Constants} %{yylval.bool_types=strcmp(yytext,"true"); return token("Boolean_Constants",slove_sparce());%}
+{Boolean_Constants} %{yylval.bool_types=strcmp(yytext,"false"); return token("Boolean_Constants",slove_sparce());%}
 
 {identifier} %{
             //Symbol_Tables.insert(yytext);

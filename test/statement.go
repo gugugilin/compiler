@@ -6,7 +6,7 @@ a[3]=10
 println a[3]
 var b int = 3
 var c bool = true
-var d bool = true
+var d bool = false
 d=c
 //a[3]=c&true
 b=a[3]

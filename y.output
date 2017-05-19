@@ -1,3 +1,12 @@
+非終結語詞在文法中無用
+
+   function
+   formal_arguments
+   formal_argument
+   func_invo
+   comm_expression
+
+
 終端機在文法中未使用
 
    BREAK
@@ -14,7 +23,6 @@
    STRUCT
    SWITCH
    TYPE
-   VOID
    WHILE
    COMPOUND_OPERATORS_ADD
    COMPOUND_OPERATORS_SUB
@@ -31,6 +39,23 @@
    REMAINDER
    LOGICAL
    ERROR_SIMPLE
+
+
+規則在文法中無用
+
+   63 function: FUNC type SAVE_IDENTIFERS LEFT_PARENTHESE formal_arguments RIGHT_PARENTHESE LEFT_BRACKETS body RIGHT_BRACKETS
+
+   64 formal_arguments: %empty
+   65                 | formal_argument
+
+   66 formal_argument: IDENTIFERS type
+   67                | IDENTIFERS type COMMA formal_argument
+
+   68 func_invo: IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE
+
+   69 comm_expression: %empty
+   70                | expression
+   71                | comm_expression COMMA comm_expression
 
 
 狀態 0 衝突：7 項偏移/縮減，1 項縮減/縮減
@@ -64,78 +89,79 @@
    13          | RETURN
    14          | RETURN expression
 
-   15 type: BOOL
-   16     | INT
-   17     | REAL
-   18     | STRING
+   15 type: VOID
+   16     | BOOL
+   17     | INT
+   18     | REAL
+   19     | STRING
 
-   19 SAVE_IDENTIFERS: IDENTIFIER
+   20 SAVE_IDENTIFERS: IDENTIFIER
 
-   20 IDENTIFERS: IDENTIFIER
+   21 IDENTIFERS: IDENTIFIER
 
-   21 declarations: declaration declarations
-   22             | %empty
+   22 declarations: declaration declarations
+   23             | %empty
 
-   23 declaration: Variables_declaration
-   24            | consts_declaration
+   24 declaration: Variables_declaration
+   25            | consts_declaration
 
-   25 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
+   26 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
 
-   26 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
+   27 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
 
-   27 consts_declaration: CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp
+   28 consts_declaration: CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp
 
-   28 Variables_declaration: VAR SAVE_IDENTIFERS type ASSIGNMENT constant_exp
-   29                      | VAR SAVE_IDENTIFERS type
-   30                      | arrays_declaration
+   29 Variables_declaration: VAR SAVE_IDENTIFERS type ASSIGNMENT constant_exp
+   30                      | VAR SAVE_IDENTIFERS type
+   31                      | arrays_declaration
 
-   31 constant_exp: expression
+   32 constant_exp: expression
 
-   32 expression: number_expression
-   33           | bool_expression
-   34           | STRING_CONSTANTS
+   33 expression: number_expression
+   34           | bool_expression
+   35           | STRING_CONSTANTS
 
-   35 const_index_expression: number_expression
+   36 const_index_expression: number_expression
 
-   36 index_expression: number_expression
+   37 index_expression: number_expression
 
-   37 number_expression: LEFT_PARENTHESE number_expression RIGHT_PARENTHESE
-   38                  | number_expression ARITHMETIC_ADD number_expression
-   39                  | number_expression ARITHMETIC_SUB number_expression
-   40                  | number_expression ARITHMETIC_MUL number_expression
-   41                  | number_expression ARITHMETIC_DIV number_expression
-   42                  | number_expression EXPONENTIATION number_expression
-   43                  | ARITHMETIC_SUB number_expression
-   44                  | ARITHMETIC_ADD number_expression
-   45                  | commponent
+   38 number_expression: LEFT_PARENTHESE number_expression RIGHT_PARENTHESE
+   39                  | number_expression ARITHMETIC_ADD number_expression
+   40                  | number_expression ARITHMETIC_SUB number_expression
+   41                  | number_expression ARITHMETIC_MUL number_expression
+   42                  | number_expression ARITHMETIC_DIV number_expression
+   43                  | number_expression EXPONENTIATION number_expression
+   44                  | ARITHMETIC_SUB number_expression
+   45                  | ARITHMETIC_ADD number_expression
+   46                  | commponent
 
-   46 bool_expression: number_expression RELATIONAL_BIG number_expression
-   47                | number_expression RELATIONAL_LEAST number_expression
-   48                | number_expression RELATIONAL_LEAST_EQ number_expression
-   49                | number_expression RELATIONAL_BIG_EQ number_expression
-   50                | number_expression RELATIONAL_EQ number_expression
-   51                | number_expression RELATIONAL_NEQ number_expression
-   52                | LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE
-   53                | bool_expression AND bool_expression
-   54                | bool_expression OR bool_expression
-   55                | NOT bool_expression
-   56                | BOOLEAN_CONSTANTS_FALSE
-   57                | BOOLEAN_CONSTANTS_TRUE
+   47 bool_expression: number_expression RELATIONAL_BIG number_expression
+   48                | number_expression RELATIONAL_LEAST number_expression
+   49                | number_expression RELATIONAL_LEAST_EQ number_expression
+   50                | number_expression RELATIONAL_BIG_EQ number_expression
+   51                | number_expression RELATIONAL_EQ number_expression
+   52                | number_expression RELATIONAL_NEQ number_expression
+   53                | LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE
+   54                | bool_expression AND bool_expression
+   55                | bool_expression OR bool_expression
+   56                | NOT bool_expression
+   57                | BOOLEAN_CONSTANTS_FALSE
+   58                | BOOLEAN_CONSTANTS_TRUE
 
-   58 commponent: INTEGER_CONSTANTS
-   59           | REAL_CONSTANTS
-   60           | IDENTIFERS
-   61           | arrays_variable
+   59 commponent: INTEGER_CONSTANTS
+   60           | REAL_CONSTANTS
+   61           | IDENTIFERS
+   62           | arrays_variable
 
 
 終結語詞，附有它們出現處的規則
 
 $end (0) 0
 error (256)
-BOOL (258) 15
+BOOL (258) 16
 BREAK (259)
 CASE (260)
-CONST (261) 27
+CONST (261) 28
 CONTINUE (262)
 DEFAULT (263)
 ELSE (264)
@@ -144,59 +170,59 @@ FUNC (266)
 GO (267)
 IF (268)
 IMPORT (269)
-INT (270) 16
+INT (270) 17
 NIL (271)
 PRINT (272) 10
 PRINTLN (273) 11
-REAL (274) 17
+REAL (274) 18
 RETURN (275) 13 14
-STRING (276) 18
+STRING (276) 19
 STRUCT (277)
 SWITCH (278)
 TYPE (279)
-VAR (280) 26 28 29
-VOID (281)
+VAR (280) 27 29 30
+VOID (281) 15
 WHILE (282)
 READ (283) 12
-ARITHMETIC_ADD (284) 38 44
-ARITHMETIC_SUB (285) 39 43
-ARITHMETIC_MUL (286) 40
-ARITHMETIC_DIV (287) 41
-RELATIONAL_LEAST (288) 47
-RELATIONAL_LEAST_EQ (289) 48
-RELATIONAL_BIG_EQ (290) 49
-RELATIONAL_BIG (291) 46
-RELATIONAL_EQ (292) 50
-RELATIONAL_NEQ (293) 51
+ARITHMETIC_ADD (284) 39 45
+ARITHMETIC_SUB (285) 40 44
+ARITHMETIC_MUL (286) 41
+ARITHMETIC_DIV (287) 42
+RELATIONAL_LEAST (288) 48
+RELATIONAL_LEAST_EQ (289) 49
+RELATIONAL_BIG_EQ (290) 50
+RELATIONAL_BIG (291) 47
+RELATIONAL_EQ (292) 51
+RELATIONAL_NEQ (293) 52
 COMPOUND_OPERATORS_ADD (294)
 COMPOUND_OPERATORS_SUB (295)
 COMPOUND_OPERATORS_MUL (296)
 COMPOUND_OPERATORS_DIV (297)
-BOOLEAN_CONSTANTS_FALSE (298) 56
-BOOLEAN_CONSTANTS_TRUE (299) 57
-AND (300) 53
-NOT (301) 55
-OR (302) 54
+BOOLEAN_CONSTANTS_FALSE (298) 57
+BOOLEAN_CONSTANTS_TRUE (299) 58
+AND (300) 54
+NOT (301) 56
+OR (302) 55
 COMMENTS_ONE (303)
 COMMENTS_START_MUL (304)
 COMMENTS_END_MUL (305)
 COMMA (306)
 COLON (307)
 SEMICOLON (308)
-LEFT_PARENTHESE (309) 37 52
-RIGHT_PARENTHESE (310) 37 52
-LEFT_SQUARE_BRACKETS (311) 25 26
-RIGHT_SQUARE_BRACKETS (312) 25 26
+LEFT_PARENTHESE (309) 38 53
+RIGHT_PARENTHESE (310) 38 53
+LEFT_SQUARE_BRACKETS (311) 26 27
+RIGHT_SQUARE_BRACKETS (312) 26 27
 LEFT_BRACKETS (313)
 RIGHT_BRACKETS (314)
-EXPONENTIATION (315) 42
+EXPONENTIATION (315) 43
 REMAINDER (316)
 LOGICAL (317)
-ASSIGNMENT (318) 8 9 27 28
-INTEGER_CONSTANTS (319) 58
-IDENTIFIER (320) 19 20
-REAL_CONSTANTS (321) 59
-STRING_CONSTANTS (322) 34
+ASSIGNMENT (318) 8 9 28 29
+INTEGER_CONSTANTS (319) 59
+IDENTIFIER (320) 20 21
+REAL_CONSTANTS (321) 60
+STRING_CONSTANTS (322) 35
 ERROR_SIMPLE (323)
 UMINUS (324)
 UADD (325)
@@ -217,39 +243,39 @@ statements (75)
 statement (76)
     於左側： 8 9 10 11 12 13 14,於右側： 6
 type (77)
-    於左側： 15 16 17 18,於右側： 26 28 29
+    於左側： 15 16 17 18 19,於右側： 27 29 30
 SAVE_IDENTIFERS (78)
-    於左側： 19,於右側： 26 27 28 29
+    於左側： 20,於右側： 27 28 29 30
 IDENTIFERS (79)
-    於左側： 20,於右側： 8 12 25 60
+    於左側： 21,於右側： 8 12 26 61
 declarations (80)
-    於左側： 21 22,於右側： 4 5 21
+    於左側： 22 23,於右側： 4 5 22
 declaration (81)
-    於左側： 23 24,於右側： 21
+    於左側： 24 25,於右側： 22
 arrays_variable (82)
-    於左側： 25,於右側： 9 61
+    於左側： 26,於右側： 9 62
 arrays_declaration (83)
-    於左側： 26,於右側： 30
+    於左側： 27,於右側： 31
 consts_declaration (84)
-    於左側： 27,於右側： 24
+    於左側： 28,於右側： 25
 Variables_declaration (85)
-    於左側： 28 29 30,於右側： 23
+    於左側： 29 30 31,於右側： 24
 constant_exp (86)
-    於左側： 31,於右側： 27 28
+    於左側： 32,於右側： 28 29
 expression (87)
-    於左側： 32 33 34,於右側： 8 9 10 11 14 31
+    於左側： 33 34 35,於右側： 8 9 10 11 14 32
 const_index_expression (88)
-    於左側： 35,於右側： 26
+    於左側： 36,於右側： 27
 index_expression (89)
-    於左側： 36,於右側： 25
+    於左側： 37,於右側： 26
 number_expression (90)
-    於左側： 37 38 39 40 41 42 43 44 45,於右側： 32 35 36 37
-    38 39 40 41 42 43 44 46 47 48 49 50 51
+    於左側： 38 39 40 41 42 43 44 45 46,於右側： 33 36 37 38
+    39 40 41 42 43 44 45 47 48 49 50 51 52
 bool_expression (91)
-    於左側： 46 47 48 49 50 51 52 53 54 55 56 57,於右側： 33
-    52 53 54 55
+    於左側： 47 48 49 50 51 52 53 54 55 56 57 58,於右側： 34
+    53 54 55 56
 commponent (92)
-    於左側： 58 59 60 61,於右側： 45
+    於左側： 59 60 61 62,於右側： 46
 
 
 狀態 0
@@ -265,14 +291,14 @@ commponent (92)
     IDENTIFIER  偏移，並進入狀態 7
 
     $end        使用規則 7 以縮減 (statements)
-    $end        [使用規則 22 以縮減 (declarations)]
-    CONST       [使用規則 22 以縮減 (declarations)]
-    PRINT       [使用規則 22 以縮減 (declarations)]
-    PRINTLN     [使用規則 22 以縮減 (declarations)]
-    RETURN      [使用規則 22 以縮減 (declarations)]
-    VAR         [使用規則 22 以縮減 (declarations)]
-    READ        [使用規則 22 以縮減 (declarations)]
-    IDENTIFIER  [使用規則 22 以縮減 (declarations)]
+    $end        [使用規則 23 以縮減 (declarations)]
+    CONST       [使用規則 23 以縮減 (declarations)]
+    PRINT       [使用規則 23 以縮減 (declarations)]
+    PRINTLN     [使用規則 23 以縮減 (declarations)]
+    RETURN      [使用規則 23 以縮減 (declarations)]
+    VAR         [使用規則 23 以縮減 (declarations)]
+    READ        [使用規則 23 以縮減 (declarations)]
+    IDENTIFIER  [使用規則 23 以縮減 (declarations)]
     $預設     使用規則 7 以縮減 (statements)
 
     start_symbol           進入狀態 8
@@ -291,7 +317,7 @@ commponent (92)
 
 狀態 1
 
-   27 consts_declaration: CONST . SAVE_IDENTIFERS ASSIGNMENT constant_exp
+   28 consts_declaration: CONST . SAVE_IDENTIFERS ASSIGNMENT constant_exp
 
     IDENTIFIER  偏移，並進入狀態 20
 
@@ -373,9 +399,9 @@ commponent (92)
 
 狀態 5
 
-   26 arrays_declaration: VAR . SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
-   28 Variables_declaration: VAR . SAVE_IDENTIFERS type ASSIGNMENT constant_exp
-   29                      | VAR . SAVE_IDENTIFERS type
+   27 arrays_declaration: VAR . SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
+   29 Variables_declaration: VAR . SAVE_IDENTIFERS type ASSIGNMENT constant_exp
+   30                      | VAR . SAVE_IDENTIFERS type
 
     IDENTIFIER  偏移，並進入狀態 20
 
@@ -393,9 +419,9 @@ commponent (92)
 
 狀態 7
 
-   20 IDENTIFERS: IDENTIFIER .
+   21 IDENTIFERS: IDENTIFIER .
 
-    $預設  使用規則 20 以縮減 (IDENTIFERS)
+    $預設  使用規則 21 以縮減 (IDENTIFERS)
 
 
 狀態 8
@@ -439,14 +465,14 @@ commponent (92)
     IDENTIFIER  偏移，並進入狀態 7
 
     $end        使用規則 7 以縮減 (statements)
-    $end        [使用規則 22 以縮減 (declarations)]
-    CONST       [使用規則 22 以縮減 (declarations)]
-    PRINT       [使用規則 22 以縮減 (declarations)]
-    PRINTLN     [使用規則 22 以縮減 (declarations)]
-    RETURN      [使用規則 22 以縮減 (declarations)]
-    VAR         [使用規則 22 以縮減 (declarations)]
-    READ        [使用規則 22 以縮減 (declarations)]
-    IDENTIFIER  [使用規則 22 以縮減 (declarations)]
+    $end        [使用規則 23 以縮減 (declarations)]
+    CONST       [使用規則 23 以縮減 (declarations)]
+    PRINT       [使用規則 23 以縮減 (declarations)]
+    PRINTLN     [使用規則 23 以縮減 (declarations)]
+    RETURN      [使用規則 23 以縮減 (declarations)]
+    VAR         [使用規則 23 以縮減 (declarations)]
+    READ        [使用規則 23 以縮減 (declarations)]
+    IDENTIFIER  [使用規則 23 以縮減 (declarations)]
     $預設     使用規則 7 以縮減 (statements)
 
     statements             進入狀態 42
@@ -463,7 +489,7 @@ commponent (92)
 狀態 13
 
     8 statement: IDENTIFERS . ASSIGNMENT expression
-   25 arrays_variable: IDENTIFERS . LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
+   26 arrays_variable: IDENTIFERS . LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
 
     LEFT_SQUARE_BRACKETS  偏移，並進入狀態 44
     ASSIGNMENT            偏移，並進入狀態 45
@@ -484,14 +510,14 @@ commponent (92)
 
     $end        使用規則 4 以縮減 (body)
     $end        [使用規則 7 以縮減 (statements)]
-    $end        [使用規則 22 以縮減 (declarations)]
-    CONST       [使用規則 22 以縮減 (declarations)]
-    PRINT       [使用規則 22 以縮減 (declarations)]
-    PRINTLN     [使用規則 22 以縮減 (declarations)]
-    RETURN      [使用規則 22 以縮減 (declarations)]
-    VAR         [使用規則 22 以縮減 (declarations)]
-    READ        [使用規則 22 以縮減 (declarations)]
-    IDENTIFIER  [使用規則 22 以縮減 (declarations)]
+    $end        [使用規則 23 以縮減 (declarations)]
+    CONST       [使用規則 23 以縮減 (declarations)]
+    PRINT       [使用規則 23 以縮減 (declarations)]
+    PRINTLN     [使用規則 23 以縮減 (declarations)]
+    RETURN      [使用規則 23 以縮減 (declarations)]
+    VAR         [使用規則 23 以縮減 (declarations)]
+    READ        [使用規則 23 以縮減 (declarations)]
+    IDENTIFIER  [使用規則 23 以縮減 (declarations)]
     $預設     使用規則 4 以縮減 (body)
 
     statements             進入狀態 46
@@ -507,14 +533,14 @@ commponent (92)
 
 狀態 15
 
-   21 declarations: declaration . declarations
+   22 declarations: declaration . declarations
 
     CONST  偏移，並進入狀態 1
     VAR    偏移，並進入狀態 5
 
-    CONST    [使用規則 22 以縮減 (declarations)]
-    VAR      [使用規則 22 以縮減 (declarations)]
-    $預設  使用規則 22 以縮減 (declarations)
+    CONST    [使用規則 23 以縮減 (declarations)]
+    VAR      [使用規則 23 以縮減 (declarations)]
+    $預設  使用規則 23 以縮減 (declarations)
 
     declarations           進入狀態 47
     declaration            進入狀態 15
@@ -532,42 +558,42 @@ commponent (92)
 
 狀態 17
 
-   30 Variables_declaration: arrays_declaration .
+   31 Variables_declaration: arrays_declaration .
 
-    $預設  使用規則 30 以縮減 (Variables_declaration)
+    $預設  使用規則 31 以縮減 (Variables_declaration)
 
 
 狀態 18
 
-   24 declaration: consts_declaration .
+   25 declaration: consts_declaration .
 
-    $預設  使用規則 24 以縮減 (declaration)
+    $預設  使用規則 25 以縮減 (declaration)
 
 
 狀態 19
 
-   23 declaration: Variables_declaration .
+   24 declaration: Variables_declaration .
 
-    $預設  使用規則 23 以縮減 (declaration)
+    $預設  使用規則 24 以縮減 (declaration)
 
 
 狀態 20
 
-   19 SAVE_IDENTIFERS: IDENTIFIER .
+   20 SAVE_IDENTIFERS: IDENTIFIER .
 
-    $預設  使用規則 19 以縮減 (SAVE_IDENTIFERS)
+    $預設  使用規則 20 以縮減 (SAVE_IDENTIFERS)
 
 
 狀態 21
 
-   27 consts_declaration: CONST SAVE_IDENTIFERS . ASSIGNMENT constant_exp
+   28 consts_declaration: CONST SAVE_IDENTIFERS . ASSIGNMENT constant_exp
 
     ASSIGNMENT  偏移，並進入狀態 49
 
 
 狀態 22
 
-   44 number_expression: ARITHMETIC_ADD . number_expression
+   45 number_expression: ARITHMETIC_ADD . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -584,7 +610,7 @@ commponent (92)
 
 狀態 23
 
-   43 number_expression: ARITHMETIC_SUB . number_expression
+   44 number_expression: ARITHMETIC_SUB . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -601,21 +627,21 @@ commponent (92)
 
 狀態 24
 
-   56 bool_expression: BOOLEAN_CONSTANTS_FALSE .
-
-    $預設  使用規則 56 以縮減 (bool_expression)
-
-
-狀態 25
-
-   57 bool_expression: BOOLEAN_CONSTANTS_TRUE .
+   57 bool_expression: BOOLEAN_CONSTANTS_FALSE .
 
     $預設  使用規則 57 以縮減 (bool_expression)
 
 
+狀態 25
+
+   58 bool_expression: BOOLEAN_CONSTANTS_TRUE .
+
+    $預設  使用規則 58 以縮減 (bool_expression)
+
+
 狀態 26
 
-   55 bool_expression: NOT . bool_expression
+   56 bool_expression: NOT . bool_expression
 
     ARITHMETIC_ADD           偏移，並進入狀態 22
     ARITHMETIC_SUB           偏移，並進入狀態 23
@@ -636,8 +662,8 @@ commponent (92)
 
 狀態 27
 
-   37 number_expression: LEFT_PARENTHESE . number_expression RIGHT_PARENTHESE
-   52 bool_expression: LEFT_PARENTHESE . bool_expression RIGHT_PARENTHESE
+   38 number_expression: LEFT_PARENTHESE . number_expression RIGHT_PARENTHESE
+   53 bool_expression: LEFT_PARENTHESE . bool_expression RIGHT_PARENTHESE
 
     ARITHMETIC_ADD           偏移，並進入狀態 22
     ARITHMETIC_SUB           偏移，並進入狀態 23
@@ -658,40 +684,40 @@ commponent (92)
 
 狀態 28
 
-   58 commponent: INTEGER_CONSTANTS .
-
-    $預設  使用規則 58 以縮減 (commponent)
-
-
-狀態 29
-
-   59 commponent: REAL_CONSTANTS .
+   59 commponent: INTEGER_CONSTANTS .
 
     $預設  使用規則 59 以縮減 (commponent)
 
 
-狀態 30
+狀態 29
 
-   34 expression: STRING_CONSTANTS .
-
-    $預設  使用規則 34 以縮減 (expression)
-
-
-狀態 31
-
-   25 arrays_variable: IDENTIFERS . LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
-   60 commponent: IDENTIFERS .
-
-    LEFT_SQUARE_BRACKETS  偏移，並進入狀態 44
+   60 commponent: REAL_CONSTANTS .
 
     $預設  使用規則 60 以縮減 (commponent)
 
 
-狀態 32
+狀態 30
 
-   61 commponent: arrays_variable .
+   35 expression: STRING_CONSTANTS .
+
+    $預設  使用規則 35 以縮減 (expression)
+
+
+狀態 31
+
+   26 arrays_variable: IDENTIFERS . LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
+   61 commponent: IDENTIFERS .
+
+    LEFT_SQUARE_BRACKETS  偏移，並進入狀態 44
 
     $預設  使用規則 61 以縮減 (commponent)
+
+
+狀態 32
+
+   62 commponent: arrays_variable .
+
+    $預設  使用規則 62 以縮減 (commponent)
 
 
 狀態 33
@@ -703,18 +729,18 @@ commponent (92)
 
 狀態 34
 
-   32 expression: number_expression .
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   46 bool_expression: number_expression . RELATIONAL_BIG number_expression
-   47                | number_expression . RELATIONAL_LEAST number_expression
-   48                | number_expression . RELATIONAL_LEAST_EQ number_expression
-   49                | number_expression . RELATIONAL_BIG_EQ number_expression
-   50                | number_expression . RELATIONAL_EQ number_expression
-   51                | number_expression . RELATIONAL_NEQ number_expression
+   33 expression: number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   47 bool_expression: number_expression . RELATIONAL_BIG number_expression
+   48                | number_expression . RELATIONAL_LEAST number_expression
+   49                | number_expression . RELATIONAL_LEAST_EQ number_expression
+   50                | number_expression . RELATIONAL_BIG_EQ number_expression
+   51                | number_expression . RELATIONAL_EQ number_expression
+   52                | number_expression . RELATIONAL_NEQ number_expression
 
     ARITHMETIC_ADD       偏移，並進入狀態 57
     ARITHMETIC_SUB       偏移，並進入狀態 58
@@ -728,26 +754,26 @@ commponent (92)
     RELATIONAL_NEQ       偏移，並進入狀態 66
     EXPONENTIATION       偏移，並進入狀態 67
 
-    $預設  使用規則 32 以縮減 (expression)
+    $預設  使用規則 33 以縮減 (expression)
 
 
 狀態 35
 
-   33 expression: bool_expression .
-   53 bool_expression: bool_expression . AND bool_expression
-   54                | bool_expression . OR bool_expression
+   34 expression: bool_expression .
+   54 bool_expression: bool_expression . AND bool_expression
+   55                | bool_expression . OR bool_expression
 
     AND  偏移，並進入狀態 68
     OR   偏移，並進入狀態 69
 
-    $預設  使用規則 33 以縮減 (expression)
+    $預設  使用規則 34 以縮減 (expression)
 
 
 狀態 36
 
-   45 number_expression: commponent .
+   46 number_expression: commponent .
 
-    $預設  使用規則 45 以縮減 (number_expression)
+    $預設  使用規則 46 以縮減 (number_expression)
 
 
 狀態 37
@@ -766,17 +792,18 @@ commponent (92)
 
 狀態 39
 
-   26 arrays_declaration: VAR SAVE_IDENTIFERS . LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
-   28 Variables_declaration: VAR SAVE_IDENTIFERS . type ASSIGNMENT constant_exp
-   29                      | VAR SAVE_IDENTIFERS . type
+   27 arrays_declaration: VAR SAVE_IDENTIFERS . LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
+   29 Variables_declaration: VAR SAVE_IDENTIFERS . type ASSIGNMENT constant_exp
+   30                      | VAR SAVE_IDENTIFERS . type
 
     BOOL                  偏移，並進入狀態 70
     INT                   偏移，並進入狀態 71
     REAL                  偏移，並進入狀態 72
     STRING                偏移，並進入狀態 73
-    LEFT_SQUARE_BRACKETS  偏移，並進入狀態 74
+    VOID                  偏移，並進入狀態 74
+    LEFT_SQUARE_BRACKETS  偏移，並進入狀態 75
 
-    type  進入狀態 75
+    type  進入狀態 76
 
 
 狀態 40
@@ -813,14 +840,14 @@ commponent (92)
     IDENTIFIER  偏移，並進入狀態 7
 
     $end        使用規則 7 以縮減 (statements)
-    $end        [使用規則 22 以縮減 (declarations)]
-    CONST       [使用規則 22 以縮減 (declarations)]
-    PRINT       [使用規則 22 以縮減 (declarations)]
-    PRINTLN     [使用規則 22 以縮減 (declarations)]
-    RETURN      [使用規則 22 以縮減 (declarations)]
-    VAR         [使用規則 22 以縮減 (declarations)]
-    READ        [使用規則 22 以縮減 (declarations)]
-    IDENTIFIER  [使用規則 22 以縮減 (declarations)]
+    $end        [使用規則 23 以縮減 (declarations)]
+    CONST       [使用規則 23 以縮減 (declarations)]
+    PRINT       [使用規則 23 以縮減 (declarations)]
+    PRINTLN     [使用規則 23 以縮減 (declarations)]
+    RETURN      [使用規則 23 以縮減 (declarations)]
+    VAR         [使用規則 23 以縮減 (declarations)]
+    READ        [使用規則 23 以縮減 (declarations)]
+    IDENTIFIER  [使用規則 23 以縮減 (declarations)]
     $預設     使用規則 7 以縮減 (statements)
 
     statements             進入狀態 46
@@ -836,7 +863,7 @@ commponent (92)
 
 狀態 44
 
-   25 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS . index_expression RIGHT_SQUARE_BRACKETS
+   26 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS . index_expression RIGHT_SQUARE_BRACKETS
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -847,8 +874,8 @@ commponent (92)
 
     IDENTIFERS         進入狀態 31
     arrays_variable    進入狀態 32
-    index_expression   進入狀態 76
-    number_expression  進入狀態 77
+    index_expression   進入狀態 77
+    number_expression  進入狀態 78
     commponent         進入狀態 36
 
 
@@ -869,7 +896,7 @@ commponent (92)
 
     IDENTIFERS         進入狀態 31
     arrays_variable    進入狀態 32
-    expression         進入狀態 78
+    expression         進入狀態 79
     number_expression  進入狀態 34
     bool_expression    進入狀態 35
     commponent         進入狀態 36
@@ -884,9 +911,9 @@ commponent (92)
 
 狀態 47
 
-   21 declarations: declaration declarations .
+   22 declarations: declaration declarations .
 
-    $預設  使用規則 21 以縮減 (declarations)
+    $預設  使用規則 22 以縮減 (declarations)
 
 
 狀態 48
@@ -906,7 +933,7 @@ commponent (92)
 
     IDENTIFERS         進入狀態 31
     arrays_variable    進入狀態 32
-    expression         進入狀態 79
+    expression         進入狀態 80
     number_expression  進入狀態 34
     bool_expression    進入狀態 35
     commponent         進入狀態 36
@@ -914,7 +941,7 @@ commponent (92)
 
 狀態 49
 
-   27 consts_declaration: CONST SAVE_IDENTIFERS ASSIGNMENT . constant_exp
+   28 consts_declaration: CONST SAVE_IDENTIFERS ASSIGNMENT . constant_exp
 
     ARITHMETIC_ADD           偏移，並進入狀態 22
     ARITHMETIC_SUB           偏移，並進入狀態 23
@@ -929,8 +956,8 @@ commponent (92)
 
     IDENTIFERS         進入狀態 31
     arrays_variable    進入狀態 32
-    constant_exp       進入狀態 80
-    expression         進入狀態 81
+    constant_exp       進入狀態 81
+    expression         進入狀態 82
     number_expression  進入狀態 34
     bool_expression    進入狀態 35
     commponent         進入狀態 36
@@ -938,7 +965,7 @@ commponent (92)
 
 狀態 50
 
-   37 number_expression: LEFT_PARENTHESE . number_expression RIGHT_PARENTHESE
+   38 number_expression: LEFT_PARENTHESE . number_expression RIGHT_PARENTHESE
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -949,47 +976,47 @@ commponent (92)
 
     IDENTIFERS         進入狀態 31
     arrays_variable    進入狀態 32
-    number_expression  進入狀態 82
+    number_expression  進入狀態 83
     commponent         進入狀態 36
 
 
 狀態 51
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   44                  | ARITHMETIC_ADD number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   45                  | ARITHMETIC_ADD number_expression .
 
-    $預設  使用規則 44 以縮減 (number_expression)
+    $預設  使用規則 45 以縮減 (number_expression)
 
 
 狀態 52
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   43                  | ARITHMETIC_SUB number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   44                  | ARITHMETIC_SUB number_expression .
 
-    $預設  使用規則 43 以縮減 (number_expression)
+    $預設  使用規則 44 以縮減 (number_expression)
 
 
 狀態 53
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   46 bool_expression: number_expression . RELATIONAL_BIG number_expression
-   47                | number_expression . RELATIONAL_LEAST number_expression
-   48                | number_expression . RELATIONAL_LEAST_EQ number_expression
-   49                | number_expression . RELATIONAL_BIG_EQ number_expression
-   50                | number_expression . RELATIONAL_EQ number_expression
-   51                | number_expression . RELATIONAL_NEQ number_expression
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   47 bool_expression: number_expression . RELATIONAL_BIG number_expression
+   48                | number_expression . RELATIONAL_LEAST number_expression
+   49                | number_expression . RELATIONAL_LEAST_EQ number_expression
+   50                | number_expression . RELATIONAL_BIG_EQ number_expression
+   51                | number_expression . RELATIONAL_EQ number_expression
+   52                | number_expression . RELATIONAL_NEQ number_expression
 
     ARITHMETIC_ADD       偏移，並進入狀態 57
     ARITHMETIC_SUB       偏移，並進入狀態 58
@@ -1006,27 +1033,27 @@ commponent (92)
 
 狀態 54
 
-   53 bool_expression: bool_expression . AND bool_expression
-   54                | bool_expression . OR bool_expression
-   55                | NOT bool_expression .
+   54 bool_expression: bool_expression . AND bool_expression
+   55                | bool_expression . OR bool_expression
+   56                | NOT bool_expression .
 
-    $預設  使用規則 55 以縮減 (bool_expression)
+    $預設  使用規則 56 以縮減 (bool_expression)
 
 
 狀態 55
 
-   37 number_expression: LEFT_PARENTHESE number_expression . RIGHT_PARENTHESE
-   38                  | number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   46 bool_expression: number_expression . RELATIONAL_BIG number_expression
-   47                | number_expression . RELATIONAL_LEAST number_expression
-   48                | number_expression . RELATIONAL_LEAST_EQ number_expression
-   49                | number_expression . RELATIONAL_BIG_EQ number_expression
-   50                | number_expression . RELATIONAL_EQ number_expression
-   51                | number_expression . RELATIONAL_NEQ number_expression
+   38 number_expression: LEFT_PARENTHESE number_expression . RIGHT_PARENTHESE
+   39                  | number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   47 bool_expression: number_expression . RELATIONAL_BIG number_expression
+   48                | number_expression . RELATIONAL_LEAST number_expression
+   49                | number_expression . RELATIONAL_LEAST_EQ number_expression
+   50                | number_expression . RELATIONAL_BIG_EQ number_expression
+   51                | number_expression . RELATIONAL_EQ number_expression
+   52                | number_expression . RELATIONAL_NEQ number_expression
 
     ARITHMETIC_ADD       偏移，並進入狀態 57
     ARITHMETIC_SUB       偏移，並進入狀態 58
@@ -1038,41 +1065,24 @@ commponent (92)
     RELATIONAL_BIG       偏移，並進入狀態 64
     RELATIONAL_EQ        偏移，並進入狀態 65
     RELATIONAL_NEQ       偏移，並進入狀態 66
-    RIGHT_PARENTHESE     偏移，並進入狀態 83
+    RIGHT_PARENTHESE     偏移，並進入狀態 84
     EXPONENTIATION       偏移，並進入狀態 67
 
 
 狀態 56
 
-   52 bool_expression: LEFT_PARENTHESE bool_expression . RIGHT_PARENTHESE
-   53                | bool_expression . AND bool_expression
-   54                | bool_expression . OR bool_expression
+   53 bool_expression: LEFT_PARENTHESE bool_expression . RIGHT_PARENTHESE
+   54                | bool_expression . AND bool_expression
+   55                | bool_expression . OR bool_expression
 
     AND               偏移，並進入狀態 68
     OR                偏移，並進入狀態 69
-    RIGHT_PARENTHESE  偏移，並進入狀態 84
+    RIGHT_PARENTHESE  偏移，並進入狀態 85
 
 
 狀態 57
 
-   38 number_expression: number_expression ARITHMETIC_ADD . number_expression
-
-    ARITHMETIC_ADD     偏移，並進入狀態 22
-    ARITHMETIC_SUB     偏移，並進入狀態 23
-    LEFT_PARENTHESE    偏移，並進入狀態 50
-    INTEGER_CONSTANTS  偏移，並進入狀態 28
-    IDENTIFIER         偏移，並進入狀態 7
-    REAL_CONSTANTS     偏移，並進入狀態 29
-
-    IDENTIFERS         進入狀態 31
-    arrays_variable    進入狀態 32
-    number_expression  進入狀態 85
-    commponent         進入狀態 36
-
-
-狀態 58
-
-   39 number_expression: number_expression ARITHMETIC_SUB . number_expression
+   39 number_expression: number_expression ARITHMETIC_ADD . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1087,9 +1097,9 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 59
+狀態 58
 
-   40 number_expression: number_expression ARITHMETIC_MUL . number_expression
+   40 number_expression: number_expression ARITHMETIC_SUB . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1104,9 +1114,9 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 60
+狀態 59
 
-   41 number_expression: number_expression ARITHMETIC_DIV . number_expression
+   41 number_expression: number_expression ARITHMETIC_MUL . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1121,9 +1131,9 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 61
+狀態 60
 
-   47 bool_expression: number_expression RELATIONAL_LEAST . number_expression
+   42 number_expression: number_expression ARITHMETIC_DIV . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1138,9 +1148,9 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 62
+狀態 61
 
-   48 bool_expression: number_expression RELATIONAL_LEAST_EQ . number_expression
+   48 bool_expression: number_expression RELATIONAL_LEAST . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1155,9 +1165,9 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 63
+狀態 62
 
-   49 bool_expression: number_expression RELATIONAL_BIG_EQ . number_expression
+   49 bool_expression: number_expression RELATIONAL_LEAST_EQ . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1172,9 +1182,9 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 64
+狀態 63
 
-   46 bool_expression: number_expression RELATIONAL_BIG . number_expression
+   50 bool_expression: number_expression RELATIONAL_BIG_EQ . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1189,9 +1199,9 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 65
+狀態 64
 
-   50 bool_expression: number_expression RELATIONAL_EQ . number_expression
+   47 bool_expression: number_expression RELATIONAL_BIG . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1206,9 +1216,9 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 66
+狀態 65
 
-   51 bool_expression: number_expression RELATIONAL_NEQ . number_expression
+   51 bool_expression: number_expression RELATIONAL_EQ . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1223,9 +1233,9 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 67
+狀態 66
 
-   42 number_expression: number_expression EXPONENTIATION . number_expression
+   52 bool_expression: number_expression RELATIONAL_NEQ . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1240,30 +1250,26 @@ commponent (92)
     commponent         進入狀態 36
 
 
-狀態 68
+狀態 67
 
-   53 bool_expression: bool_expression AND . bool_expression
+   43 number_expression: number_expression EXPONENTIATION . number_expression
 
-    ARITHMETIC_ADD           偏移，並進入狀態 22
-    ARITHMETIC_SUB           偏移，並進入狀態 23
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 24
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 25
-    NOT                      偏移，並進入狀態 26
-    LEFT_PARENTHESE          偏移，並進入狀態 27
-    INTEGER_CONSTANTS        偏移，並進入狀態 28
-    IDENTIFIER               偏移，並進入狀態 7
-    REAL_CONSTANTS           偏移，並進入狀態 29
+    ARITHMETIC_ADD     偏移，並進入狀態 22
+    ARITHMETIC_SUB     偏移，並進入狀態 23
+    LEFT_PARENTHESE    偏移，並進入狀態 50
+    INTEGER_CONSTANTS  偏移，並進入狀態 28
+    IDENTIFIER         偏移，並進入狀態 7
+    REAL_CONSTANTS     偏移，並進入狀態 29
 
     IDENTIFERS         進入狀態 31
     arrays_variable    進入狀態 32
-    number_expression  進入狀態 53
-    bool_expression    進入狀態 96
+    number_expression  進入狀態 96
     commponent         進入狀態 36
 
 
-狀態 69
+狀態 68
 
-   54 bool_expression: bool_expression OR . bool_expression
+   54 bool_expression: bool_expression AND . bool_expression
 
     ARITHMETIC_ADD           偏移，並進入狀態 22
     ARITHMETIC_SUB           偏移，並進入狀態 23
@@ -1282,37 +1288,65 @@ commponent (92)
     commponent         進入狀態 36
 
 
+狀態 69
+
+   55 bool_expression: bool_expression OR . bool_expression
+
+    ARITHMETIC_ADD           偏移，並進入狀態 22
+    ARITHMETIC_SUB           偏移，並進入狀態 23
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 24
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 25
+    NOT                      偏移，並進入狀態 26
+    LEFT_PARENTHESE          偏移，並進入狀態 27
+    INTEGER_CONSTANTS        偏移，並進入狀態 28
+    IDENTIFIER               偏移，並進入狀態 7
+    REAL_CONSTANTS           偏移，並進入狀態 29
+
+    IDENTIFERS         進入狀態 31
+    arrays_variable    進入狀態 32
+    number_expression  進入狀態 53
+    bool_expression    進入狀態 98
+    commponent         進入狀態 36
+
+
 狀態 70
 
-   15 type: BOOL .
-
-    $預設  使用規則 15 以縮減 (type)
-
-
-狀態 71
-
-   16 type: INT .
+   16 type: BOOL .
 
     $預設  使用規則 16 以縮減 (type)
 
 
-狀態 72
+狀態 71
 
-   17 type: REAL .
+   17 type: INT .
 
     $預設  使用規則 17 以縮減 (type)
 
 
-狀態 73
+狀態 72
 
-   18 type: STRING .
+   18 type: REAL .
 
     $預設  使用規則 18 以縮減 (type)
 
 
+狀態 73
+
+   19 type: STRING .
+
+    $預設  使用規則 19 以縮減 (type)
+
+
 狀態 74
 
-   26 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS . const_index_expression RIGHT_SQUARE_BRACKETS type
+   15 type: VOID .
+
+    $預設  使用規則 15 以縮減 (type)
+
+
+狀態 75
+
+   27 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS . const_index_expression RIGHT_SQUARE_BRACKETS type
 
     ARITHMETIC_ADD     偏移，並進入狀態 22
     ARITHMETIC_SUB     偏移，並進入狀態 23
@@ -1323,36 +1357,36 @@ commponent (92)
 
     IDENTIFERS              進入狀態 31
     arrays_variable         進入狀態 32
-    const_index_expression  進入狀態 98
-    number_expression       進入狀態 99
+    const_index_expression  進入狀態 99
+    number_expression       進入狀態 100
     commponent              進入狀態 36
-
-
-狀態 75
-
-   28 Variables_declaration: VAR SAVE_IDENTIFERS type . ASSIGNMENT constant_exp
-   29                      | VAR SAVE_IDENTIFERS type .
-
-    ASSIGNMENT  偏移，並進入狀態 100
-
-    $預設  使用規則 29 以縮減 (Variables_declaration)
 
 
 狀態 76
 
-   25 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS index_expression . RIGHT_SQUARE_BRACKETS
+   29 Variables_declaration: VAR SAVE_IDENTIFERS type . ASSIGNMENT constant_exp
+   30                      | VAR SAVE_IDENTIFERS type .
 
-    RIGHT_SQUARE_BRACKETS  偏移，並進入狀態 101
+    ASSIGNMENT  偏移，並進入狀態 101
+
+    $預設  使用規則 30 以縮減 (Variables_declaration)
 
 
 狀態 77
 
-   36 index_expression: number_expression .
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
+   26 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS index_expression . RIGHT_SQUARE_BRACKETS
+
+    RIGHT_SQUARE_BRACKETS  偏移，並進入狀態 102
+
+
+狀態 78
+
+   37 index_expression: number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
 
     ARITHMETIC_ADD  偏移，並進入狀態 57
     ARITHMETIC_SUB  偏移，並進入狀態 58
@@ -1360,92 +1394,76 @@ commponent (92)
     ARITHMETIC_DIV  偏移，並進入狀態 60
     EXPONENTIATION  偏移，並進入狀態 67
 
-    $預設  使用規則 36 以縮減 (index_expression)
+    $預設  使用規則 37 以縮減 (index_expression)
 
 
-狀態 78
+狀態 79
 
     8 statement: IDENTIFERS ASSIGNMENT expression .
 
     $預設  使用規則 8 以縮減 (statement)
 
 
-狀態 79
+狀態 80
 
     9 statement: arrays_variable ASSIGNMENT expression .
 
     $預設  使用規則 9 以縮減 (statement)
 
 
-狀態 80
-
-   27 consts_declaration: CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp .
-
-    $預設  使用規則 27 以縮減 (consts_declaration)
-
-
 狀態 81
 
-   31 constant_exp: expression .
+   28 consts_declaration: CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp .
 
-    $預設  使用規則 31 以縮減 (constant_exp)
+    $預設  使用規則 28 以縮減 (consts_declaration)
 
 
 狀態 82
 
-   37 number_expression: LEFT_PARENTHESE number_expression . RIGHT_PARENTHESE
-   38                  | number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
+   32 constant_exp: expression .
+
+    $預設  使用規則 32 以縮減 (constant_exp)
+
+
+狀態 83
+
+   38 number_expression: LEFT_PARENTHESE number_expression . RIGHT_PARENTHESE
+   39                  | number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
 
     ARITHMETIC_ADD    偏移，並進入狀態 57
     ARITHMETIC_SUB    偏移，並進入狀態 58
     ARITHMETIC_MUL    偏移，並進入狀態 59
     ARITHMETIC_DIV    偏移，並進入狀態 60
-    RIGHT_PARENTHESE  偏移，並進入狀態 83
+    RIGHT_PARENTHESE  偏移，並進入狀態 84
     EXPONENTIATION    偏移，並進入狀態 67
-
-
-狀態 83
-
-   37 number_expression: LEFT_PARENTHESE number_expression RIGHT_PARENTHESE .
-
-    $預設  使用規則 37 以縮減 (number_expression)
 
 
 狀態 84
 
-   52 bool_expression: LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE .
-
-    $預設  使用規則 52 以縮減 (bool_expression)
-
-
-狀態 85
-
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   38                  | number_expression ARITHMETIC_ADD number_expression .
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-
-    ARITHMETIC_MUL  偏移，並進入狀態 59
-    ARITHMETIC_DIV  偏移，並進入狀態 60
-    EXPONENTIATION  偏移，並進入狀態 67
+   38 number_expression: LEFT_PARENTHESE number_expression RIGHT_PARENTHESE .
 
     $預設  使用規則 38 以縮減 (number_expression)
 
 
+狀態 85
+
+   53 bool_expression: LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE .
+
+    $預設  使用規則 53 以縮減 (bool_expression)
+
+
 狀態 86
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   39                  | number_expression ARITHMETIC_SUB number_expression .
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   39                  | number_expression ARITHMETIC_ADD number_expression .
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
 
     ARITHMETIC_MUL  偏移，並進入狀態 59
     ARITHMETIC_DIV  偏移，並進入狀態 60
@@ -1456,13 +1474,15 @@ commponent (92)
 
 狀態 87
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   40                  | number_expression ARITHMETIC_MUL number_expression .
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   40                  | number_expression ARITHMETIC_SUB number_expression .
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
 
+    ARITHMETIC_MUL  偏移，並進入狀態 59
+    ARITHMETIC_DIV  偏移，並進入狀態 60
     EXPONENTIATION  偏移，並進入狀態 67
 
     $預設  使用規則 40 以縮減 (number_expression)
@@ -1470,12 +1490,12 @@ commponent (92)
 
 狀態 88
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   41                  | number_expression ARITHMETIC_DIV number_expression .
-   42                  | number_expression . EXPONENTIATION number_expression
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   41                  | number_expression ARITHMETIC_MUL number_expression .
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
 
     EXPONENTIATION  偏移，並進入狀態 67
 
@@ -1484,30 +1504,26 @@ commponent (92)
 
 狀態 89
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   47 bool_expression: number_expression RELATIONAL_LEAST number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   42                  | number_expression ARITHMETIC_DIV number_expression .
+   43                  | number_expression . EXPONENTIATION number_expression
 
-    ARITHMETIC_ADD  偏移，並進入狀態 57
-    ARITHMETIC_SUB  偏移，並進入狀態 58
-    ARITHMETIC_MUL  偏移，並進入狀態 59
-    ARITHMETIC_DIV  偏移，並進入狀態 60
     EXPONENTIATION  偏移，並進入狀態 67
 
-    $預設  使用規則 47 以縮減 (bool_expression)
+    $預設  使用規則 42 以縮減 (number_expression)
 
 
 狀態 90
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   48 bool_expression: number_expression RELATIONAL_LEAST_EQ number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   48 bool_expression: number_expression RELATIONAL_LEAST number_expression .
 
     ARITHMETIC_ADD  偏移，並進入狀態 57
     ARITHMETIC_SUB  偏移，並進入狀態 58
@@ -1520,12 +1536,12 @@ commponent (92)
 
 狀態 91
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   49 bool_expression: number_expression RELATIONAL_BIG_EQ number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   49 bool_expression: number_expression RELATIONAL_LEAST_EQ number_expression .
 
     ARITHMETIC_ADD  偏移，並進入狀態 57
     ARITHMETIC_SUB  偏移，並進入狀態 58
@@ -1538,30 +1554,12 @@ commponent (92)
 
 狀態 92
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   46 bool_expression: number_expression RELATIONAL_BIG number_expression .
-
-    ARITHMETIC_ADD  偏移，並進入狀態 57
-    ARITHMETIC_SUB  偏移，並進入狀態 58
-    ARITHMETIC_MUL  偏移，並進入狀態 59
-    ARITHMETIC_DIV  偏移，並進入狀態 60
-    EXPONENTIATION  偏移，並進入狀態 67
-
-    $預設  使用規則 46 以縮減 (bool_expression)
-
-
-狀態 93
-
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   50 bool_expression: number_expression RELATIONAL_EQ number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   50 bool_expression: number_expression RELATIONAL_BIG_EQ number_expression .
 
     ARITHMETIC_ADD  偏移，並進入狀態 57
     ARITHMETIC_SUB  偏移，並進入狀態 58
@@ -1572,14 +1570,32 @@ commponent (92)
     $預設  使用規則 50 以縮減 (bool_expression)
 
 
+狀態 93
+
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   47 bool_expression: number_expression RELATIONAL_BIG number_expression .
+
+    ARITHMETIC_ADD  偏移，並進入狀態 57
+    ARITHMETIC_SUB  偏移，並進入狀態 58
+    ARITHMETIC_MUL  偏移，並進入狀態 59
+    ARITHMETIC_DIV  偏移，並進入狀態 60
+    EXPONENTIATION  偏移，並進入狀態 67
+
+    $預設  使用規則 47 以縮減 (bool_expression)
+
+
 狀態 94
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   51 bool_expression: number_expression RELATIONAL_NEQ number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   51 bool_expression: number_expression RELATIONAL_EQ number_expression .
 
     ARITHMETIC_ADD  偏移，並進入狀態 57
     ARITHMETIC_SUB  偏移，並進入狀態 58
@@ -1592,51 +1608,12 @@ commponent (92)
 
 狀態 95
 
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
-   42                  | number_expression EXPONENTIATION number_expression .
-
-    $預設  使用規則 42 以縮減 (number_expression)
-
-
-狀態 96
-
-   53 bool_expression: bool_expression . AND bool_expression
-   53                | bool_expression AND bool_expression .
-   54                | bool_expression . OR bool_expression
-
-    $預設  使用規則 53 以縮減 (bool_expression)
-
-
-狀態 97
-
-   53 bool_expression: bool_expression . AND bool_expression
-   54                | bool_expression . OR bool_expression
-   54                | bool_expression OR bool_expression .
-
-    AND  偏移，並進入狀態 68
-
-    $預設  使用規則 54 以縮減 (bool_expression)
-
-
-狀態 98
-
-   26 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression . RIGHT_SQUARE_BRACKETS type
-
-    RIGHT_SQUARE_BRACKETS  偏移，並進入狀態 102
-
-
-狀態 99
-
-   35 const_index_expression: number_expression .
-   38 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   39                  | number_expression . ARITHMETIC_SUB number_expression
-   40                  | number_expression . ARITHMETIC_MUL number_expression
-   41                  | number_expression . ARITHMETIC_DIV number_expression
-   42                  | number_expression . EXPONENTIATION number_expression
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   52 bool_expression: number_expression RELATIONAL_NEQ number_expression .
 
     ARITHMETIC_ADD  偏移，並進入狀態 57
     ARITHMETIC_SUB  偏移，並進入狀態 58
@@ -1644,12 +1621,69 @@ commponent (92)
     ARITHMETIC_DIV  偏移，並進入狀態 60
     EXPONENTIATION  偏移，並進入狀態 67
 
-    $預設  使用規則 35 以縮減 (const_index_expression)
+    $預設  使用規則 52 以縮減 (bool_expression)
+
+
+狀態 96
+
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+   43                  | number_expression EXPONENTIATION number_expression .
+
+    $預設  使用規則 43 以縮減 (number_expression)
+
+
+狀態 97
+
+   54 bool_expression: bool_expression . AND bool_expression
+   54                | bool_expression AND bool_expression .
+   55                | bool_expression . OR bool_expression
+
+    $預設  使用規則 54 以縮減 (bool_expression)
+
+
+狀態 98
+
+   54 bool_expression: bool_expression . AND bool_expression
+   55                | bool_expression . OR bool_expression
+   55                | bool_expression OR bool_expression .
+
+    AND  偏移，並進入狀態 68
+
+    $預設  使用規則 55 以縮減 (bool_expression)
+
+
+狀態 99
+
+   27 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression . RIGHT_SQUARE_BRACKETS type
+
+    RIGHT_SQUARE_BRACKETS  偏移，並進入狀態 103
 
 
 狀態 100
 
-   28 Variables_declaration: VAR SAVE_IDENTIFERS type ASSIGNMENT . constant_exp
+   36 const_index_expression: number_expression .
+   39 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   40                  | number_expression . ARITHMETIC_SUB number_expression
+   41                  | number_expression . ARITHMETIC_MUL number_expression
+   42                  | number_expression . ARITHMETIC_DIV number_expression
+   43                  | number_expression . EXPONENTIATION number_expression
+
+    ARITHMETIC_ADD  偏移，並進入狀態 57
+    ARITHMETIC_SUB  偏移，並進入狀態 58
+    ARITHMETIC_MUL  偏移，並進入狀態 59
+    ARITHMETIC_DIV  偏移，並進入狀態 60
+    EXPONENTIATION  偏移，並進入狀態 67
+
+    $預設  使用規則 36 以縮減 (const_index_expression)
+
+
+狀態 101
+
+   29 Variables_declaration: VAR SAVE_IDENTIFERS type ASSIGNMENT . constant_exp
 
     ARITHMETIC_ADD           偏移，並進入狀態 22
     ARITHMETIC_SUB           偏移，並進入狀態 23
@@ -1664,41 +1698,42 @@ commponent (92)
 
     IDENTIFERS         進入狀態 31
     arrays_variable    進入狀態 32
-    constant_exp       進入狀態 103
-    expression         進入狀態 81
+    constant_exp       進入狀態 104
+    expression         進入狀態 82
     number_expression  進入狀態 34
     bool_expression    進入狀態 35
     commponent         進入狀態 36
 
 
-狀態 101
-
-   25 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS .
-
-    $預設  使用規則 25 以縮減 (arrays_variable)
-
-
 狀態 102
 
-   26 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS . type
+   26 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS .
+
+    $預設  使用規則 26 以縮減 (arrays_variable)
+
+
+狀態 103
+
+   27 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS . type
 
     BOOL    偏移，並進入狀態 70
     INT     偏移，並進入狀態 71
     REAL    偏移，並進入狀態 72
     STRING  偏移，並進入狀態 73
+    VOID    偏移，並進入狀態 74
 
-    type  進入狀態 104
-
-
-狀態 103
-
-   28 Variables_declaration: VAR SAVE_IDENTIFERS type ASSIGNMENT constant_exp .
-
-    $預設  使用規則 28 以縮減 (Variables_declaration)
+    type  進入狀態 105
 
 
 狀態 104
 
-   26 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type .
+   29 Variables_declaration: VAR SAVE_IDENTIFERS type ASSIGNMENT constant_exp .
 
-    $預設  使用規則 26 以縮減 (arrays_declaration)
+    $預設  使用規則 29 以縮減 (Variables_declaration)
+
+
+狀態 105
+
+   27 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type .
+
+    $預設  使用規則 27 以縮減 (arrays_declaration)
