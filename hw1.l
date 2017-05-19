@@ -95,6 +95,7 @@ public:
         hash_table_int.erase(temp2);
         id_node temp=temp1->second;
         temp.set_IDvalue(value);
+        printf("v(%s):%s %s\n",name.c_str(),temp.get_IDname().c_str(),temp.get_IDvalue().c_str());
         hash_table_string[name]=temp;
         hash_table_int[index]=temp;
     }
@@ -160,7 +161,7 @@ int slove_sparce(){
             yylval.int_types=BOOLTYPE;
             break;
         case 12+258:
-            yylval.int_types=REALTYPE;
+            yylval.int_types=INTTYPE;
             break;
         case 16+258:
             yylval.int_types=REALTYPE;
@@ -250,7 +251,7 @@ error_simple .
 
 {identifier} %{
             //Symbol_Tables.insert(yytext);
-            yylval.string_types=yytext;
+            yylval.string_types=new string(yytext);
             return token("identifier",IDENTIFIER);
             %}
 
@@ -264,7 +265,7 @@ error_simple .
 <String_Constants>\"\" {str_temp+="\"";LIST;}
 <String_Constants>\n {exit(-1);}
 <String_Constants>\" {printf("<string:\"%s\">\n",str_temp.c_str());BEGIN 0;
-yylval.string_types=str_temp.c_str();
+yylval.string_types=new string(str_temp.c_str());
 LIST;
 return STRING_CONSTANTS;
 }

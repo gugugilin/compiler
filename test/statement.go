@@ -1,12 +1,17 @@
 //test statement with int_exp
-var a[100] string
-//a[3+8]=5.5E+10
-//a[3]=10
+var a[100] int
+a[3+8]=5.5E+10
+println a[11]
+a[3]=10
+println a[3]
 var b int = 3
-var c int = 5
-a[3]=c&true
+var c bool = true
+var d bool = true
+d=c
+//a[3]=c&true
 b=a[3]
 println b
+println a[3]
 a[3]=a[3+8]
 a[(((3+8)-2*2)/3)^2]=-(((8.6+3)-2*2)/3)^2
 println -(((3+8.6)-2*2)/3)^2

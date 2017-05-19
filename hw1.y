@@ -8,6 +8,8 @@
 #include <map>
 #include "lex.yy.c"
 #define Trace(t) {printf("[%d]:%s",linenum,t);}
+const int MINUS=500;
+const int PLAUS=501;
 using namespace std;
 list<string> scope_name;
 map<string,Hash> scope_list;
@@ -61,17 +63,167 @@ void insert_scope(string name){
     current_scop=name;
 }
 typedef union YYSTYPE id_union;
-id_union create_idnode(int Attrubutes,int IDtype,int IDnumber,const char * IDvalue)
+id_union create_idnode(int Attrubutes,int IDtype,int IDnumber,string IDvalue)
 {
     
     id_union temp;
     temp.idnode.IDAttributes=Attrubutes;
     temp.idnode.IDtype=IDtype;
     temp.idnode.IDnumber=IDnumber;
-    temp.idnode.IDvalue=IDvalue;
+    temp.idnode.IDvalue=new string(IDvalue.c_str());
     return temp;
 }
-
+bool isnum(id_union::node t1,id_union::node t2){
+    if(!(t1.IDtype==INTTYPE||t1.IDtype==REALTYPE)){yyerror("must be a number");return false;}
+    if(!(t2.IDtype!=INTTYPE||t2.IDtype!=REALTYPE)){yyerror("must be a number");return false;}
+    return true;
+}
+id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
+    id_union::node temp;
+    switch(op){
+        case ARITHMETIC_ADD:
+            if(isnum(t1,t2)){
+            double answer=atof(t1.IDvalue->c_str())+atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=REALTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case ARITHMETIC_SUB:
+            if(isnum(t1,t2)){
+            double answer=atof(t1.IDvalue->c_str())-atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=REALTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case ARITHMETIC_MUL:
+            if(isnum(t1,t2)){
+            double answer=atof(t1.IDvalue->c_str())*atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=REALTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case ARITHMETIC_DIV:
+            if(isnum(t1,t2)){
+            if(atof(t2.IDvalue->c_str())==0){
+                yyerror("can't be zero");
+                temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            }
+            double answer=atof(t1.IDvalue->c_str())/atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=REALTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case EXPONENTIATION:
+            if(isnum(t1,t2)){
+            double answer=pow(atof(t1.IDvalue->c_str()),atof(t2.IDvalue->c_str()));
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=REALTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            
+            break;
+        case MINUS:
+            if(isnum(t1,t1)){
+            double answer=-atof(t1.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case PLAUS:
+            if(isnum(t1,t1)){temp=t1;}
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case RELATIONAL_BIG:
+            if(isnum(t1,t2)){
+            bool answer=atof(t1.IDvalue->c_str())>atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case RELATIONAL_BIG_EQ:
+            if(isnum(t1,t2)){
+            bool answer=atof(t1.IDvalue->c_str())>=atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case RELATIONAL_LEAST:
+            if(isnum(t1,t2)){
+            bool answer=atof(t1.IDvalue->c_str())<atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case RELATIONAL_LEAST_EQ:
+            if(isnum(t1,t2)){
+            bool answer=atof(t1.IDvalue->c_str())<=atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case RELATIONAL_EQ:
+            if(isnum(t1,t2)){
+            bool answer=atof(t1.IDvalue->c_str())==atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case RELATIONAL_NEQ:
+            if(isnum(t1,t2)){
+            bool answer=atof(t1.IDvalue->c_str())!=atof(t2.IDvalue->c_str());
+            t1.IDvalue=new string(to_string(answer).c_str());
+            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case AND:
+            if(t1.IDtype==BOOLTYPE&&t2.IDtype==BOOLTYPE){
+            bool answer=(atof(t1.IDvalue->c_str())==1)&(atof(t2.IDvalue->c_str())==1);
+            t1.IDvalue=new string(to_string(answer).c_str());
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case OR:
+            if(t1.IDtype==BOOLTYPE&&t2.IDtype==BOOLTYPE){
+            bool answer=(atof(t1.IDvalue->c_str())==1)&(atof(t2.IDvalue->c_str())==1);
+            t1.IDvalue=new string(to_string(answer).c_str());
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+        case NOT:
+            if(t1.IDtype==BOOLTYPE&&t1.IDtype==BOOLTYPE){
+            bool answer=!(atof(t1.IDvalue->c_str())==1);
+            t1.IDvalue=new string(to_string(answer).c_str());
+            temp=t1;
+            }
+            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"None").idnode;
+            break;
+    }
+    return temp;
+}
 
 %}
 
@@ -81,13 +233,13 @@ id_union create_idnode(int Attrubutes,int IDtype,int IDnumber,const char * IDval
     bool bool_types;
     int int_types;
     double real_types;
-    const char* string_types;
+    std::string* string_types;
     struct node{
         int IDAttributes;
         int IDtype;
         int IDnumber;
-        const char* IDvalue;
-        const char* IDname;
+        std::string* IDvalue;
+        std::string* IDname;
     }idnode;
 }
 %token <int_types>BOOL
@@ -172,10 +324,8 @@ id_union create_idnode(int Attrubutes,int IDtype,int IDnumber,const char * IDval
 %left EXPONENTIATION
 %nonassoc UMINUS
 %nonassoc UADD
-%type<real_types> number_expression const_number_expression
 %type<int_types> index_expression type const_index_expression
-%type<bool_types> bool_expression const_bool_expression
-%type<idnode> IDENTIFERS commponent arrays_variable constant_exp expression SAVE_IDENTIFERS statement
+%type<idnode> IDENTIFERS commponent arrays_variable constant_exp expression SAVE_IDENTIFERS statement bool_expression number_expression
 
 
 %%
@@ -222,7 +372,7 @@ statement:      IDENTIFERS ASSIGNMENT expression{
                             return 1;
                         }
                     }
-                    update_data($1.IDname,$3.IDvalue);
+                    update_data($1.IDname->c_str(),$3.IDvalue->c_str());
                     
                 }|
                 arrays_variable ASSIGNMENT expression{
@@ -239,10 +389,10 @@ statement:      IDENTIFERS ASSIGNMENT expression{
                             return 1;
                         }
                     }
-                    update_data($1.IDname,$3.IDvalue);
+                    update_data($1.IDname->c_str(),$3.IDvalue->c_str());
                 }|
-                PRINT expression{printf("%s ",$2.IDvalue);}|
-                PRINTLN expression{printf(" %s \n",$2.IDvalue);}|
+                PRINT expression{printf("%s ",$2.IDvalue->c_str());}|
+                PRINTLN expression{printf(" %s \n",$2.IDvalue->c_str());}|
                 READ IDENTIFERS|
                 RETURN |
                 RETURN expression
@@ -264,14 +414,14 @@ SAVE_IDENTIFERS:IDENTIFIER{
                 //if find the Id in table than return 1 to expression error
                 //else not do anything
                 union YYSTYPE temp;
-                id_node temp_id = lookout_data($1);
+                id_node temp_id = lookout_data($1->c_str());
                 if (temp_id.get_IDAttributes()==ERROR_ATTRIBUTE)
                 {
                     temp.idnode.IDAttributes=CONST_ATTRIBUTE;
                     temp.idnode.IDtype=0;
                     temp.idnode.IDnumber=1;
-                    temp.idnode.IDvalue="None";
-                    temp.idnode.IDname=temp_id.get_IDname().c_str();
+                    temp.idnode.IDvalue=new string("None");
+                    temp.idnode.IDname=new string(temp_id.get_IDname().c_str());
                     $$=temp.idnode;
                 }
                 else{
@@ -284,7 +434,7 @@ IDENTIFERS:    IDENTIFIER{
                 // must find the value and the attrubutes to ASSIGNMENT in table
                 // if not find return 1 to expression error
                 union YYSTYPE temp;
-                id_node temp_id = lookout_data($1);
+                id_node temp_id = lookout_data($1->c_str());
                 if (temp_id.get_IDAttributes()==ERROR_ATTRIBUTE)
                 {
                     yyerror("not define declaration");
@@ -293,8 +443,8 @@ IDENTIFERS:    IDENTIFIER{
                 temp.idnode.IDAttributes=temp_id.get_IDAttributes();
                 temp.idnode.IDtype=temp_id.get_IDtype();
                 temp.idnode.IDnumber=temp_id.get_IDnumber();
-                temp.idnode.IDvalue=temp_id.get_IDvalue().c_str();
-                temp.idnode.IDname=temp_id.get_IDname().c_str();
+                temp.idnode.IDvalue=new string(temp_id.get_IDvalue().c_str());
+                temp.idnode.IDname=new string(temp_id.get_IDname().c_str());
                 $$=temp.idnode;
                 };
                                 
@@ -324,14 +474,14 @@ arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BR
 arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
                 {
                 //if SAVE_IDENTIFERS not return 1 to expression error than creat the item in table
-                    inser_data($4,$2.IDname,"None",$6,ARRAY_ATTRIBUTE);
+                    inser_data($4,$2.IDname->c_str(),"None",$6,ARRAY_ATTRIBUTE);
                 };                
                 
 
 consts_declaration:
                 CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp{
-                    inser_data(1,$2.IDname,$4.IDvalue,$4.IDtype,CONST_ATTRIBUTE);
-                    printf("Const_declaration:%s\n",$4.IDvalue);
+                    inser_data(1,$2.IDname->c_str(),$4.IDvalue->c_str(),$4.IDtype,CONST_ATTRIBUTE);
+                    printf("Const_declaration:%s\n",$4.IDvalue->c_str());
                 };
                 
 Variables_declaration:
@@ -343,125 +493,82 @@ Variables_declaration:
                         yyerror("type not match");
                         return 1;
                     }
-                    inser_data(1,$2.IDname,$5.IDvalue,$3,VAR_ATTRIBUTE);
-                    printf("Variables_declaration:%s\n",$5.IDvalue);
+                    inser_data(1,$2.IDname->c_str(),$5.IDvalue->c_str(),$3,VAR_ATTRIBUTE);
+                    printf("Variables_declaration:%s\n",$5.IDvalue->c_str());
                 }|
                 VAR SAVE_IDENTIFERS type{
-                    inser_data(1,$2.IDname,"None",$3,VAR_ATTRIBUTE);
+                    inser_data(1,$2.IDname->c_str(),"None",$3,VAR_ATTRIBUTE);
                     printf("Const_declaration:%s\n",$2);
                 }|
                 arrays_declaration;
                 
 
 
-constant_exp:   const_number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str()).idnode;}
-                |const_bool_expression{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str()).idnode;}|
-                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1).idnode;};
+constant_exp:  expression{
+                if ($1.IDAttributes!=CONST_ATTRIBUTE){
+                    yyerror("must be const");
+                    return 1;
+                }
+                $$=$1;
+                };
 
                 
 // expression                
-expression:     commponent{$$=$1;}|
-                number_expression{$$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str()).idnode;}
-                |bool_expression{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str()).idnode;}|
-                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1).idnode;};
+expression:     
+                number_expression{$$=$1;}|bool_expression{$$=$1;}|
+                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1->c_str()).idnode;};
                 
                 
 
 const_index_expression:
-                const_number_expression{$$=int($1);};
+                number_expression{
+                if ($1.IDAttributes!=CONST_ATTRIBUTE){
+                    yyerror("must be const");
+                    return 1;
+                }
+                $$=atoi($1.IDvalue->c_str());
+                };
                 
 index_expression:
-                number_expression{$$=int($1);};
-                
-const_number_expression:
-                LEFT_PARENTHESE number_expression RIGHT_PARENTHESE{$$=$2;}|
-                number_expression ARITHMETIC_ADD number_expression{$$=$1+$3;}|
-                number_expression ARITHMETIC_SUB number_expression{$$=$1-$3;}|
-                number_expression ARITHMETIC_MUL number_expression{$$=$1*$3;}|
-                number_expression ARITHMETIC_DIV number_expression{$$=$1/$3;}|
-                number_expression EXPONENTIATION number_expression{$$=pow($1,$3);}|
-                ARITHMETIC_SUB number_expression %prec UMINUS{$$=-$2;}|
-                ARITHMETIC_ADD number_expression %prec UADD{$$=$2;}|
-                commponent
-                {
-                    if($1.IDAttributes!=CONST_ATTRIBUTE)
-                    {
-                        yyerror("must be a const\n");
-                        return 1;
-                    }
-                    if($1.IDtype==INTTYPE||$1.IDtype==REALTYPE){
-                         $$ = atof($1.IDvalue);
-                    }
-                    else
-                    {
-                        yyerror("must be a number\n");
-                        return 1;
-                    }
-                };
-            
+                number_expression{$$=atoi($1.IDvalue->c_str());};
+                            
 number_expression: 
-                LEFT_PARENTHESE number_expression RIGHT_PARENTHESE{$$=$2;}|
-                number_expression ARITHMETIC_ADD number_expression{$$=$1+$3;}|
-                number_expression ARITHMETIC_SUB number_expression{$$=$1-$3;}|
-                number_expression ARITHMETIC_MUL number_expression{$$=$1*$3;}|
-                number_expression ARITHMETIC_DIV number_expression{$$=$1/$3;}|
-                number_expression EXPONENTIATION number_expression{$$=pow($1,$3);}|
-                ARITHMETIC_SUB number_expression %prec UMINUS{$$=-$2;}|
-                ARITHMETIC_ADD number_expression %prec UADD{$$=$2;}|
-                commponent
-                {
-                    if($1.IDtype==INTTYPE||$1.IDtype==REALTYPE){
-                         $$ = atof($1.IDvalue);
-                    }
-                    else
-                    {
-                        yyerror("must be a number\n");
-                        return 1;
-                    }
-                };
-
-const_bool_expression:
-                const_number_expression RELATIONAL_BIG const_number_expression{$$=($1>$3);}|
-                const_number_expression RELATIONAL_LEAST const_number_expression{$$=($1<$3);}|
-                const_number_expression RELATIONAL_LEAST_EQ const_number_expression{$$=($1<=$3);}|
-                const_number_expression RELATIONAL_BIG_EQ const_number_expression{$$=($1>=$3);}|
-                const_number_expression RELATIONAL_EQ const_number_expression{$$=($1==$3);}|
-                const_number_expression RELATIONAL_NEQ const_number_expression{$$=($1!=$3);}|
-                LEFT_PARENTHESE const_bool_expression RIGHT_PARENTHESE{$$=$2;}|
-                const_bool_expression AND const_bool_expression{$$=($1&$3);}|
-                const_bool_expression OR const_bool_expression{$$=($1|$3);}|
-                NOT const_bool_expression{$$=!$2;}|
-                BOOLEAN_CONSTANTS_FALSE{$$=$1;}|
-                BOOLEAN_CONSTANTS_TRUE{$$=$1;};
-
-bool_expression:number_expression RELATIONAL_BIG number_expression{$$=($1>$3);}|
-                number_expression RELATIONAL_LEAST number_expression{$$=($1<$3);}|
-                number_expression RELATIONAL_LEAST_EQ number_expression{$$=($1<=$3);}|
-                number_expression RELATIONAL_BIG_EQ number_expression{$$=($1>=$3);}|
-                number_expression RELATIONAL_EQ number_expression{$$=($1==$3);}|
-                number_expression RELATIONAL_NEQ number_expression{$$=($1!=$3);}|
-                LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE{$$=$2;}|
-                bool_expression AND bool_expression{$$=($1&$3);}|
-                bool_expression OR bool_expression{$$=($1|$3);}|
-                NOT bool_expression{$$=!$2;}|commponent{
-                    if($1.IDtype!=BOOLTYPE){
-                        yyerror("must be bool");
-                        return 1;
-                    }
-                };
+                LEFT_PARENTHESE number_expression RIGHT_PARENTHESE{$$=$2;if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 
+                number_expression ARITHMETIC_ADD number_expression{
+                $$=slove(ARITHMETIC_ADD,$1,$3);
+                if ($$.IDAttributes==ERROR_ATTRIBUTE) 
+                return 1;
+                }|
+                number_expression ARITHMETIC_SUB number_expression{$$=slove(ARITHMETIC_SUB,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                number_expression ARITHMETIC_MUL number_expression{$$=slove(ARITHMETIC_MUL,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                number_expression ARITHMETIC_DIV number_expression{$$=slove(ARITHMETIC_DIV,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                number_expression EXPONENTIATION number_expression{$$=slove(EXPONENTIATION,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                ARITHMETIC_SUB number_expression %prec UMINUS{$$=slove(MINUS,$2,$2);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                ARITHMETIC_ADD number_expression %prec UADD{$$=slove(PLAUS,$2,$2);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                commponent{$$=$1;if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;};
+
+
+bool_expression:number_expression RELATIONAL_BIG number_expression{$$=slove(RELATIONAL_BIG,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                number_expression RELATIONAL_LEAST number_expression{$$=slove(RELATIONAL_LEAST,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                number_expression RELATIONAL_LEAST_EQ number_expression{$$=slove(RELATIONAL_LEAST_EQ,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                number_expression RELATIONAL_BIG_EQ number_expression{$$=slove(RELATIONAL_BIG_EQ,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                number_expression RELATIONAL_EQ number_expression{$$=slove(RELATIONAL_EQ,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                number_expression RELATIONAL_NEQ number_expression{$$=slove(RELATIONAL_NEQ,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE{$$=$2;if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                bool_expression AND bool_expression{$$=slove(AND,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                bool_expression OR bool_expression{$$=slove(OR,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                NOT bool_expression{$$=slove(NOT,$2,$2);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                BOOLEAN_CONSTANTS_FALSE{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1)).idnode;}|
+                BOOLEAN_CONSTANTS_TRUE{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1)).idnode;};
+                            
                 
-commponent:     BOOLEAN_CONSTANTS_FALSE{
-                $$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str()).idnode;
-                }|
-                BOOLEAN_CONSTANTS_TRUE{
-                $$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1).c_str()).idnode;
-                }|
+commponent:     
                 INTEGER_CONSTANTS{
-                $$=create_idnode(CONST_ATTRIBUTE,INTTYPE,1,std::to_string($1).c_str()).idnode;
+                $$=create_idnode(CONST_ATTRIBUTE,INTTYPE,1,std::to_string($1)).idnode;
                 }|
                 REAL_CONSTANTS{
-                $$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1).c_str()).idnode;
+                $$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1)).idnode;
                 }|
                 IDENTIFERS{$$=$1;}|
                 arrays_variable{$$=$1;};

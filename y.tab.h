@@ -190,18 +190,18 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 80 "hw1.y" /* yacc.c:1909  */
+#line 232 "hw1.y" /* yacc.c:1909  */
 
     bool bool_types;
     int int_types;
     double real_types;
-    const char* string_types;
+    std::string* string_types;
     struct node{
         int IDAttributes;
         int IDtype;
         int IDnumber;
-        const char* IDvalue;
-        const char* IDname;
+        std::string* IDvalue;
+        std::string* IDname;
     }idnode;
 
 #line 208 "y.tab.h" /* yacc.c:1909  */

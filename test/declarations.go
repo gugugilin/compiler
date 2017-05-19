@@ -1,5 +1,6 @@
 //test declarations
 var a0 real = 5+5.5
+var a111 int =3-5
 var a1[100]int
 var a2 int = 5
 var a3 int = -5
@@ -12,7 +13,6 @@ var a9 real = 5.5E-2
 var a10 real = -5.5E-2
 var a11 real = +5.5E-2
 var a12 int =5+3
-var a13 real =5+3
 var a14 real =+5.5E-2 - -5.5E-2
 var a15 bool = true
 var a16 bool = false&true
