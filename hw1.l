@@ -83,7 +83,7 @@ public:
     }
     id_node get_data(string s){
         map<string,id_node>::iterator temp=hash_table_string.find(s);
-        id_node new_data(counter,s,-1,-1,"None");
+        id_node new_data(counter,s,-1,-1,"0");
         if (temp==hash_table_string.end())
             return new_data;
         return temp->second;
@@ -183,7 +183,7 @@ Comments_one \/\/[^\n]*
 Comments_start_mul \/\*
 Comments_end_mul \*\/
 keywords bool|break|case|const|continue|default|else|for|func|go|if|import|int|nil|print|println|real|return|string|struct|switch|type|var|void|while|read
-comma [']
+comma [,]
 colon [:]
 semicolon [;]
 line_feed [\n]
