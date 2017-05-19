@@ -21,18 +21,20 @@ return -(((3+8.6)-2*2)/3)^2
 return a[3+8]
 //test statement with bool_exp
 //a = true
-a[3+8]=true
-a[3]=true
-a[(((3+8)-2*2)/3)^2]=!(true&true)&(true|true)
+var x[100] bool
+x[3+8]=true
+x[3]=true
+x[(((3+8)-2*2)/3)^2]=!(true&true)&(true|true)
 println true
 println !(true&true)&(true|true)
 println false
 println !(true&false)&(true|false)
 return !(true&true)&(true|true)
 //test statement with constant
-a="test"
+var z string
+z="test"
 read a
-a = a[0] + a[0]
+a[0] = a[0] + a[0]
 return 
 
 
