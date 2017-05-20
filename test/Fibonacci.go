@@ -13,11 +13,14 @@ var temp int
 // compute the nth Fibonacci number
 func void main() {
   for (;n > 2;n = n - 1) {
+    var a int =5
     temp = Fn
     Fn = Fn + FNminus1
     FNminus1 = temp
   }
-  var a real = 5.0
+  {
+    var b int =0
+  }
   /* print result */
   print "Result of computation: "
   println n

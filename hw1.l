@@ -60,7 +60,8 @@ public:
     string set_IDvalue(string new_value){
     IDvalue=new_value;
     return IDvalue;}
-    string set_scope(string name){Scope=name;}
+    string set_name(string name){IDname=name;return name;}
+    string set_scope(string name){Scope=name;return Scope;}
     void print_node(){
         printf("IDScope:%s\nIDname:%s\nIDtype:%d\nIDAttributes:%d\nIDvalue:%s\nIDnumber:%d\n",Scope.c_str(),IDname.c_str(),IDtype,IDAttributes,IDvalue.c_str(),IDnumber);
     }

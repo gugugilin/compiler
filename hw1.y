@@ -51,20 +51,18 @@ int inser_data(int idcount,string idname,string idvalue,int idtype, int idattrub
     scope_list.pop_front();
     id_node new_data(idcount,idname,idtype,idattrubutes,idvalue,current_scop);
     temp.insert(new_data);
+    new_data.set_name(current_scop+"_"+idname);
     out_scope_table.insert(new_data);
     scope_list.push_front(temp);
     return 1;
 }
 void update_data(string name,string value){
-    list<Hash>::iterator it=scope_list.end();
-    for(--it;it!=scope_list.begin();--it){
-        if(it->lookout(name)){
+    list<Hash>::iterator it=scope_list.begin();
+    for(it;it!=scope_list.end();++it){
+        if(it->lookout(name)!=-1){
             it->update(name,value);
             break;
         }
-    }
-    if(it->lookout(name)){
-        it->update(name,value);
     }
 }
 
@@ -78,17 +76,13 @@ id_node current_lookout_data(string name){
     return temp.get_data(name);
 }
 id_node lookout_data(string name){
-    list<Hash>::iterator it=scope_list.end();
-    for(--it;it!=scope_list.begin();--it){
-        if(it->lookout(name)){
+    list<Hash>::iterator it=scope_list.begin();
+    for(;it!=scope_list.end();++it){
+        if(it->lookout(name)!=-1){
             return it->get_data(name);
         }
     }
-    if(it->lookout(name)){
-        return it->get_data(name);
-    }
     id_node new_data(1,name,-1,-1,"0",current_scop);
-    new_data.print_node();
     return new_data;
 }
 void insert_scope(string name){
@@ -364,14 +358,16 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
 
 
 %%
-start_symbol:   program 
+start_symbol:   programs 
                 {
                     Trace("Reducing to start_symbol\n");
                 };
-program:        statements|declarations
+programs:       program programs |/*empty*/;
+program:        functions|declarations
                 {
                     Trace("Reducing to program\n");
                 };
+functions:      function functions|/*empty*/;
 ex_function:    FUNC type SAVE_IDENTIFERS LEFT_PARENTHESE {
                     inser_data(1,$3.IDname->c_str(),"0",$2,FUNC_ATTRIBUTE);
                     add_scope($3.IDname->c_str());
@@ -392,17 +388,15 @@ func_invo:      IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{$$=$
 
 comm_expression:/*empty*/|expression|comm_expression COMMA comm_expression{};
 
-Compound:       LEFT_BRACKETS statements RIGHT_BRACKETS{};
+ex_compound:    LEFT_BRACKETS{add_scope(current_scop+"_Compound");};
+Compound:       ex_compound statements RIGHT_BRACKETS{exit_scope();};
 
 Conditional:    IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound ELSE Compound|
                 IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound{};
 
-LOOP:           FOR LEFT_PARENTHESE statements SEMICOLON bool_expression SEMICOLON statements RIGHT_PARENTHESE Compound{};
-
-ex_Procedure:   GO IDENTIFERS LEFT_PARENTHESE{add_scope("Procedure");};
-Procedure:      ex_Procedure comm_expression RIGHT_PARENTHESE{
-                    exit_scope();
-                };
+ex_loop:        FOR LEFT_PARENTHESE{add_scope(current_scop+"_loop");};
+LOOP:           ex_loop statements SEMICOLON bool_expression SEMICOLON statements RIGHT_PARENTHESE Compound{exit_scope();};
+Procedure:      GO IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{};
 
 statements:     declarations statements  |
                 statement statements|
@@ -498,6 +492,7 @@ IDENTIFERS:    IDENTIFIER{
                 id_node temp_id = lookout_data($1->c_str());
                 if (temp_id.get_IDAttributes()==ERROR_ATTRIBUTE)
                 {
+                    printf("name : %s\n",temp_id.get_IDname().c_str());
                     yyerror("not define declaration");
                     return 1;
                 }
@@ -519,6 +514,7 @@ declaration:    Variables_declaration|
 arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
                 {
                     if ($1.IDAttributes!=ARRAY_ATTRIBUTE){
+                        printf("IDAttributes %d\n",$1.IDAttributes);
                         yyerror("not ARRAY_type");
                         return 1;
                     }
@@ -665,10 +661,12 @@ int main(int argc,char** argv)
         else
             break;
     }
-    if(count==0)
+    if(count==0){
+        dump_table();
         yyerror("\nsave pass!!\n");
+    }
     else
         fprintf(stderr,"\nParsing error:%d \n",count);
-    dump_table();
+    
 }
 
