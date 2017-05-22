@@ -1,0 +1,277 @@
+1: var a0[5] int
+2: var a1[5] string
+3: var a2[5] bool
+4: var a6 string = "S6"
+5: var b0 int = 3
+6: var b1 real = 3.3
+7: var b2 string = "S3"
+8: const c0 = "test"
+9: const c1 = 1
+10: const c2 = c1
+11: const c3 = 2
+12: //c0=5 //to test the const assigment
+13: //a0[3]=c0 //test the type is error
+14: //a0[5]=1 //test outside the func can't use the statement
+17: func int lala(){
+18:     var a4 real = (3.0+3.6+7.8)*2/4
+19:     //var a5 real = (3+3.6+7.8)*2/0  //test the mod zero
+20:     a0[3]=c2//test assigment
+21:     a1[3]=c0
+22:     //b0=a0[5]
+23:     b1=3+3.3
+24:     b2=c0
+25: }
+26: func string lala2(a5 int,a4 int,a2 int){
+27:     a0[4]=c2//check can see the const 
+28:     var a6 int = 5//redefine a6 to test m1=a6 
+29:     //var a2 real =3.5 //this will error by a2 int(redefine)
+30:     //a2=a4
+31:     a6=a2// if you catch the goble a2 than it is error
+32: }
+34: func void main(){
+35:     {
+36:         var a6 bool = !(false&true)//redefine a6 to test m1=a6 
+37:         //var main bool = true
+38:         var a7 bool = !(c2>b0|c2>b0)
+39:         a6=a2[0]
+40:     }
+41:     var m1 string =c0//trace you can assigment the const Var
+42:     m1=a6// trace you can assces var a6 string = "S6"
+43:     a6=lala2((a0[1]+1)*2,a0[2]+c2,a0[3]+b0)//return the func
+44:     go lala()
+45:     //a6 = go lala() //no return
+46:     var test int = 4
+47:     //a0=0 //a0 is a array can't assigment a int
+48:     for(a0[3]=0;b0>2;b0=b0+1){
+49:         var test int = 5//test the for and scope
+50:         b0=c2//check the value or type is change by b0=a0[5]
+51:     }
+52:     if (c2>b0){
+53:         print test
+
+exe_code : 4 
+54:         a0[0]=test
+55:         println a0[0]+3.5
+
+exe_code : 7.500000 
+
+56:     }
+57:     
+58: }
+------ID print: 0 ------ 
+ IDScope:goble
+IDname:goble_a0
+IDtype:INT
+IDAttributes:ARRAY
+IDvalue:0
+IDnumber:5
+------------------------- 
+ ------ID print: 1 ------ 
+ IDScope:goble
+IDname:goble_a1
+IDtype:STRING
+IDAttributes:ARRAY
+IDvalue:0
+IDnumber:5
+------------------------- 
+ ------ID print: 2 ------ 
+ IDScope:goble
+IDname:goble_a2
+IDtype:BOOL
+IDAttributes:ARRAY
+IDvalue:0
+IDnumber:5
+------------------------- 
+ ------ID print: 3 ------ 
+ IDScope:goble
+IDname:goble_a6
+IDtype:STRING
+IDAttributes:VAR
+IDvalue:S6
+IDnumber:1
+------------------------- 
+ ------ID print: 4 ------ 
+ IDScope:goble
+IDname:goble_b0
+IDtype:INT
+IDAttributes:VAR
+IDvalue:3
+IDnumber:1
+------------------------- 
+ ------ID print: 5 ------ 
+ IDScope:goble
+IDname:goble_b1
+IDtype:REAL
+IDAttributes:VAR
+IDvalue:3.300000
+IDnumber:1
+------------------------- 
+ ------ID print: 6 ------ 
+ IDScope:goble
+IDname:goble_b2
+IDtype:STRING
+IDAttributes:VAR
+IDvalue:S3
+IDnumber:1
+------------------------- 
+ ------ID print: 7 ------ 
+ IDScope:goble
+IDname:goble_c0
+IDtype:STRING
+IDAttributes:CONST
+IDvalue:test
+IDnumber:1
+------------------------- 
+ ------ID print: 8 ------ 
+ IDScope:goble
+IDname:goble_c1
+IDtype:INT
+IDAttributes:CONST
+IDvalue:1
+IDnumber:1
+------------------------- 
+ ------ID print: 9 ------ 
+ IDScope:goble
+IDname:goble_c2
+IDtype:INT
+IDAttributes:CONST
+IDvalue:1
+IDnumber:1
+------------------------- 
+ ------ID print: 10 ------ 
+ IDScope:goble
+IDname:goble_c3
+IDtype:INT
+IDAttributes:CONST
+IDvalue:2
+IDnumber:1
+------------------------- 
+ ------ID print: 11 ------ 
+ IDScope:goble
+IDname:goble_lala
+IDtype:INT
+IDAttributes:FUNC
+IDvalue:0
+IDnumber:1
+------------------------- 
+ ------ID print: 12 ------ 
+ IDScope:lala
+IDname:lala_lala
+IDtype:INT
+IDAttributes:FUNC
+IDvalue:0
+IDnumber:1
+------------------------- 
+ ------ID print: 13 ------ 
+ IDScope:lala
+IDname:lala_a4
+IDtype:REAL
+IDAttributes:VAR
+IDvalue:7.200000
+IDnumber:1
+------------------------- 
+ ------ID print: 14 ------ 
+ IDScope:goble
+IDname:goble_lala2
+IDtype:STRING
+IDAttributes:FUNC
+IDvalue:0
+IDnumber:1
+------------------------- 
+ ------ID print: 15 ------ 
+ IDScope:lala2
+IDname:lala2_lala2
+IDtype:STRING
+IDAttributes:FUNC
+IDvalue:0
+IDnumber:1
+------------------------- 
+ ------ID print: 16 ------ 
+ IDScope:lala2
+IDname:lala2_a2
+IDtype:INT
+IDAttributes:VAR
+IDvalue:0
+IDnumber:1
+------------------------- 
+ ------ID print: 17 ------ 
+ IDScope:lala2
+IDname:lala2_a4
+IDtype:INT
+IDAttributes:VAR
+IDvalue:0
+IDnumber:1
+------------------------- 
+ ------ID print: 18 ------ 
+ IDScope:lala2
+IDname:lala2_a5
+IDtype:INT
+IDAttributes:VAR
+IDvalue:0
+IDnumber:1
+------------------------- 
+ ------ID print: 19 ------ 
+ IDScope:lala2
+IDname:lala2_a6
+IDtype:INT
+IDAttributes:VAR
+IDvalue:5
+IDnumber:1
+------------------------- 
+ ------ID print: 20 ------ 
+ IDScope:goble
+IDname:goble_main
+IDtype:VOID
+IDAttributes:FUNC
+IDvalue:0
+IDnumber:1
+------------------------- 
+ ------ID print: 21 ------ 
+ IDScope:main
+IDname:main_main
+IDtype:VOID
+IDAttributes:FUNC
+IDvalue:0
+IDnumber:1
+------------------------- 
+ ------ID print: 22 ------ 
+ IDScope:main_Compound
+IDname:main_Compound_a6
+IDtype:BOOL
+IDAttributes:VAR
+IDvalue:1
+IDnumber:1
+------------------------- 
+ ------ID print: 23 ------ 
+ IDScope:main_Compound
+IDname:main_Compound_a7
+IDtype:BOOL
+IDAttributes:VAR
+IDvalue:1
+IDnumber:1
+------------------------- 
+ ------ID print: 24 ------ 
+ IDScope:main
+IDname:main_m1
+IDtype:STRING
+IDAttributes:VAR
+IDvalue:test
+IDnumber:1
+------------------------- 
+ ------ID print: 25 ------ 
+ IDScope:main
+IDname:main_test
+IDtype:INT
+IDAttributes:VAR
+IDvalue:4
+IDnumber:1
+------------------------- 
+ ------ID print: 26 ------ 
+ IDScope:main_loop_Compound
+IDname:main_loop_Compound_test
+IDtype:INT
+IDAttributes:VAR
+IDvalue:5
+IDnumber:1
+------------------------- 
+ 

@@ -13,12 +13,13 @@ const c3 = 2
 //a0[3]=c0 //test the type is error
 //a0[5]=1 //test outside the func can't use the statement
 
+
 func int lala(){
-    var a4 real = (3+3.6+7.8)*2/4
+    var a4 real = (3.0+3.6+7.8)*2/4
     //var a5 real = (3+3.6+7.8)*2/0  //test the mod zero
     a0[3]=c2//test assigment
     a1[3]=c0
-    b0=a0[5]
+    //b0=a0[5]
     b1=3+3.3
     b2=c0
 }
@@ -34,7 +35,7 @@ func void main(){
     {
         var a6 bool = !(false&true)//redefine a6 to test m1=a6 
         //var main bool = true
-        var a7 bool = !(c2>b0)
+        var a7 bool = !(c2>b0|c2>b0)
         a6=a2[0]
     }
     var m1 string =c0//trace you can assigment the const Var
@@ -48,6 +49,10 @@ func void main(){
         var test int = 5//test the for and scope
         b0=c2//check the value or type is change by b0=a0[5]
     }
-    print test
-    println test+3.5
+    if (c2>b0){
+        print test
+        a0[0]=test
+        println a0[0]+3.5
+    }
+    
 }

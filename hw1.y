@@ -176,7 +176,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
             if(isnum(t1,t2)){
             bool answer=atof(t1.IDvalue->c_str())>atof(t2.IDvalue->c_str());
             t1.IDvalue=new string(to_string(answer).c_str());
-            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            t1.IDtype=BOOLTYPE;
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
@@ -185,7 +185,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
             if(isnum(t1,t2)){
             bool answer=atof(t1.IDvalue->c_str())>=atof(t2.IDvalue->c_str());
             t1.IDvalue=new string(to_string(answer).c_str());
-            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            t1.IDtype=BOOLTYPE;
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
@@ -194,7 +194,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
             if(isnum(t1,t2)){
             bool answer=atof(t1.IDvalue->c_str())<atof(t2.IDvalue->c_str());
             t1.IDvalue=new string(to_string(answer).c_str());
-            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            t1.IDtype=BOOLTYPE;
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
@@ -203,7 +203,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
             if(isnum(t1,t2)){
             bool answer=atof(t1.IDvalue->c_str())<=atof(t2.IDvalue->c_str());
             t1.IDvalue=new string(to_string(answer).c_str());
-            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            t1.IDtype=BOOLTYPE;
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
@@ -212,7 +212,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
             if(isnum(t1,t2)){
             bool answer=atof(t1.IDvalue->c_str())==atof(t2.IDvalue->c_str());
             t1.IDvalue=new string(to_string(answer).c_str());
-            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            t1.IDtype=BOOLTYPE;
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
@@ -221,7 +221,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
             if(isnum(t1,t2)){
             bool answer=atof(t1.IDvalue->c_str())!=atof(t2.IDvalue->c_str());
             t1.IDvalue=new string(to_string(answer).c_str());
-            if(t1.IDtype!=t2.IDtype) t1.IDtype=BOOLTYPE;
+            t1.IDtype=BOOLTYPE;
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
@@ -272,8 +272,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
     }idnode;
 }
 %token <int_types>BOOL
-%token BREAK
-%token CASE
+%token BREAK CASE
 %token CONST
 %token CONTINUE
 %token DEFAULT
@@ -358,15 +357,10 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
 
 
 %%
-start_symbol:   programs 
-                {
-                    Trace("Reducing to start_symbol\n");
-                };
+start_symbol:   programs {};
 programs:       program programs |/*empty*/;
-program:        functions|declarations
-                {
-                    Trace("Reducing to program\n");
-                };
+program:        functions|declarations;
+                
 functions:      function functions|/*empty*/;
 ex_function:    FUNC type SAVE_IDENTIFERS LEFT_PARENTHESE {
                     inser_data(1,$3.IDname->c_str(),"0",$2,FUNC_ATTRIBUTE);
@@ -400,10 +394,8 @@ Procedure:      GO IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{}
 
 statements:     declarations statements  |
                 statement statements|
-                /*empty*/ 
-                {
-                    Trace("Reducing to statements\n");
-                };
+                /*empty*/ ;
+                
                 
                 
 statement:      Compound|LOOP|function|Conditional|Procedure|
@@ -445,15 +437,11 @@ statement:      Compound|LOOP|function|Conditional|Procedure|
                     }
                     update_data($1.IDname->c_str(),$3.IDvalue->c_str());
                 }|
-                PRINT expression{printf("%s ",$2.IDvalue->c_str());}|
-                PRINTLN expression{printf(" %s \n",$2.IDvalue->c_str());}|
+                PRINT expression{printf("\nexe_code : %s \n",$2.IDvalue->c_str());}|
+                PRINTLN expression{printf("\nexe_code : %s \n\n",$2.IDvalue->c_str());}|
                 READ IDENTIFERS|
                 RETURN |
-                RETURN expression
-                {
-                    $$=$2;
-                    Trace("Reducing to statement\n");
-                };
+                RETURN expression{$$=$2;};
 
                                 
                 
@@ -518,7 +506,7 @@ arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BR
                         yyerror("not ARRAY_type");
                         return 1;
                     }
-                    if ($3<=$1.IDnumber&& $3>=0){
+                    if ($3<$1.IDnumber&& $3>=0){
                         $$=$1;
                     }
                     else{ 
@@ -538,7 +526,7 @@ arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expressi
 consts_declaration:
                 CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp{
                     inser_data(1,$2.IDname->c_str(),$4.IDvalue->c_str(),$4.IDtype,CONST_ATTRIBUTE);
-                    printf("Const_declaration:%s\n",$4.IDvalue->c_str());
+                    //printf("Const_declaration:%s\n",$4.IDvalue->c_str());
                 };
                 
 Variables_declaration:
@@ -551,11 +539,11 @@ Variables_declaration:
                         return 1;
                     }
                     inser_data(1,$2.IDname->c_str(),$5.IDvalue->c_str(),$3,VAR_ATTRIBUTE);
-                    printf("Variables_declaration:%s\n",$5.IDvalue->c_str());
+                    //printf("Variables_declaration:%s\n",$5.IDvalue->c_str());
                 }|
                 VAR SAVE_IDENTIFERS type{
                     inser_data(1,$2.IDname->c_str(),"0",$3,VAR_ATTRIBUTE);
-                    printf("Variables_declaration:%s\n",$2);
+                    //printf("Variables_declaration:%s\n",$2);
                 }|
                 arrays_declaration;
                 
@@ -591,12 +579,7 @@ index_expression:
                             
 number_expression: 
                 LEFT_PARENTHESE number_expression RIGHT_PARENTHESE{$$=$2;if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
-                
-                number_expression ARITHMETIC_ADD number_expression{
-                $$=slove(ARITHMETIC_ADD,$1,$3);
-                if ($$.IDAttributes==ERROR_ATTRIBUTE) 
-                return 1;
-                }|
+                number_expression ARITHMETIC_ADD number_expression{$$=slove(ARITHMETIC_ADD,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 number_expression ARITHMETIC_SUB number_expression{$$=slove(ARITHMETIC_SUB,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 number_expression ARITHMETIC_MUL number_expression{$$=slove(ARITHMETIC_MUL,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 number_expression ARITHMETIC_DIV number_expression{$$=slove(ARITHMETIC_DIV,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
@@ -606,13 +589,13 @@ number_expression:
                 commponent{$$=$1;if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;};
 
 
-bool_expression:number_expression RELATIONAL_BIG number_expression{$$=slove(RELATIONAL_BIG,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+bool_expression:LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE{$$=$2;if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                number_expression RELATIONAL_BIG number_expression{$$=slove(RELATIONAL_BIG,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 number_expression RELATIONAL_LEAST number_expression{$$=slove(RELATIONAL_LEAST,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 number_expression RELATIONAL_LEAST_EQ number_expression{$$=slove(RELATIONAL_LEAST_EQ,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 number_expression RELATIONAL_BIG_EQ number_expression{$$=slove(RELATIONAL_BIG_EQ,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 number_expression RELATIONAL_EQ number_expression{$$=slove(RELATIONAL_EQ,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 number_expression RELATIONAL_NEQ number_expression{$$=slove(RELATIONAL_NEQ,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
-                LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE{$$=$2;if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 bool_expression AND bool_expression{$$=slove(AND,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 bool_expression OR bool_expression{$$=slove(OR,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 NOT bool_expression{$$=slove(NOT,$2,$2);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|

@@ -4,7 +4,7 @@
 
 // variables
 var a int = 5
-a=5
+//a=5
 var c int
 
 // function declaration

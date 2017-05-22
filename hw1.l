@@ -19,6 +19,8 @@
 #define tokenInteger(t,i) {LIST; printf("<%s:%d>\n","t",i);}
 #define tokenid(t,s) {LIST; printf("<%s:%s>\n","t",s);}
 using namespace std;
+string type_name[6]={"None","BOOL","INT","REAL","STRING","VOID"};
+string attr_name[5]={"ERROR","FUNC","CONST","VAR","ARRAY"};
 int linenum = 0;
 char buf[MAX_LINE_LENG];
 char temp[MAX_LINE_LENG];
@@ -63,7 +65,7 @@ public:
     string set_name(string name){IDname=name;return name;}
     string set_scope(string name){Scope=name;return Scope;}
     void print_node(){
-        printf("IDScope:%s\nIDname:%s\nIDtype:%d\nIDAttributes:%d\nIDvalue:%s\nIDnumber:%d\n",Scope.c_str(),IDname.c_str(),IDtype,IDAttributes,IDvalue.c_str(),IDnumber);
+        printf("IDScope:%s\nIDname:%s\nIDtype:%s\nIDAttributes:%s\nIDvalue:%s\nIDnumber:%d\n",Scope.c_str(),IDname.c_str(),type_name[IDtype].c_str(),attr_name[1+ IDAttributes].c_str(),IDvalue.c_str(),IDnumber);
     }
 private:
     int IDtable_count;
@@ -270,7 +272,7 @@ error_simple .
     
 <String_Constants>\"\" {str_temp+="\"";LIST;}
 <String_Constants>\n {exit(-1);}
-<String_Constants>\" {printf("<string:\"%s\">\n",str_temp.c_str());BEGIN 0;
+<String_Constants>\" {BEGIN 0;
 yylval.string_types=new string(str_temp.c_str());
 LIST;
 return STRING_CONSTANTS;

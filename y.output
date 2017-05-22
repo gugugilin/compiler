@@ -144,13 +144,13 @@
    70                  | ARITHMETIC_ADD number_expression
    71                  | commponent
 
-   72 bool_expression: number_expression RELATIONAL_BIG number_expression
-   73                | number_expression RELATIONAL_LEAST number_expression
-   74                | number_expression RELATIONAL_LEAST_EQ number_expression
-   75                | number_expression RELATIONAL_BIG_EQ number_expression
-   76                | number_expression RELATIONAL_EQ number_expression
-   77                | number_expression RELATIONAL_NEQ number_expression
-   78                | LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE
+   72 bool_expression: LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE
+   73                | number_expression RELATIONAL_BIG number_expression
+   74                | number_expression RELATIONAL_LEAST number_expression
+   75                | number_expression RELATIONAL_LEAST_EQ number_expression
+   76                | number_expression RELATIONAL_BIG_EQ number_expression
+   77                | number_expression RELATIONAL_EQ number_expression
+   78                | number_expression RELATIONAL_NEQ number_expression
    79                | bool_expression AND bool_expression
    80                | bool_expression OR bool_expression
    81                | NOT bool_expression
@@ -198,12 +198,12 @@ ARITHMETIC_ADD (284) 64 70
 ARITHMETIC_SUB (285) 65 69
 ARITHMETIC_MUL (286) 66
 ARITHMETIC_DIV (287) 67
-RELATIONAL_LEAST (288) 73
-RELATIONAL_LEAST_EQ (289) 74
-RELATIONAL_BIG_EQ (290) 75
-RELATIONAL_BIG (291) 72
-RELATIONAL_EQ (292) 76
-RELATIONAL_NEQ (293) 77
+RELATIONAL_LEAST (288) 74
+RELATIONAL_LEAST_EQ (289) 75
+RELATIONAL_BIG_EQ (290) 76
+RELATIONAL_BIG (291) 73
+RELATIONAL_EQ (292) 77
+RELATIONAL_NEQ (293) 78
 COMPOUND_OPERATORS_ADD (294)
 COMPOUND_OPERATORS_SUB (295)
 COMPOUND_OPERATORS_MUL (296)
@@ -219,8 +219,8 @@ COMMENTS_END_MUL (305)
 COMMA (306) 13 17
 COLON (307)
 SEMICOLON (308) 23
-LEFT_PARENTHESE (309) 8 14 20 21 22 24 63 78
-RIGHT_PARENTHESE (310) 9 14 20 21 23 24 63 78
+LEFT_PARENTHESE (309) 8 14 20 21 22 24 63 72
+RIGHT_PARENTHESE (310) 9 14 20 21 23 24 63 72
 LEFT_SQUARE_BRACKETS (311) 51 52
 RIGHT_SQUARE_BRACKETS (312) 51 52
 LEFT_BRACKETS (313) 9 18
@@ -306,10 +306,10 @@ index_expression (102)
     於左側： 62,於右側： 51
 number_expression (103)
     於左側： 63 64 65 66 67 68 69 70 71,於右側： 58 61 62 63
-    64 65 66 67 68 69 70 72 73 74 75 76 77
+    64 65 66 67 68 69 70 73 74 75 76 77 78
 bool_expression (104)
     於左側： 72 73 74 75 76 77 78 79 80 81 82 83,於右側： 20
-    21 23 59 78 79 80 81
+    21 23 59 72 79 80 81
 commponent (105)
     於左側： 84 85 86 87 88,於右側： 71
 
@@ -787,7 +787,7 @@ commponent (105)
 狀態 42
 
    63 number_expression: LEFT_PARENTHESE . number_expression RIGHT_PARENTHESE
-   78 bool_expression: LEFT_PARENTHESE . bool_expression RIGHT_PARENTHESE
+   72 bool_expression: LEFT_PARENTHESE . bool_expression RIGHT_PARENTHESE
 
     ARITHMETIC_ADD           偏移，並進入狀態 37
     ARITHMETIC_SUB           偏移，並進入狀態 38
@@ -883,12 +883,12 @@ commponent (105)
    66                  | number_expression . ARITHMETIC_MUL number_expression
    67                  | number_expression . ARITHMETIC_DIV number_expression
    68                  | number_expression . EXPONENTIATION number_expression
-   72 bool_expression: number_expression . RELATIONAL_BIG number_expression
-   73                | number_expression . RELATIONAL_LEAST number_expression
-   74                | number_expression . RELATIONAL_LEAST_EQ number_expression
-   75                | number_expression . RELATIONAL_BIG_EQ number_expression
-   76                | number_expression . RELATIONAL_EQ number_expression
-   77                | number_expression . RELATIONAL_NEQ number_expression
+   73 bool_expression: number_expression . RELATIONAL_BIG number_expression
+   74                | number_expression . RELATIONAL_LEAST number_expression
+   75                | number_expression . RELATIONAL_LEAST_EQ number_expression
+   76                | number_expression . RELATIONAL_BIG_EQ number_expression
+   77                | number_expression . RELATIONAL_EQ number_expression
+   78                | number_expression . RELATIONAL_NEQ number_expression
 
     ARITHMETIC_ADD       偏移，並進入狀態 70
     ARITHMETIC_SUB       偏移，並進入狀態 71
@@ -1092,12 +1092,12 @@ commponent (105)
    66                  | number_expression . ARITHMETIC_MUL number_expression
    67                  | number_expression . ARITHMETIC_DIV number_expression
    68                  | number_expression . EXPONENTIATION number_expression
-   72 bool_expression: number_expression . RELATIONAL_BIG number_expression
-   73                | number_expression . RELATIONAL_LEAST number_expression
-   74                | number_expression . RELATIONAL_LEAST_EQ number_expression
-   75                | number_expression . RELATIONAL_BIG_EQ number_expression
-   76                | number_expression . RELATIONAL_EQ number_expression
-   77                | number_expression . RELATIONAL_NEQ number_expression
+   73 bool_expression: number_expression . RELATIONAL_BIG number_expression
+   74                | number_expression . RELATIONAL_LEAST number_expression
+   75                | number_expression . RELATIONAL_LEAST_EQ number_expression
+   76                | number_expression . RELATIONAL_BIG_EQ number_expression
+   77                | number_expression . RELATIONAL_EQ number_expression
+   78                | number_expression . RELATIONAL_NEQ number_expression
 
     ARITHMETIC_ADD       偏移，並進入狀態 70
     ARITHMETIC_SUB       偏移，並進入狀態 71
@@ -1129,12 +1129,12 @@ commponent (105)
    66                  | number_expression . ARITHMETIC_MUL number_expression
    67                  | number_expression . ARITHMETIC_DIV number_expression
    68                  | number_expression . EXPONENTIATION number_expression
-   72 bool_expression: number_expression . RELATIONAL_BIG number_expression
-   73                | number_expression . RELATIONAL_LEAST number_expression
-   74                | number_expression . RELATIONAL_LEAST_EQ number_expression
-   75                | number_expression . RELATIONAL_BIG_EQ number_expression
-   76                | number_expression . RELATIONAL_EQ number_expression
-   77                | number_expression . RELATIONAL_NEQ number_expression
+   73 bool_expression: number_expression . RELATIONAL_BIG number_expression
+   74                | number_expression . RELATIONAL_LEAST number_expression
+   75                | number_expression . RELATIONAL_LEAST_EQ number_expression
+   76                | number_expression . RELATIONAL_BIG_EQ number_expression
+   77                | number_expression . RELATIONAL_EQ number_expression
+   78                | number_expression . RELATIONAL_NEQ number_expression
 
     ARITHMETIC_ADD       偏移，並進入狀態 70
     ARITHMETIC_SUB       偏移，並進入狀態 71
@@ -1152,7 +1152,7 @@ commponent (105)
 
 狀態 67
 
-   78 bool_expression: LEFT_PARENTHESE bool_expression . RIGHT_PARENTHESE
+   72 bool_expression: LEFT_PARENTHESE bool_expression . RIGHT_PARENTHESE
    79                | bool_expression . AND bool_expression
    80                | bool_expression . OR bool_expression
 
@@ -1281,7 +1281,7 @@ commponent (105)
 
 狀態 74
 
-   73 bool_expression: number_expression RELATIONAL_LEAST . number_expression
+   74 bool_expression: number_expression RELATIONAL_LEAST . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 37
     ARITHMETIC_SUB     偏移，並進入狀態 38
@@ -1299,7 +1299,7 @@ commponent (105)
 
 狀態 75
 
-   74 bool_expression: number_expression RELATIONAL_LEAST_EQ . number_expression
+   75 bool_expression: number_expression RELATIONAL_LEAST_EQ . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 37
     ARITHMETIC_SUB     偏移，並進入狀態 38
@@ -1317,7 +1317,7 @@ commponent (105)
 
 狀態 76
 
-   75 bool_expression: number_expression RELATIONAL_BIG_EQ . number_expression
+   76 bool_expression: number_expression RELATIONAL_BIG_EQ . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 37
     ARITHMETIC_SUB     偏移，並進入狀態 38
@@ -1335,7 +1335,7 @@ commponent (105)
 
 狀態 77
 
-   72 bool_expression: number_expression RELATIONAL_BIG . number_expression
+   73 bool_expression: number_expression RELATIONAL_BIG . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 37
     ARITHMETIC_SUB     偏移，並進入狀態 38
@@ -1353,7 +1353,7 @@ commponent (105)
 
 狀態 78
 
-   76 bool_expression: number_expression RELATIONAL_EQ . number_expression
+   77 bool_expression: number_expression RELATIONAL_EQ . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 37
     ARITHMETIC_SUB     偏移，並進入狀態 38
@@ -1371,7 +1371,7 @@ commponent (105)
 
 狀態 79
 
-   77 bool_expression: number_expression RELATIONAL_NEQ . number_expression
+   78 bool_expression: number_expression RELATIONAL_NEQ . number_expression
 
     ARITHMETIC_ADD     偏移，並進入狀態 37
     ARITHMETIC_SUB     偏移，並進入狀態 38
@@ -1892,9 +1892,9 @@ commponent (105)
 
 狀態 108
 
-   78 bool_expression: LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE .
+   72 bool_expression: LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE .
 
-    $預設  使用規則 78 以縮減 (bool_expression)
+    $預設  使用規則 72 以縮減 (bool_expression)
 
 
 狀態 109
@@ -2005,25 +2005,7 @@ commponent (105)
    66                  | number_expression . ARITHMETIC_MUL number_expression
    67                  | number_expression . ARITHMETIC_DIV number_expression
    68                  | number_expression . EXPONENTIATION number_expression
-   73 bool_expression: number_expression RELATIONAL_LEAST number_expression .
-
-    ARITHMETIC_ADD  偏移，並進入狀態 70
-    ARITHMETIC_SUB  偏移，並進入狀態 71
-    ARITHMETIC_MUL  偏移，並進入狀態 72
-    ARITHMETIC_DIV  偏移，並進入狀態 73
-    EXPONENTIATION  偏移，並進入狀態 80
-
-    $預設  使用規則 73 以縮減 (bool_expression)
-
-
-狀態 118
-
-   64 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   65                  | number_expression . ARITHMETIC_SUB number_expression
-   66                  | number_expression . ARITHMETIC_MUL number_expression
-   67                  | number_expression . ARITHMETIC_DIV number_expression
-   68                  | number_expression . EXPONENTIATION number_expression
-   74 bool_expression: number_expression RELATIONAL_LEAST_EQ number_expression .
+   74 bool_expression: number_expression RELATIONAL_LEAST number_expression .
 
     ARITHMETIC_ADD  偏移，並進入狀態 70
     ARITHMETIC_SUB  偏移，並進入狀態 71
@@ -2034,14 +2016,14 @@ commponent (105)
     $預設  使用規則 74 以縮減 (bool_expression)
 
 
-狀態 119
+狀態 118
 
    64 number_expression: number_expression . ARITHMETIC_ADD number_expression
    65                  | number_expression . ARITHMETIC_SUB number_expression
    66                  | number_expression . ARITHMETIC_MUL number_expression
    67                  | number_expression . ARITHMETIC_DIV number_expression
    68                  | number_expression . EXPONENTIATION number_expression
-   75 bool_expression: number_expression RELATIONAL_BIG_EQ number_expression .
+   75 bool_expression: number_expression RELATIONAL_LEAST_EQ number_expression .
 
     ARITHMETIC_ADD  偏移，並進入狀態 70
     ARITHMETIC_SUB  偏移，並進入狀態 71
@@ -2052,32 +2034,14 @@ commponent (105)
     $預設  使用規則 75 以縮減 (bool_expression)
 
 
-狀態 120
+狀態 119
 
    64 number_expression: number_expression . ARITHMETIC_ADD number_expression
    65                  | number_expression . ARITHMETIC_SUB number_expression
    66                  | number_expression . ARITHMETIC_MUL number_expression
    67                  | number_expression . ARITHMETIC_DIV number_expression
    68                  | number_expression . EXPONENTIATION number_expression
-   72 bool_expression: number_expression RELATIONAL_BIG number_expression .
-
-    ARITHMETIC_ADD  偏移，並進入狀態 70
-    ARITHMETIC_SUB  偏移，並進入狀態 71
-    ARITHMETIC_MUL  偏移，並進入狀態 72
-    ARITHMETIC_DIV  偏移，並進入狀態 73
-    EXPONENTIATION  偏移，並進入狀態 80
-
-    $預設  使用規則 72 以縮減 (bool_expression)
-
-
-狀態 121
-
-   64 number_expression: number_expression . ARITHMETIC_ADD number_expression
-   65                  | number_expression . ARITHMETIC_SUB number_expression
-   66                  | number_expression . ARITHMETIC_MUL number_expression
-   67                  | number_expression . ARITHMETIC_DIV number_expression
-   68                  | number_expression . EXPONENTIATION number_expression
-   76 bool_expression: number_expression RELATIONAL_EQ number_expression .
+   76 bool_expression: number_expression RELATIONAL_BIG_EQ number_expression .
 
     ARITHMETIC_ADD  偏移，並進入狀態 70
     ARITHMETIC_SUB  偏移，並進入狀態 71
@@ -2088,14 +2052,32 @@ commponent (105)
     $預設  使用規則 76 以縮減 (bool_expression)
 
 
-狀態 122
+狀態 120
 
    64 number_expression: number_expression . ARITHMETIC_ADD number_expression
    65                  | number_expression . ARITHMETIC_SUB number_expression
    66                  | number_expression . ARITHMETIC_MUL number_expression
    67                  | number_expression . ARITHMETIC_DIV number_expression
    68                  | number_expression . EXPONENTIATION number_expression
-   77 bool_expression: number_expression RELATIONAL_NEQ number_expression .
+   73 bool_expression: number_expression RELATIONAL_BIG number_expression .
+
+    ARITHMETIC_ADD  偏移，並進入狀態 70
+    ARITHMETIC_SUB  偏移，並進入狀態 71
+    ARITHMETIC_MUL  偏移，並進入狀態 72
+    ARITHMETIC_DIV  偏移，並進入狀態 73
+    EXPONENTIATION  偏移，並進入狀態 80
+
+    $預設  使用規則 73 以縮減 (bool_expression)
+
+
+狀態 121
+
+   64 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   65                  | number_expression . ARITHMETIC_SUB number_expression
+   66                  | number_expression . ARITHMETIC_MUL number_expression
+   67                  | number_expression . ARITHMETIC_DIV number_expression
+   68                  | number_expression . EXPONENTIATION number_expression
+   77 bool_expression: number_expression RELATIONAL_EQ number_expression .
 
     ARITHMETIC_ADD  偏移，並進入狀態 70
     ARITHMETIC_SUB  偏移，並進入狀態 71
@@ -2104,6 +2086,24 @@ commponent (105)
     EXPONENTIATION  偏移，並進入狀態 80
 
     $預設  使用規則 77 以縮減 (bool_expression)
+
+
+狀態 122
+
+   64 number_expression: number_expression . ARITHMETIC_ADD number_expression
+   65                  | number_expression . ARITHMETIC_SUB number_expression
+   66                  | number_expression . ARITHMETIC_MUL number_expression
+   67                  | number_expression . ARITHMETIC_DIV number_expression
+   68                  | number_expression . EXPONENTIATION number_expression
+   78 bool_expression: number_expression RELATIONAL_NEQ number_expression .
+
+    ARITHMETIC_ADD  偏移，並進入狀態 70
+    ARITHMETIC_SUB  偏移，並進入狀態 71
+    ARITHMETIC_MUL  偏移，並進入狀態 72
+    ARITHMETIC_DIV  偏移，並進入狀態 73
+    EXPONENTIATION  偏移，並進入狀態 80
+
+    $預設  使用規則 78 以縮減 (bool_expression)
 
 
 狀態 123
