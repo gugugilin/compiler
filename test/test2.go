@@ -23,7 +23,7 @@ func int lala(){
     b1=3+3.3
     b2=c0
 }
-func string lala2(a5 int,a4 int,a2 int){
+func string lala2(a5 int,a4 int,a2 int,a98 int,a99 int){
     a0[4]=c2//check can see the const 
     var a6 int = 5//redefine a6 to test m1=a6 
     //var a2 real =3.5 //this will error by a2 int(redefine)
@@ -40,8 +40,8 @@ func void main(){
     }
     var m1 string =c0//trace you can assigment the const Var
     m1=a6// trace you can assces var a6 string = "S6"
-    a6=lala2(1,2,3)//return the func
-    go lala()
+    a6=lala2(1,2,3,4,5)//return the func
+    go lala2(1,2,3,4,5)
     //a6 = go lala() //no return
     var test int = 4
     //a0=0 //a0 is a array can't assigment a int

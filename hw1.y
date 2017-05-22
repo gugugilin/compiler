@@ -399,12 +399,13 @@ func_invo:      IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{
                 {
                     list<int>::iterator it1=temp->second->begin();
                     list<int>::iterator it2=$3->begin();
+                    int count;
                     if(temp->second->size()==$3->size())
                     {
                     
-                        for(it1;it1!=temp->second->end();++it1,++it2){
+                        for(it1,count=0;it1!=temp->second->end();++it1,++it2,++count){
                             if(*it1!=*it2){
-                                printf("argument type not mathc in %d\n",*it1);
+                                printf("argument type not mathc in %d\n",count);
                                 return 1;
                             }
                         }
@@ -443,7 +444,7 @@ Conditional:    IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound ELS
 
 ex_loop:        FOR LEFT_PARENTHESE{add_scope(current_scop+"_loop");};
 LOOP:           ex_loop statements SEMICOLON bool_expression SEMICOLON statements RIGHT_PARENTHESE Compound{exit_scope();};
-Procedure:      GO IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{};
+Procedure:      GO func_invo{};
 
 statements:     declarations statements  |
                 statement statements|

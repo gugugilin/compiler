@@ -33,7 +33,7 @@
 狀態 43 衝突：12 項偏移/縮減，1 項縮減/縮減
 狀態 47 衝突：12 項偏移/縮減，3 項縮減/縮減
 狀態 49 衝突：12 項偏移/縮減，3 項縮減/縮減
-狀態 157 衝突：12 項偏移/縮減，1 項縮減/縮減
+狀態 155 衝突：12 項偏移/縮減，1 項縮減/縮減
 
 
 文法
@@ -82,7 +82,7 @@
 
    25 LOOP: ex_loop statements SEMICOLON bool_expression SEMICOLON statements RIGHT_PARENTHESE Compound
 
-   26 Procedure: GO IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE
+   26 Procedure: GO func_invo
 
    27 statements: declarations statements
    28           | statement statements
@@ -222,8 +222,8 @@ COMMENTS_END_MUL (305)
 COMMA (306) 14 19
 COLON (307)
 SEMICOLON (308) 25
-LEFT_PARENTHESE (309) 8 15 22 23 24 26 65 74
-RIGHT_PARENTHESE (310) 9 15 22 23 25 26 65 74
+LEFT_PARENTHESE (309) 8 15 22 23 24 65 74
+RIGHT_PARENTHESE (310) 9 15 22 23 25 65 74
 LEFT_SQUARE_BRACKETS (311) 53 54
 RIGHT_SQUARE_BRACKETS (312) 53 54
 LEFT_BRACKETS (313) 9 20
@@ -264,9 +264,9 @@ formal_arguments (79)
 formal_argument (80)
     於左側： 13 14,於右側： 12 14
 func_invo (81)
-    於左側： 15,於右側： 88
+    於左側： 15,於右側： 26 88
 comm_expression (82)
-    於左側： 16 17,於右側： 15 19 26
+    於左側： 16 17,於右側： 15 19
 comm_expressions (83)
     於左側： 18 19,於右側： 17
 ex_compound (84)
@@ -290,7 +290,7 @@ type (92)
 SAVE_IDENTIFERS (93)
     於左側： 47,於右側： 8 13 14 54 55 56 57
 IDENTIFERS (94)
-    於左側： 48,於右側： 15 26 35 39 53 89
+    於左側： 48,於右側： 15 35 39 53 89
 declarations (95)
     於左側： 49 50,於右側： 5 27 49
 declaration (96)
@@ -692,11 +692,12 @@ commponent (107)
 
 狀態 31
 
-   26 Procedure: GO . IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE
+   26 Procedure: GO . func_invo
 
     IDENTIFIER  偏移，並進入狀態 38
 
-    IDENTIFERS  進入狀態 60
+    func_invo   進入狀態 60
+    IDENTIFERS  進入狀態 61
 
 
 狀態 32
@@ -704,55 +705,55 @@ commponent (107)
    22 Conditional: IF . LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound ELSE Compound
    23            | IF . LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound
 
-    LEFT_PARENTHESE  偏移，並進入狀態 61
+    LEFT_PARENTHESE  偏移，並進入狀態 62
 
 
 狀態 33
 
    37 statement: PRINT . expression
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
+    REAL_CONSTANTS           偏移，並進入狀態 70
+    STRING_CONSTANTS         偏移，並進入狀態 71
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    expression         進入狀態 74
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    expression         進入狀態 75
+    number_expression  進入狀態 76
+    bool_expression    進入狀態 77
+    commponent         進入狀態 78
 
 
 狀態 34
 
    38 statement: PRINTLN . expression
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
+    REAL_CONSTANTS           偏移，並進入狀態 70
+    STRING_CONSTANTS         偏移，並進入狀態 71
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    expression         進入狀態 78
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    expression         進入狀態 79
+    number_expression  進入狀態 76
+    bool_expression    進入狀態 77
+    commponent         進入狀態 78
 
 
 狀態 35
@@ -760,27 +761,27 @@ commponent (107)
    40 statement: RETURN .
    41          | RETURN . expression
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
+    REAL_CONSTANTS           偏移，並進入狀態 70
+    STRING_CONSTANTS         偏移，並進入狀態 71
 
     IDENTIFIER  [使用規則 40 以縮減 (statement)]
     $預設     使用規則 40 以縮減 (statement)
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    expression         進入狀態 79
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    expression         進入狀態 80
+    number_expression  進入狀態 76
+    bool_expression    進入狀態 77
+    commponent         進入狀態 78
 
 
 狀態 36
@@ -789,7 +790,7 @@ commponent (107)
 
     IDENTIFIER  偏移，並進入狀態 38
 
-    IDENTIFERS  進入狀態 80
+    IDENTIFERS  進入狀態 81
 
 
 狀態 37
@@ -855,7 +856,7 @@ commponent (107)
     ex_loop                進入狀態 43
     LOOP                   進入狀態 44
     Procedure              進入狀態 45
-    statements             進入狀態 81
+    statements             進入狀態 82
     statement              進入狀態 47
     IDENTIFERS             進入狀態 48
     declarations           進入狀態 49
@@ -922,7 +923,7 @@ commponent (107)
     ex_loop                進入狀態 43
     LOOP                   進入狀態 44
     Procedure              進入狀態 45
-    statements             進入狀態 82
+    statements             進入狀態 83
     statement              進入狀態 47
     IDENTIFERS             進入狀態 48
     declarations           進入狀態 49
@@ -951,7 +952,7 @@ commponent (107)
 
    10 function: ex1_function statements . RIGHT_BRACKETS
 
-    RIGHT_BRACKETS  偏移，並進入狀態 83
+    RIGHT_BRACKETS  偏移，並進入狀態 84
 
 
 狀態 47
@@ -1000,7 +1001,7 @@ commponent (107)
     ex_loop                進入狀態 43
     LOOP                   進入狀態 44
     Procedure              進入狀態 45
-    statements             進入狀態 84
+    statements             進入狀態 85
     statement              進入狀態 47
     IDENTIFERS             進入狀態 48
     declarations           進入狀態 49
@@ -1016,8 +1017,8 @@ commponent (107)
    35 statement: IDENTIFERS . ASSIGNMENT expression
    53 arrays_variable: IDENTIFERS . LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
 
-    LEFT_SQUARE_BRACKETS  偏移，並進入狀態 85
-    ASSIGNMENT            偏移，並進入狀態 86
+    LEFT_SQUARE_BRACKETS  偏移，並進入狀態 86
+    ASSIGNMENT            偏移，並進入狀態 87
 
 
 狀態 49
@@ -1066,7 +1067,7 @@ commponent (107)
     ex_loop                進入狀態 43
     LOOP                   進入狀態 44
     Procedure              進入狀態 45
-    statements             進入狀態 87
+    statements             進入狀態 88
     statement              進入狀態 47
     IDENTIFERS             進入狀態 48
     declarations           進入狀態 49
@@ -1081,7 +1082,7 @@ commponent (107)
 
    36 statement: arrays_variable . ASSIGNMENT expression
 
-    ASSIGNMENT  偏移，並進入狀態 88
+    ASSIGNMENT  偏移，並進入狀態 89
 
 
 狀態 51
@@ -1102,51 +1103,51 @@ commponent (107)
 
    55 consts_declaration: CONST SAVE_IDENTIFERS ASSIGNMENT . constant_exp
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
+    REAL_CONSTANTS           偏移，並進入狀態 70
+    STRING_CONSTANTS         偏移，並進入狀態 71
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    constant_exp       進入狀態 89
-    expression         進入狀態 90
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    constant_exp       進入狀態 90
+    expression         進入狀態 91
+    number_expression  進入狀態 76
+    bool_expression    進入狀態 77
+    commponent         進入狀態 78
 
 
 狀態 54
 
     8 ex_function: FUNC type SAVE_IDENTIFERS . LEFT_PARENTHESE
 
-    LEFT_PARENTHESE  偏移，並進入狀態 91
+    LEFT_PARENTHESE  偏移，並進入狀態 92
 
 
 狀態 55
 
    54 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS . const_index_expression RIGHT_SQUARE_BRACKETS type
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo               進入狀態 71
-    IDENTIFERS              進入狀態 72
-    arrays_variable         進入狀態 73
-    const_index_expression  進入狀態 93
-    number_expression       進入狀態 94
-    commponent              進入狀態 77
+    func_invo               進入狀態 72
+    IDENTIFERS              進入狀態 73
+    arrays_variable         進入狀態 74
+    const_index_expression  進入狀態 94
+    number_expression       進入狀態 95
+    commponent              進入狀態 78
 
 
 狀態 56
@@ -1154,7 +1155,7 @@ commponent (107)
    56 Variables_declaration: VAR SAVE_IDENTIFERS type . ASSIGNMENT constant_exp
    57                      | VAR SAVE_IDENTIFERS type .
 
-    ASSIGNMENT  偏移，並進入狀態 95
+    ASSIGNMENT  偏移，並進入狀態 96
 
     $預設  使用規則 57 以縮減 (Variables_declaration)
 
@@ -1163,7 +1164,7 @@ commponent (107)
 
     9 ex1_function: ex_function formal_arguments RIGHT_PARENTHESE . LEFT_BRACKETS
 
-    LEFT_BRACKETS  偏移，並進入狀態 96
+    LEFT_BRACKETS  偏移，並進入狀態 97
 
 
 狀態 58
@@ -1171,7 +1172,7 @@ commponent (107)
    13 formal_argument: SAVE_IDENTIFERS type .
    14                | SAVE_IDENTIFERS type . COMMA formal_argument
 
-    COMMA  偏移，並進入狀態 97
+    COMMA  偏移，並進入狀態 98
 
     $預設  使用規則 13 以縮減 (formal_argument)
 
@@ -1185,184 +1186,191 @@ commponent (107)
 
 狀態 60
 
-   26 Procedure: GO IDENTIFERS . LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE
+   26 Procedure: GO func_invo .
 
-    LEFT_PARENTHESE  偏移，並進入狀態 98
+    $預設  使用規則 26 以縮減 (Procedure)
 
 
 狀態 61
 
-   22 Conditional: IF LEFT_PARENTHESE . bool_expression RIGHT_PARENTHESE Compound ELSE Compound
-   23            | IF LEFT_PARENTHESE . bool_expression RIGHT_PARENTHESE Compound
+   15 func_invo: IDENTIFERS . LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
-    IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 99
-    bool_expression    進入狀態 100
-    commponent         進入狀態 77
+    LEFT_PARENTHESE  偏移，並進入狀態 99
 
 
 狀態 62
 
-   72 number_expression: ARITHMETIC_ADD . number_expression
+   22 Conditional: IF LEFT_PARENTHESE . bool_expression RIGHT_PARENTHESE Compound ELSE Compound
+   23            | IF LEFT_PARENTHESE . bool_expression RIGHT_PARENTHESE Compound
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
-    IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
+    IDENTIFIER               偏移，並進入狀態 38
+    REAL_CONSTANTS           偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 101
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 100
+    bool_expression    進入狀態 101
+    commponent         進入狀態 78
 
 
 狀態 63
 
-   71 number_expression: ARITHMETIC_SUB . number_expression
+   72 number_expression: ARITHMETIC_ADD . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
     number_expression  進入狀態 102
-    commponent         進入狀態 77
+    commponent         進入狀態 78
 
 
 狀態 64
+
+   71 number_expression: ARITHMETIC_SUB . number_expression
+
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
+    IDENTIFIER         偏移，並進入狀態 38
+    REAL_CONSTANTS     偏移，並進入狀態 70
+
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 103
+    commponent         進入狀態 78
+
+
+狀態 65
 
    84 bool_expression: BOOLEAN_CONSTANTS_FALSE .
 
     $預設  使用規則 84 以縮減 (bool_expression)
 
 
-狀態 65
+狀態 66
 
    85 bool_expression: BOOLEAN_CONSTANTS_TRUE .
 
     $預設  使用規則 85 以縮減 (bool_expression)
 
 
-狀態 66
+狀態 67
 
    83 bool_expression: NOT . bool_expression
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
+    REAL_CONSTANTS           偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 99
-    bool_expression    進入狀態 103
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 100
+    bool_expression    進入狀態 104
+    commponent         進入狀態 78
 
 
-狀態 67
+狀態 68
 
    65 number_expression: LEFT_PARENTHESE . number_expression RIGHT_PARENTHESE
    74 bool_expression: LEFT_PARENTHESE . bool_expression RIGHT_PARENTHESE
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
+    REAL_CONSTANTS           偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 104
-    bool_expression    進入狀態 105
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 105
+    bool_expression    進入狀態 106
+    commponent         進入狀態 78
 
 
-狀態 68
+狀態 69
 
    86 commponent: INTEGER_CONSTANTS .
 
     $預設  使用規則 86 以縮減 (commponent)
 
 
-狀態 69
+狀態 70
 
    87 commponent: REAL_CONSTANTS .
 
     $預設  使用規則 87 以縮減 (commponent)
 
 
-狀態 70
+狀態 71
 
    62 expression: STRING_CONSTANTS .
 
     $預設  使用規則 62 以縮減 (expression)
 
 
-狀態 71
+狀態 72
 
    88 commponent: func_invo .
 
     $預設  使用規則 88 以縮減 (commponent)
 
 
-狀態 72
+狀態 73
 
    15 func_invo: IDENTIFERS . LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE
    53 arrays_variable: IDENTIFERS . LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS
    89 commponent: IDENTIFERS .
 
-    LEFT_PARENTHESE       偏移，並進入狀態 106
-    LEFT_SQUARE_BRACKETS  偏移，並進入狀態 85
+    LEFT_PARENTHESE       偏移，並進入狀態 99
+    LEFT_SQUARE_BRACKETS  偏移，並進入狀態 86
 
     $預設  使用規則 89 以縮減 (commponent)
 
 
-狀態 73
+狀態 74
 
    90 commponent: arrays_variable .
 
     $預設  使用規則 90 以縮減 (commponent)
 
 
-狀態 74
+狀態 75
 
    37 statement: PRINT expression .
 
     $預設  使用規則 37 以縮減 (statement)
 
 
-狀態 75
+狀態 76
 
    60 expression: number_expression .
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
@@ -1392,7 +1400,7 @@ commponent (107)
     $預設  使用規則 60 以縮減 (expression)
 
 
-狀態 76
+狀態 77
 
    61 expression: bool_expression .
    81 bool_expression: bool_expression . AND bool_expression
@@ -1404,183 +1412,183 @@ commponent (107)
     $預設  使用規則 61 以縮減 (expression)
 
 
-狀態 77
+狀態 78
 
    73 number_expression: commponent .
 
     $預設  使用規則 73 以縮減 (number_expression)
 
 
-狀態 78
+狀態 79
 
    38 statement: PRINTLN expression .
 
     $預設  使用規則 38 以縮減 (statement)
 
 
-狀態 79
+狀態 80
 
    41 statement: RETURN expression .
 
     $預設  使用規則 41 以縮減 (statement)
 
 
-狀態 80
+狀態 81
 
    39 statement: READ IDENTIFERS .
 
     $預設  使用規則 39 以縮減 (statement)
 
 
-狀態 81
+狀態 82
 
    21 Compound: ex_compound statements . RIGHT_BRACKETS
 
     RIGHT_BRACKETS  偏移，並進入狀態 120
 
 
-狀態 82
+狀態 83
 
    25 LOOP: ex_loop statements . SEMICOLON bool_expression SEMICOLON statements RIGHT_PARENTHESE Compound
 
     SEMICOLON  偏移，並進入狀態 121
 
 
-狀態 83
+狀態 84
 
    10 function: ex1_function statements RIGHT_BRACKETS .
 
     $預設  使用規則 10 以縮減 (function)
 
 
-狀態 84
+狀態 85
 
    28 statements: statement statements .
 
     $預設  使用規則 28 以縮減 (statements)
 
 
-狀態 85
+狀態 86
 
    53 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS . index_expression RIGHT_SQUARE_BRACKETS
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
     index_expression   進入狀態 122
     number_expression  進入狀態 123
-    commponent         進入狀態 77
-
-
-狀態 86
-
-   35 statement: IDENTIFERS ASSIGNMENT . expression
-
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
-    IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
-
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    expression         進入狀態 124
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
+    commponent         進入狀態 78
 
 
 狀態 87
+
+   35 statement: IDENTIFERS ASSIGNMENT . expression
+
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
+    IDENTIFIER               偏移，並進入狀態 38
+    REAL_CONSTANTS           偏移，並進入狀態 70
+    STRING_CONSTANTS         偏移，並進入狀態 71
+
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    expression         進入狀態 124
+    number_expression  進入狀態 76
+    bool_expression    進入狀態 77
+    commponent         進入狀態 78
+
+
+狀態 88
 
    27 statements: declarations statements .
 
     $預設  使用規則 27 以縮減 (statements)
 
 
-狀態 88
+狀態 89
 
    36 statement: arrays_variable ASSIGNMENT . expression
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
+    REAL_CONSTANTS           偏移，並進入狀態 70
+    STRING_CONSTANTS         偏移，並進入狀態 71
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
     expression         進入狀態 125
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
+    number_expression  進入狀態 76
+    bool_expression    進入狀態 77
+    commponent         進入狀態 78
 
 
-狀態 89
+狀態 90
 
    55 consts_declaration: CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp .
 
     $預設  使用規則 55 以縮減 (consts_declaration)
 
 
-狀態 90
+狀態 91
 
    59 constant_exp: expression .
 
     $預設  使用規則 59 以縮減 (constant_exp)
 
 
-狀態 91
+狀態 92
 
     8 ex_function: FUNC type SAVE_IDENTIFERS LEFT_PARENTHESE .
 
     $預設  使用規則 8 以縮減 (ex_function)
 
 
-狀態 92
+狀態 93
 
    65 number_expression: LEFT_PARENTHESE . number_expression RIGHT_PARENTHESE
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
     number_expression  進入狀態 126
-    commponent         進入狀態 77
+    commponent         進入狀態 78
 
 
-狀態 93
+狀態 94
 
    54 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression . RIGHT_SQUARE_BRACKETS type
 
     RIGHT_SQUARE_BRACKETS  偏移，並進入狀態 127
 
 
-狀態 94
+狀態 95
 
    63 const_index_expression: number_expression .
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
@@ -1598,39 +1606,39 @@ commponent (107)
     $預設  使用規則 63 以縮減 (const_index_expression)
 
 
-狀態 95
+狀態 96
 
    56 Variables_declaration: VAR SAVE_IDENTIFERS type ASSIGNMENT . constant_exp
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
+    REAL_CONSTANTS           偏移，並進入狀態 70
+    STRING_CONSTANTS         偏移，並進入狀態 71
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
     constant_exp       進入狀態 128
-    expression         進入狀態 90
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
+    expression         進入狀態 91
+    number_expression  進入狀態 76
+    bool_expression    進入狀態 77
+    commponent         進入狀態 78
 
 
-狀態 96
+狀態 97
 
     9 ex1_function: ex_function formal_arguments RIGHT_PARENTHESE LEFT_BRACKETS .
 
     $預設  使用規則 9 以縮減 (ex1_function)
 
 
-狀態 97
+狀態 98
 
    14 formal_argument: SAVE_IDENTIFERS type COMMA . formal_argument
 
@@ -1640,35 +1648,35 @@ commponent (107)
     SAVE_IDENTIFERS  進入狀態 29
 
 
-狀態 98
+狀態 99
 
-   26 Procedure: GO IDENTIFERS LEFT_PARENTHESE . comm_expression RIGHT_PARENTHESE
+   15 func_invo: IDENTIFERS LEFT_PARENTHESE . comm_expression RIGHT_PARENTHESE
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
+    REAL_CONSTANTS           偏移，並進入狀態 70
+    STRING_CONSTANTS         偏移，並進入狀態 71
 
     $預設  使用規則 16 以縮減 (comm_expression)
 
-    func_invo          進入狀態 71
+    func_invo          進入狀態 72
     comm_expression    進入狀態 130
     comm_expressions   進入狀態 131
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
     expression         進入狀態 132
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
+    number_expression  進入狀態 76
+    bool_expression    進入狀態 77
+    commponent         進入狀態 78
 
 
-狀態 99
+狀態 100
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -1695,7 +1703,7 @@ commponent (107)
     EXPONENTIATION       偏移，並進入狀態 117
 
 
-狀態 100
+狀態 101
 
    22 Conditional: IF LEFT_PARENTHESE bool_expression . RIGHT_PARENTHESE Compound ELSE Compound
    23            | IF LEFT_PARENTHESE bool_expression . RIGHT_PARENTHESE Compound
@@ -1707,7 +1715,7 @@ commponent (107)
     RIGHT_PARENTHESE  偏移，並進入狀態 133
 
 
-狀態 101
+狀態 102
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -1719,7 +1727,7 @@ commponent (107)
     $預設  使用規則 72 以縮減 (number_expression)
 
 
-狀態 102
+狀態 103
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -1731,7 +1739,7 @@ commponent (107)
     $預設  使用規則 71 以縮減 (number_expression)
 
 
-狀態 103
+狀態 104
 
    81 bool_expression: bool_expression . AND bool_expression
    82                | bool_expression . OR bool_expression
@@ -1740,7 +1748,7 @@ commponent (107)
     $預設  使用規則 83 以縮減 (bool_expression)
 
 
-狀態 104
+狀態 105
 
    65 number_expression: LEFT_PARENTHESE number_expression . RIGHT_PARENTHESE
    66                  | number_expression . ARITHMETIC_ADD number_expression
@@ -1769,7 +1777,7 @@ commponent (107)
     EXPONENTIATION       偏移，並進入狀態 117
 
 
-狀態 105
+狀態 106
 
    74 bool_expression: LEFT_PARENTHESE bool_expression . RIGHT_PARENTHESE
    81                | bool_expression . AND bool_expression
@@ -1780,274 +1788,246 @@ commponent (107)
     RIGHT_PARENTHESE  偏移，並進入狀態 135
 
 
-狀態 106
-
-   15 func_invo: IDENTIFERS LEFT_PARENTHESE . comm_expression RIGHT_PARENTHESE
-
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
-    IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
-
-    $預設  使用規則 16 以縮減 (comm_expression)
-
-    func_invo          進入狀態 71
-    comm_expression    進入狀態 136
-    comm_expressions   進入狀態 131
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    expression         進入狀態 132
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
-
-
 狀態 107
 
    66 number_expression: number_expression ARITHMETIC_ADD . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 137
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 136
+    commponent         進入狀態 78
 
 
 狀態 108
 
    67 number_expression: number_expression ARITHMETIC_SUB . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 138
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 137
+    commponent         進入狀態 78
 
 
 狀態 109
 
    68 number_expression: number_expression ARITHMETIC_MUL . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 139
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 138
+    commponent         進入狀態 78
 
 
 狀態 110
 
    69 number_expression: number_expression ARITHMETIC_DIV . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 140
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 139
+    commponent         進入狀態 78
 
 
 狀態 111
 
    76 bool_expression: number_expression RELATIONAL_LEAST . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 141
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 140
+    commponent         進入狀態 78
 
 
 狀態 112
 
    77 bool_expression: number_expression RELATIONAL_LEAST_EQ . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 142
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 141
+    commponent         進入狀態 78
 
 
 狀態 113
 
    78 bool_expression: number_expression RELATIONAL_BIG_EQ . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 143
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 142
+    commponent         進入狀態 78
 
 
 狀態 114
 
    75 bool_expression: number_expression RELATIONAL_BIG . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 144
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 143
+    commponent         進入狀態 78
 
 
 狀態 115
 
    79 bool_expression: number_expression RELATIONAL_EQ . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 145
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 144
+    commponent         進入狀態 78
 
 
 狀態 116
 
    80 bool_expression: number_expression RELATIONAL_NEQ . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 146
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 145
+    commponent         進入狀態 78
 
 
 狀態 117
 
    70 number_expression: number_expression EXPONENTIATION . number_expression
 
-    ARITHMETIC_ADD     偏移，並進入狀態 62
-    ARITHMETIC_SUB     偏移，並進入狀態 63
-    LEFT_PARENTHESE    偏移，並進入狀態 92
-    INTEGER_CONSTANTS  偏移，並進入狀態 68
+    ARITHMETIC_ADD     偏移，並進入狀態 63
+    ARITHMETIC_SUB     偏移，並進入狀態 64
+    LEFT_PARENTHESE    偏移，並進入狀態 93
+    INTEGER_CONSTANTS  偏移，並進入狀態 69
     IDENTIFIER         偏移，並進入狀態 38
-    REAL_CONSTANTS     偏移，並進入狀態 69
+    REAL_CONSTANTS     偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 147
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 146
+    commponent         進入狀態 78
 
 
 狀態 118
 
    81 bool_expression: bool_expression AND . bool_expression
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
+    REAL_CONSTANTS           偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 99
-    bool_expression    進入狀態 148
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 100
+    bool_expression    進入狀態 147
+    commponent         進入狀態 78
 
 
 狀態 119
 
    82 bool_expression: bool_expression OR . bool_expression
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
+    REAL_CONSTANTS           偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 99
-    bool_expression    進入狀態 149
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 100
+    bool_expression    進入狀態 148
+    commponent         進入狀態 78
 
 
 狀態 120
@@ -2061,29 +2041,29 @@ commponent (107)
 
    25 LOOP: ex_loop statements SEMICOLON . bool_expression SEMICOLON statements RIGHT_PARENTHESE Compound
 
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
     IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
+    REAL_CONSTANTS           偏移，並進入狀態 70
 
-    func_invo          進入狀態 71
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    number_expression  進入狀態 99
-    bool_expression    進入狀態 150
-    commponent         進入狀態 77
+    func_invo          進入狀態 72
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    number_expression  進入狀態 100
+    bool_expression    進入狀態 149
+    commponent         進入狀態 78
 
 
 狀態 122
 
    53 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS index_expression . RIGHT_SQUARE_BRACKETS
 
-    RIGHT_SQUARE_BRACKETS  偏移，並進入狀態 151
+    RIGHT_SQUARE_BRACKETS  偏移，並進入狀態 150
 
 
 狀態 123
@@ -2145,7 +2125,7 @@ commponent (107)
     STRING  偏移，並進入狀態 21
     VOID    偏移，並進入狀態 22
 
-    type  進入狀態 152
+    type  進入狀態 151
 
 
 狀態 128
@@ -2164,9 +2144,9 @@ commponent (107)
 
 狀態 130
 
-   26 Procedure: GO IDENTIFERS LEFT_PARENTHESE comm_expression . RIGHT_PARENTHESE
+   15 func_invo: IDENTIFERS LEFT_PARENTHESE comm_expression . RIGHT_PARENTHESE
 
-    RIGHT_PARENTHESE  偏移，並進入狀態 153
+    RIGHT_PARENTHESE  偏移，並進入狀態 152
 
 
 狀態 131
@@ -2181,7 +2161,7 @@ commponent (107)
    18 comm_expressions: expression .
    19                 | expression . COMMA comm_expression
 
-    COMMA  偏移，並進入狀態 154
+    COMMA  偏移，並進入狀態 153
 
     $預設  使用規則 18 以縮減 (comm_expressions)
 
@@ -2194,7 +2174,7 @@ commponent (107)
     LEFT_BRACKETS  偏移，並進入狀態 37
 
     ex_compound  進入狀態 40
-    Compound     進入狀態 155
+    Compound     進入狀態 154
 
 
 狀態 134
@@ -2213,13 +2193,6 @@ commponent (107)
 
 狀態 136
 
-   15 func_invo: IDENTIFERS LEFT_PARENTHESE comm_expression . RIGHT_PARENTHESE
-
-    RIGHT_PARENTHESE  偏移，並進入狀態 156
-
-
-狀態 137
-
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    66                  | number_expression ARITHMETIC_ADD number_expression .
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2234,7 +2207,7 @@ commponent (107)
     $預設  使用規則 66 以縮減 (number_expression)
 
 
-狀態 138
+狀態 137
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2250,7 +2223,7 @@ commponent (107)
     $預設  使用規則 67 以縮減 (number_expression)
 
 
-狀態 139
+狀態 138
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2264,7 +2237,7 @@ commponent (107)
     $預設  使用規則 68 以縮減 (number_expression)
 
 
-狀態 140
+狀態 139
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2278,7 +2251,7 @@ commponent (107)
     $預設  使用規則 69 以縮減 (number_expression)
 
 
-狀態 141
+狀態 140
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2296,7 +2269,7 @@ commponent (107)
     $預設  使用規則 76 以縮減 (bool_expression)
 
 
-狀態 142
+狀態 141
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2314,7 +2287,7 @@ commponent (107)
     $預設  使用規則 77 以縮減 (bool_expression)
 
 
-狀態 143
+狀態 142
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2332,7 +2305,7 @@ commponent (107)
     $預設  使用規則 78 以縮減 (bool_expression)
 
 
-狀態 144
+狀態 143
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2350,7 +2323,7 @@ commponent (107)
     $預設  使用規則 75 以縮減 (bool_expression)
 
 
-狀態 145
+狀態 144
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2368,7 +2341,7 @@ commponent (107)
     $預設  使用規則 79 以縮減 (bool_expression)
 
 
-狀態 146
+狀態 145
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2386,7 +2359,7 @@ commponent (107)
     $預設  使用規則 80 以縮減 (bool_expression)
 
 
-狀態 147
+狀態 146
 
    66 number_expression: number_expression . ARITHMETIC_ADD number_expression
    67                  | number_expression . ARITHMETIC_SUB number_expression
@@ -2398,7 +2371,7 @@ commponent (107)
     $預設  使用規則 70 以縮減 (number_expression)
 
 
-狀態 148
+狀態 147
 
    81 bool_expression: bool_expression . AND bool_expression
    81                | bool_expression AND bool_expression .
@@ -2407,7 +2380,7 @@ commponent (107)
     $預設  使用規則 81 以縮減 (bool_expression)
 
 
-狀態 149
+狀態 148
 
    81 bool_expression: bool_expression . AND bool_expression
    82                | bool_expression . OR bool_expression
@@ -2418,7 +2391,7 @@ commponent (107)
     $預設  使用規則 82 以縮減 (bool_expression)
 
 
-狀態 150
+狀態 149
 
    25 LOOP: ex_loop statements SEMICOLON bool_expression . SEMICOLON statements RIGHT_PARENTHESE Compound
    81 bool_expression: bool_expression . AND bool_expression
@@ -2426,76 +2399,69 @@ commponent (107)
 
     AND        偏移，並進入狀態 118
     OR         偏移，並進入狀態 119
-    SEMICOLON  偏移，並進入狀態 157
+    SEMICOLON  偏移，並進入狀態 155
 
 
-狀態 151
+狀態 150
 
    53 arrays_variable: IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BRACKETS .
 
     $預設  使用規則 53 以縮減 (arrays_variable)
 
 
-狀態 152
+狀態 151
 
    54 arrays_declaration: VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type .
 
     $預設  使用規則 54 以縮減 (arrays_declaration)
 
 
-狀態 153
-
-   26 Procedure: GO IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE .
-
-    $預設  使用規則 26 以縮減 (Procedure)
-
-
-狀態 154
-
-   19 comm_expressions: expression COMMA . comm_expression
-
-    ARITHMETIC_ADD           偏移，並進入狀態 62
-    ARITHMETIC_SUB           偏移，並進入狀態 63
-    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 64
-    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 65
-    NOT                      偏移，並進入狀態 66
-    LEFT_PARENTHESE          偏移，並進入狀態 67
-    INTEGER_CONSTANTS        偏移，並進入狀態 68
-    IDENTIFIER               偏移，並進入狀態 38
-    REAL_CONSTANTS           偏移，並進入狀態 69
-    STRING_CONSTANTS         偏移，並進入狀態 70
-
-    $預設  使用規則 16 以縮減 (comm_expression)
-
-    func_invo          進入狀態 71
-    comm_expression    進入狀態 158
-    comm_expressions   進入狀態 131
-    IDENTIFERS         進入狀態 72
-    arrays_variable    進入狀態 73
-    expression         進入狀態 132
-    number_expression  進入狀態 75
-    bool_expression    進入狀態 76
-    commponent         進入狀態 77
-
-
-狀態 155
-
-   22 Conditional: IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound . ELSE Compound
-   23            | IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound .
-
-    ELSE  偏移，並進入狀態 159
-
-    $預設  使用規則 23 以縮減 (Conditional)
-
-
-狀態 156
+狀態 152
 
    15 func_invo: IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE .
 
     $預設  使用規則 15 以縮減 (func_invo)
 
 
-狀態 157
+狀態 153
+
+   19 comm_expressions: expression COMMA . comm_expression
+
+    ARITHMETIC_ADD           偏移，並進入狀態 63
+    ARITHMETIC_SUB           偏移，並進入狀態 64
+    BOOLEAN_CONSTANTS_FALSE  偏移，並進入狀態 65
+    BOOLEAN_CONSTANTS_TRUE   偏移，並進入狀態 66
+    NOT                      偏移，並進入狀態 67
+    LEFT_PARENTHESE          偏移，並進入狀態 68
+    INTEGER_CONSTANTS        偏移，並進入狀態 69
+    IDENTIFIER               偏移，並進入狀態 38
+    REAL_CONSTANTS           偏移，並進入狀態 70
+    STRING_CONSTANTS         偏移，並進入狀態 71
+
+    $預設  使用規則 16 以縮減 (comm_expression)
+
+    func_invo          進入狀態 72
+    comm_expression    進入狀態 156
+    comm_expressions   進入狀態 131
+    IDENTIFERS         進入狀態 73
+    arrays_variable    進入狀態 74
+    expression         進入狀態 132
+    number_expression  進入狀態 76
+    bool_expression    進入狀態 77
+    commponent         進入狀態 78
+
+
+狀態 154
+
+   22 Conditional: IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound . ELSE Compound
+   23            | IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound .
+
+    ELSE  偏移，並進入狀態 157
+
+    $預設  使用規則 23 以縮減 (Conditional)
+
+
+狀態 155
 
    25 LOOP: ex_loop statements SEMICOLON bool_expression SEMICOLON . statements RIGHT_PARENTHESE Compound
 
@@ -2537,7 +2503,7 @@ commponent (107)
     ex_loop                進入狀態 43
     LOOP                   進入狀態 44
     Procedure              進入狀態 45
-    statements             進入狀態 160
+    statements             進入狀態 158
     statement              進入狀態 47
     IDENTIFERS             進入狀態 48
     declarations           進入狀態 49
@@ -2548,16 +2514,40 @@ commponent (107)
     Variables_declaration  進入狀態 15
 
 
-狀態 158
+狀態 156
 
    19 comm_expressions: expression COMMA comm_expression .
 
     $預設  使用規則 19 以縮減 (comm_expressions)
 
 
-狀態 159
+狀態 157
 
    22 Conditional: IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound ELSE . Compound
+
+    LEFT_BRACKETS  偏移，並進入狀態 37
+
+    ex_compound  進入狀態 40
+    Compound     進入狀態 159
+
+
+狀態 158
+
+   25 LOOP: ex_loop statements SEMICOLON bool_expression SEMICOLON statements . RIGHT_PARENTHESE Compound
+
+    RIGHT_PARENTHESE  偏移，並進入狀態 160
+
+
+狀態 159
+
+   22 Conditional: IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound ELSE Compound .
+
+    $預設  使用規則 22 以縮減 (Conditional)
+
+
+狀態 160
+
+   25 LOOP: ex_loop statements SEMICOLON bool_expression SEMICOLON statements RIGHT_PARENTHESE . Compound
 
     LEFT_BRACKETS  偏移，並進入狀態 37
 
@@ -2565,31 +2555,7 @@ commponent (107)
     Compound     進入狀態 161
 
 
-狀態 160
-
-   25 LOOP: ex_loop statements SEMICOLON bool_expression SEMICOLON statements . RIGHT_PARENTHESE Compound
-
-    RIGHT_PARENTHESE  偏移，並進入狀態 162
-
-
 狀態 161
-
-   22 Conditional: IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound ELSE Compound .
-
-    $預設  使用規則 22 以縮減 (Conditional)
-
-
-狀態 162
-
-   25 LOOP: ex_loop statements SEMICOLON bool_expression SEMICOLON statements RIGHT_PARENTHESE . Compound
-
-    LEFT_BRACKETS  偏移，並進入狀態 37
-
-    ex_compound  進入狀態 40
-    Compound     進入狀態 163
-
-
-狀態 163
 
    25 LOOP: ex_loop statements SEMICOLON bool_expression SEMICOLON statements RIGHT_PARENTHESE Compound .
 
