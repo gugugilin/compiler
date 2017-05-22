@@ -15,6 +15,9 @@ Hash out_scope_table;
 list<string> scope_name;
 list<Hash> scope_list;
 string current_scop;
+
+map<string,list<int>*> func_map;
+
 int idcount;
 void yyerror(char * msg);
 void scope_init(){
@@ -270,6 +273,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
         std::string* IDvalue;
         std::string* IDname;
     }idnode;
+    std::list<int>* arg_types;
 }
 %token <int_types>BOOL
 %token BREAK CASE
@@ -354,6 +358,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){
 %nonassoc UADD
 %type<int_types> index_expression type const_index_expression
 %type<idnode> IDENTIFERS commponent arrays_variable constant_exp expression SAVE_IDENTIFERS statement bool_expression number_expression func_invo
+%type<string_types>ex_function
+%type<arg_types> formal_argument formal_arguments comm_expression comm_expressions
 
 
 %%
@@ -366,21 +372,68 @@ ex_function:    FUNC type SAVE_IDENTIFERS LEFT_PARENTHESE {
                     inser_data(1,$3.IDname->c_str(),"0",$2,FUNC_ATTRIBUTE);
                     add_scope($3.IDname->c_str());
                     inser_data(1,$3.IDname->c_str(),"0",$2,FUNC_ATTRIBUTE);
+                    $$=new string($3.IDname->c_str());
                 };
-function:       ex_function  formal_arguments RIGHT_PARENTHESE LEFT_BRACKETS statements RIGHT_BRACKETS{exit_scope();};
+ex1_function:   ex_function formal_arguments RIGHT_PARENTHESE LEFT_BRACKETS{
+                func_map[$1->c_str()]=$2;
+                };
+function:       ex1_function statements RIGHT_BRACKETS{exit_scope();};
 
-formal_arguments:/*empty*/|formal_argument{};
+formal_arguments:/*empty*/{$$=new list<int>;}|formal_argument{$$=$1;};
 
 formal_argument: SAVE_IDENTIFERS type{
+                    list<int>* temp=new list<int>;
+                    temp->push_front($2);
+                    $$=temp;
                     inser_data(1,$1.IDname->c_str(),"0",$2,VAR_ATTRIBUTE);
                 }|
                 SAVE_IDENTIFERS type COMMA formal_argument{
+                    $4->push_front($2);
+                    $$=$4;
                     inser_data(1,$1.IDname->c_str(),"0",$2,VAR_ATTRIBUTE);
                 };
 
-func_invo:      IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{$$=$1;};
-
-comm_expression:/*empty*/|expression|comm_expression COMMA comm_expression{};
+func_invo:      IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{
+                map<string,list<int>*>::iterator temp=func_map.find($1.IDname->c_str());
+                if(temp!=func_map.end())
+                {
+                    list<int>::iterator it1=temp->second->begin();
+                    list<int>::iterator it2=$3->begin();
+                    if(temp->second->size()==$3->size())
+                    {
+                    
+                        for(it1;it1!=temp->second->end();++it1,++it2){
+                            if(*it1!=*it2){
+                                printf("argument type not mathc in %d\n",*it1);
+                                return 1;
+                            }
+                        }
+                    }
+                    else{
+                        printf("%d\n",temp->second->size());
+                        printf("argument number not match\n");
+                        return 1;
+                    }
+                    
+                }
+                else
+                {
+                    printf("not func\n");
+                    return 1;
+                }
+                $$=$1;
+                };
+comm_expression:/*empty*/{$$=new list<int>;}|comm_expressions{$$=$1;};
+comm_expressions:
+                expression{
+                    list<int>* temp=new list<int>;
+                    temp->push_front($1.IDtype);
+                    $$=temp;
+                }|
+                expression COMMA comm_expression{
+                    $3->push_front($1.IDtype);
+                    $$=$3;
+                };
 
 ex_compound:    LEFT_BRACKETS{add_scope(current_scop+"_Compound");};
 Compound:       ex_compound statements RIGHT_BRACKETS{exit_scope();};
@@ -518,7 +571,7 @@ arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BR
 
 arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expression RIGHT_SQUARE_BRACKETS type
                 {
-                //if SAVE_IDENTIFERS not return 1 to expression error than creat the item in table
+                //if SAVE_IccDENTIFERS not return 1 to expression error than creat the item in table
                     inser_data($4,$2.IDname->c_str(),"0",$6,ARRAY_ATTRIBUTE);
                 };                
                 

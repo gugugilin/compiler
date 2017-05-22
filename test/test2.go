@@ -28,7 +28,7 @@ func string lala2(a5 int,a4 int,a2 int){
     var a6 int = 5//redefine a6 to test m1=a6 
     //var a2 real =3.5 //this will error by a2 int(redefine)
     //a2=a4
-    a6=a2// if you catch the goble a2 than it is error
+    //a6=a2// if you catch the goble a2 than it is error
 }
 
 func void main(){
@@ -40,7 +40,7 @@ func void main(){
     }
     var m1 string =c0//trace you can assigment the const Var
     m1=a6// trace you can assces var a6 string = "S6"
-    a6=lala2((a0[1]+1)*2,a0[2]+c2,a0[3]+b0)//return the func
+    a6=lala2(1,2,3)//return the func
     go lala()
     //a6 = go lala() //no return
     var test int = 4

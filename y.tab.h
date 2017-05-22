@@ -190,7 +190,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 261 "hw1.y" /* yacc.c:1909  */
+#line 264 "hw1.y" /* yacc.c:1909  */
 
     bool bool_types;
     int int_types;
@@ -203,8 +203,9 @@ union YYSTYPE
         std::string* IDvalue;
         std::string* IDname;
     }idnode;
+    std::list<int>* arg_types;
 
-#line 208 "y.tab.h" /* yacc.c:1909  */
+#line 209 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
