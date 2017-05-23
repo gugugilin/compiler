@@ -427,13 +427,29 @@ func_invo:      IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{
 comm_expression:/*empty*/{$$=new list<int>;}|comm_expressions{$$=$1;};
 comm_expressions:
                 expression{
-                    list<int>* temp=new list<int>;
-                    temp->push_front($1.IDtype);
-                    $$=temp;
+                    if($1.IDAttributes!=ARRAY_ATTRIBUTE)
+                    {
+                        list<int>* temp=new list<int>;
+                        temp->push_front($1.IDtype);
+                        $$=temp;
+                    }
+                    else{
+                        printf("type not a array\n");
+                        return 1;
+                    }
+                    
                 }|
                 expression COMMA comm_expression{
-                    $3->push_front($1.IDtype);
-                    $$=$3;
+                    if($1.IDAttributes!=ARRAY_ATTRIBUTE)
+                    {
+                        $3->push_front($1.IDtype);
+                        $$=$3;
+                    }
+                    else{
+                        printf("type not a array\n");
+                        return 1;
+                    }
+                    
                 };
 
 ex_compound:    LEFT_BRACKETS{add_scope(current_scop+"_Compound");};
@@ -562,6 +578,8 @@ arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BR
                     }
                     if ($3<$1.IDnumber&& $3>=0){
                         $$=$1;
+                        $$.IDAttributes=VAR_ATTRIBUTE;
+                        $$.IDnumber=1;
                     }
                     else{ 
                         printf("xd:%d %d\n",$1.IDnumber,$3);

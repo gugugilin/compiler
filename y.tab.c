@@ -841,14 +841,14 @@ static const yytype_uint16 yyrline[] =
 {
        0,   366,   366,   367,   367,   368,   368,   370,   370,   371,
      377,   380,   382,   382,   384,   390,   396,   427,   427,   429,
-     434,   439,   440,   442,   443,   445,   446,   447,   449,   450,
-     450,   455,   455,   455,   455,   455,   456,   478,   494,   495,
-     496,   497,   498,   504,   505,   506,   507,   508,   510,   530,
-     550,   550,   552,   553,   556,   573,   581,   587,   598,   602,
-     606,   617,   617,   618,   623,   632,   635,   636,   637,   638,
-     639,   640,   641,   642,   643,   646,   647,   648,   649,   650,
-     651,   652,   653,   654,   655,   656,   657,   661,   664,   667,
-     668,   669
+     442,   455,   456,   458,   459,   461,   462,   463,   465,   466,
+     466,   471,   471,   471,   471,   471,   472,   494,   510,   511,
+     512,   513,   514,   520,   521,   522,   523,   524,   526,   546,
+     566,   566,   568,   569,   572,   591,   599,   605,   616,   620,
+     624,   635,   635,   636,   641,   650,   653,   654,   655,   656,
+     657,   658,   659,   660,   661,   664,   665,   666,   667,   668,
+     669,   670,   671,   672,   673,   674,   675,   679,   682,   685,
+     686,   687
 };
 #endif
 
@@ -1874,60 +1874,76 @@ yyreduce:
   case 19:
 #line 429 "hw1.y" /* yacc.c:1646  */
     {
-                    list<int>* temp=new list<int>;
-                    temp->push_front((yyvsp[0].idnode).IDtype);
-                    (yyval.arg_types)=temp;
+                    if((yyvsp[0].idnode).IDAttributes!=ARRAY_ATTRIBUTE)
+                    {
+                        list<int>* temp=new list<int>;
+                        temp->push_front((yyvsp[0].idnode).IDtype);
+                        (yyval.arg_types)=temp;
+                    }
+                    else{
+                        printf("type not a array\n");
+                        return 1;
+                    }
+                    
                 }
-#line 1882 "y.tab.c" /* yacc.c:1646  */
+#line 1890 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 434 "hw1.y" /* yacc.c:1646  */
+#line 442 "hw1.y" /* yacc.c:1646  */
     {
-                    (yyvsp[0].arg_types)->push_front((yyvsp[-2].idnode).IDtype);
-                    (yyval.arg_types)=(yyvsp[0].arg_types);
+                    if((yyvsp[-2].idnode).IDAttributes!=ARRAY_ATTRIBUTE)
+                    {
+                        (yyvsp[0].arg_types)->push_front((yyvsp[-2].idnode).IDtype);
+                        (yyval.arg_types)=(yyvsp[0].arg_types);
+                    }
+                    else{
+                        printf("type not a array\n");
+                        return 1;
+                    }
+                    
                 }
-#line 1891 "y.tab.c" /* yacc.c:1646  */
+#line 1907 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 439 "hw1.y" /* yacc.c:1646  */
+#line 455 "hw1.y" /* yacc.c:1646  */
     {add_scope(current_scop+"_Compound");}
-#line 1897 "y.tab.c" /* yacc.c:1646  */
+#line 1913 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 440 "hw1.y" /* yacc.c:1646  */
+#line 456 "hw1.y" /* yacc.c:1646  */
     {exit_scope();}
-#line 1903 "y.tab.c" /* yacc.c:1646  */
+#line 1919 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 443 "hw1.y" /* yacc.c:1646  */
+#line 459 "hw1.y" /* yacc.c:1646  */
     {}
-#line 1909 "y.tab.c" /* yacc.c:1646  */
+#line 1925 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 445 "hw1.y" /* yacc.c:1646  */
+#line 461 "hw1.y" /* yacc.c:1646  */
     {add_scope(current_scop+"_loop");}
-#line 1915 "y.tab.c" /* yacc.c:1646  */
+#line 1931 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 446 "hw1.y" /* yacc.c:1646  */
+#line 462 "hw1.y" /* yacc.c:1646  */
     {exit_scope();}
-#line 1921 "y.tab.c" /* yacc.c:1646  */
+#line 1937 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 447 "hw1.y" /* yacc.c:1646  */
+#line 463 "hw1.y" /* yacc.c:1646  */
     {}
-#line 1927 "y.tab.c" /* yacc.c:1646  */
+#line 1943 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 456 "hw1.y" /* yacc.c:1646  */
+#line 472 "hw1.y" /* yacc.c:1646  */
     {
                     //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
                     if((yyvsp[-2].idnode).IDAttributes==CONST_ATTRIBUTE)
@@ -1950,11 +1966,11 @@ yyreduce:
                     update_data((yyvsp[-2].idnode).IDname->c_str(),(yyvsp[0].idnode).IDvalue->c_str());
                     
                 }
-#line 1954 "y.tab.c" /* yacc.c:1646  */
+#line 1970 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 478 "hw1.y" /* yacc.c:1646  */
+#line 494 "hw1.y" /* yacc.c:1646  */
     {
                     //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
                     if((yyvsp[-2].idnode).IDAttributes==CONST_ATTRIBUTE)
@@ -1971,59 +1987,59 @@ yyreduce:
                     }
                     update_data((yyvsp[-2].idnode).IDname->c_str(),(yyvsp[0].idnode).IDvalue->c_str());
                 }
-#line 1975 "y.tab.c" /* yacc.c:1646  */
+#line 1991 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 494 "hw1.y" /* yacc.c:1646  */
+#line 510 "hw1.y" /* yacc.c:1646  */
     {printf("\nexe_code : %s \n",(yyvsp[0].idnode).IDvalue->c_str());}
-#line 1981 "y.tab.c" /* yacc.c:1646  */
+#line 1997 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 495 "hw1.y" /* yacc.c:1646  */
+#line 511 "hw1.y" /* yacc.c:1646  */
     {printf("\nexe_code : %s \n\n",(yyvsp[0].idnode).IDvalue->c_str());}
-#line 1987 "y.tab.c" /* yacc.c:1646  */
+#line 2003 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 498 "hw1.y" /* yacc.c:1646  */
+#line 514 "hw1.y" /* yacc.c:1646  */
     {(yyval.idnode)=(yyvsp[0].idnode);}
-#line 1993 "y.tab.c" /* yacc.c:1646  */
+#line 2009 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 504 "hw1.y" /* yacc.c:1646  */
+#line 520 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 1999 "y.tab.c" /* yacc.c:1646  */
+#line 2015 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 505 "hw1.y" /* yacc.c:1646  */
+#line 521 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 2005 "y.tab.c" /* yacc.c:1646  */
+#line 2021 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 506 "hw1.y" /* yacc.c:1646  */
+#line 522 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 2011 "y.tab.c" /* yacc.c:1646  */
+#line 2027 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 507 "hw1.y" /* yacc.c:1646  */
+#line 523 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 2017 "y.tab.c" /* yacc.c:1646  */
+#line 2033 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 508 "hw1.y" /* yacc.c:1646  */
+#line 524 "hw1.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 2023 "y.tab.c" /* yacc.c:1646  */
+#line 2039 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 510 "hw1.y" /* yacc.c:1646  */
+#line 526 "hw1.y" /* yacc.c:1646  */
     {
                 //if find the Id in table than return 1 to expression error
                 //else not do anything
@@ -2043,11 +2059,11 @@ yyreduce:
                     return 1;
                 }
                 }
-#line 2047 "y.tab.c" /* yacc.c:1646  */
+#line 2063 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 530 "hw1.y" /* yacc.c:1646  */
+#line 546 "hw1.y" /* yacc.c:1646  */
     {
                 // must find the value and the attrubutes to ASSIGNMENT in table
                 // if not find return 1 to expression error
@@ -2066,11 +2082,11 @@ yyreduce:
                 temp.idnode.IDname=new string(temp_id.get_IDname().c_str());
                 (yyval.idnode)=temp.idnode;
                 }
-#line 2070 "y.tab.c" /* yacc.c:1646  */
+#line 2086 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 557 "hw1.y" /* yacc.c:1646  */
+#line 573 "hw1.y" /* yacc.c:1646  */
     {
                     if ((yyvsp[-3].idnode).IDAttributes!=ARRAY_ATTRIBUTE){
                         printf("IDAttributes %d\n",(yyvsp[-3].idnode).IDAttributes);
@@ -2079,6 +2095,8 @@ yyreduce:
                     }
                     if ((yyvsp[-1].int_types)<(yyvsp[-3].idnode).IDnumber&& (yyvsp[-1].int_types)>=0){
                         (yyval.idnode)=(yyvsp[-3].idnode);
+                        (yyval.idnode).IDAttributes=VAR_ATTRIBUTE;
+                        (yyval.idnode).IDnumber=1;
                     }
                     else{ 
                         printf("xd:%d %d\n",(yyvsp[-3].idnode).IDnumber,(yyvsp[-1].int_types));
@@ -2086,29 +2104,29 @@ yyreduce:
                         return 1;
                     }
                 }
-#line 2090 "y.tab.c" /* yacc.c:1646  */
+#line 2108 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 574 "hw1.y" /* yacc.c:1646  */
+#line 592 "hw1.y" /* yacc.c:1646  */
     {
                 //if SAVE_IccDENTIFERS not return 1 to expression error than creat the item in table
                     inser_data((yyvsp[-2].int_types),(yyvsp[-4].idnode).IDname->c_str(),"0",(yyvsp[0].int_types),ARRAY_ATTRIBUTE);
                 }
-#line 2099 "y.tab.c" /* yacc.c:1646  */
+#line 2117 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 581 "hw1.y" /* yacc.c:1646  */
+#line 599 "hw1.y" /* yacc.c:1646  */
     {
                     inser_data(1,(yyvsp[-2].idnode).IDname->c_str(),(yyvsp[0].idnode).IDvalue->c_str(),(yyvsp[0].idnode).IDtype,CONST_ATTRIBUTE);
                     //printf("Const_declaration:%s\n",$4.IDvalue->c_str());
                 }
-#line 2108 "y.tab.c" /* yacc.c:1646  */
+#line 2126 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 587 "hw1.y" /* yacc.c:1646  */
+#line 605 "hw1.y" /* yacc.c:1646  */
     {
                     //if SAVE_IDENTIFERS not return 1 to expression error constant_exp is pass
                     //than creat the item in table
@@ -2120,20 +2138,20 @@ yyreduce:
                     inser_data(1,(yyvsp[-3].idnode).IDname->c_str(),(yyvsp[0].idnode).IDvalue->c_str(),(yyvsp[-2].int_types),VAR_ATTRIBUTE);
                     //printf("Variables_declaration:%s\n",$5.IDvalue->c_str());
                 }
-#line 2124 "y.tab.c" /* yacc.c:1646  */
+#line 2142 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 598 "hw1.y" /* yacc.c:1646  */
+#line 616 "hw1.y" /* yacc.c:1646  */
     {
                     inser_data(1,(yyvsp[-1].idnode).IDname->c_str(),"0",(yyvsp[0].int_types),VAR_ATTRIBUTE);
                     //printf("Variables_declaration:%s\n",$2);
                 }
-#line 2133 "y.tab.c" /* yacc.c:1646  */
+#line 2151 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 606 "hw1.y" /* yacc.c:1646  */
+#line 624 "hw1.y" /* yacc.c:1646  */
     {
                 if ((yyvsp[0].idnode).IDAttributes!=CONST_ATTRIBUTE){
                     yyerror("must be const");
@@ -2141,29 +2159,29 @@ yyreduce:
                 }
                 (yyval.idnode)=(yyvsp[0].idnode);
                 }
-#line 2145 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 61:
-#line 617 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=(yyvsp[0].idnode);}
-#line 2151 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 62:
-#line 617 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=(yyvsp[0].idnode);}
-#line 2157 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 63:
-#line 618 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,(yyvsp[0].string_types)->c_str()).idnode;}
 #line 2163 "y.tab.c" /* yacc.c:1646  */
     break;
 
+  case 61:
+#line 635 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=(yyvsp[0].idnode);}
+#line 2169 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 62:
+#line 635 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=(yyvsp[0].idnode);}
+#line 2175 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 63:
+#line 636 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,(yyvsp[0].string_types)->c_str()).idnode;}
+#line 2181 "y.tab.c" /* yacc.c:1646  */
+    break;
+
   case 64:
-#line 623 "hw1.y" /* yacc.c:1646  */
+#line 641 "hw1.y" /* yacc.c:1646  */
     {
                 if ((yyvsp[0].idnode).IDAttributes!=CONST_ATTRIBUTE){
                     yyerror("must be const");
@@ -2171,177 +2189,177 @@ yyreduce:
                 }
                 (yyval.int_types)=atoi((yyvsp[0].idnode).IDvalue->c_str());
                 }
-#line 2175 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 65:
-#line 632 "hw1.y" /* yacc.c:1646  */
-    {(yyval.int_types)=atoi((yyvsp[0].idnode).IDvalue->c_str());}
-#line 2181 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 66:
-#line 635 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=(yyvsp[-1].idnode);if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2187 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 67:
-#line 636 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(ARITHMETIC_ADD,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2193 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 68:
-#line 637 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(ARITHMETIC_SUB,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 65:
+#line 650 "hw1.y" /* yacc.c:1646  */
+    {(yyval.int_types)=atoi((yyvsp[0].idnode).IDvalue->c_str());}
 #line 2199 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 69:
-#line 638 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(ARITHMETIC_MUL,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 66:
+#line 653 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=(yyvsp[-1].idnode);if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2205 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 70:
-#line 639 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(ARITHMETIC_DIV,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 67:
+#line 654 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(ARITHMETIC_ADD,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2211 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 71:
-#line 640 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(EXPONENTIATION,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 68:
+#line 655 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(ARITHMETIC_SUB,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2217 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 72:
-#line 641 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(MINUS,(yyvsp[0].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 69:
+#line 656 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(ARITHMETIC_MUL,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2223 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 73:
-#line 642 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(PLAUS,(yyvsp[0].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 70:
+#line 657 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(ARITHMETIC_DIV,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2229 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 74:
-#line 643 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=(yyvsp[0].idnode);if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 71:
+#line 658 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(EXPONENTIATION,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2235 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 75:
-#line 646 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=(yyvsp[-1].idnode);if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 72:
+#line 659 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(MINUS,(yyvsp[0].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2241 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 76:
-#line 647 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(RELATIONAL_BIG,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 73:
+#line 660 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(PLAUS,(yyvsp[0].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2247 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 77:
-#line 648 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(RELATIONAL_LEAST,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 74:
+#line 661 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=(yyvsp[0].idnode);if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2253 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 78:
-#line 649 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(RELATIONAL_LEAST_EQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 75:
+#line 664 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=(yyvsp[-1].idnode);if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2259 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 79:
-#line 650 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(RELATIONAL_BIG_EQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 76:
+#line 665 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(RELATIONAL_BIG,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2265 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 80:
-#line 651 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(RELATIONAL_EQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 77:
+#line 666 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(RELATIONAL_LEAST,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2271 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 81:
-#line 652 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(RELATIONAL_NEQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 78:
+#line 667 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(RELATIONAL_LEAST_EQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2277 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 82:
-#line 653 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(AND,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 79:
+#line 668 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(RELATIONAL_BIG_EQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2283 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 83:
-#line 654 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(OR,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 80:
+#line 669 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(RELATIONAL_EQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2289 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 84:
-#line 655 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=slove(NOT,(yyvsp[0].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+  case 81:
+#line 670 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(RELATIONAL_NEQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2295 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 85:
-#line 656 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string((yyvsp[0].bool_types))).idnode;}
+  case 82:
+#line 671 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(AND,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2301 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 86:
-#line 657 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string((yyvsp[0].bool_types))).idnode;}
+  case 83:
+#line 672 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(OR,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
 #line 2307 "y.tab.c" /* yacc.c:1646  */
     break;
 
+  case 84:
+#line 673 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=slove(NOT,(yyvsp[0].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
+#line 2313 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 85:
+#line 674 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string((yyvsp[0].bool_types))).idnode;}
+#line 2319 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 86:
+#line 675 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string((yyvsp[0].bool_types))).idnode;}
+#line 2325 "y.tab.c" /* yacc.c:1646  */
+    break;
+
   case 87:
-#line 661 "hw1.y" /* yacc.c:1646  */
+#line 679 "hw1.y" /* yacc.c:1646  */
     {
                 (yyval.idnode)=create_idnode(CONST_ATTRIBUTE,INTTYPE,1,std::to_string((yyvsp[0].int_types))).idnode;
                 }
-#line 2315 "y.tab.c" /* yacc.c:1646  */
+#line 2333 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 664 "hw1.y" /* yacc.c:1646  */
+#line 682 "hw1.y" /* yacc.c:1646  */
     {
                 (yyval.idnode)=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string((yyvsp[0].real_types))).idnode;
                 }
-#line 2323 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 89:
-#line 667 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=(yyvsp[0].idnode);}
-#line 2329 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 90:
-#line 668 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=(yyvsp[0].idnode);}
-#line 2335 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 91:
-#line 669 "hw1.y" /* yacc.c:1646  */
-    {(yyval.idnode)=(yyvsp[0].idnode);}
 #line 2341 "y.tab.c" /* yacc.c:1646  */
     break;
 
+  case 89:
+#line 685 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=(yyvsp[0].idnode);}
+#line 2347 "y.tab.c" /* yacc.c:1646  */
+    break;
 
-#line 2345 "y.tab.c" /* yacc.c:1646  */
+  case 90:
+#line 686 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=(yyvsp[0].idnode);}
+#line 2353 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 91:
+#line 687 "hw1.y" /* yacc.c:1646  */
+    {(yyval.idnode)=(yyvsp[0].idnode);}
+#line 2359 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+
+#line 2363 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2569,7 +2587,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 671 "hw1.y" /* yacc.c:1906  */
+#line 689 "hw1.y" /* yacc.c:1906  */
 
 
 

@@ -40,7 +40,7 @@ func void main(){
     }
     var m1 string =c0//trace you can assigment the const Var
     m1=a6// trace you can assces var a6 string = "S6"
-    a6=lala2(1,2,3,4,5)//return the func
+    a6=lala2(a0[0]+a0[1],2,3,4,5)//return the func
     go lala2(1,2,3,4,5)
     //a6 = go lala() //no return
     var test int = 4
