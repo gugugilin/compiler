@@ -89,6 +89,7 @@ string outstring="";
 string app_name="";
 int id_counter=0;
 map<string,list<int>*> func_map;
+list<int> scope_Llab;
 
 
 template<typename Out>
@@ -158,6 +159,7 @@ void add_scope(string name){
     temp.set_counter(id_counter);
     scope_name.push_front(name);
     scope_list.push_front(temp);
+    scope_Llab.push_front(count_L);
     current_scop=name;
 }
 int get_current_counter(){
@@ -166,6 +168,8 @@ int get_current_counter(){
 void exit_scope(){
     scope_name.pop_front();
     scope_list.pop_front();
+    count_L=scope_Llab.front();
+    scope_Llab.pop_front();
     current_scop=scope_name.front();
 }
 int inser_data(int idcount,string idname,string idvalue,int idtype, int idattrubutes){
@@ -335,15 +339,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifgt L"+to_string(count_L)+"\n";
+            outstring+="    ifgt L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_BIG_EQ:
@@ -357,15 +361,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifge L"+to_string(count_L)+"\n";
+            outstring+="    ifge L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_LEAST:
@@ -379,15 +383,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    iflt L"+to_string(count_L)+"\n";
+            outstring+="    iflt L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_LEAST_EQ:
@@ -401,15 +405,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifle L"+to_string(count_L)+"\n";
+            outstring+="    ifle L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_EQ:
@@ -424,15 +428,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifeq L"+to_string(count_L)+"\n";
+            outstring+="    ifeq L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_NEQ:
@@ -446,15 +450,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifne L"+to_string(count_L)+"\n";
+            outstring+="    ifne L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case AND:
@@ -492,7 +496,7 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
 }
 
 
-#line 496 "y.tab.c" /* yacc.c:339  */
+#line 500 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -672,7 +676,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 433 "hw3.y" /* yacc.c:355  */
+#line 437 "hw3.y" /* yacc.c:355  */
 
     bool bool_types;
     int int_types;
@@ -687,7 +691,7 @@ union YYSTYPE
     }idnode;
     std::list<int>* arg_types;
 
-#line 691 "y.tab.c" /* yacc.c:355  */
+#line 695 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -704,7 +708,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 708 "y.tab.c" /* yacc.c:358  */
+#line 712 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1008,16 +1012,16 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   535,   535,   536,   536,   537,   537,   539,   539,   540,
-     553,   570,   572,   572,   574,   580,   586,   618,   618,   620,
-     625,   630,   631,   633,   633,   646,   650,   655,   656,   659,
-     668,   656,   680,   682,   683,   683,   688,   688,   688,   688,
-     688,   689,   722,   738,   749,   760,   761,   766,   782,   783,
-     784,   785,   786,   788,   808,   828,   828,   830,   831,   834,
-     852,   862,   886,   910,   928,   932,   943,   943,   944,   952,
-     961,   964,   965,   966,   967,   968,   969,   970,   971,   972,
-     979,   980,   981,   982,   983,   984,   985,   986,   987,   988,
-     989,   993,  1000,  1005,  1010,  1015,  1024
+       0,   539,   539,   540,   540,   541,   541,   543,   543,   544,
+     557,   574,   576,   576,   578,   584,   590,   622,   622,   624,
+     629,   634,   635,   637,   637,   650,   654,   659,   660,   663,
+     672,   660,   684,   686,   687,   687,   692,   692,   692,   692,
+     692,   693,   726,   742,   753,   764,   765,   770,   786,   787,
+     788,   789,   790,   792,   812,   832,   832,   834,   835,   838,
+     856,   866,   890,   914,   932,   936,   947,   947,   948,   956,
+     965,   968,   969,   970,   971,   972,   973,   974,   975,   976,
+     983,   984,   985,   986,   987,   988,   989,   990,   991,   992,
+     993,   997,  1004,  1009,  1014,  1019,  1028
 };
 #endif
 
@@ -1935,13 +1939,13 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 535 "hw3.y" /* yacc.c:1646  */
+#line 539 "hw3.y" /* yacc.c:1646  */
     {}
-#line 1941 "y.tab.c" /* yacc.c:1646  */
+#line 1945 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 540 "hw3.y" /* yacc.c:1646  */
+#line 544 "hw3.y" /* yacc.c:1646  */
     {
                     inser_data(1,(yyvsp[-1].idnode).IDname->c_str(),"0",(yyvsp[-2].int_types),FUNC_ATTRIBUTE);
                     id_counter=-1;
@@ -1955,11 +1959,11 @@ yyreduce:
                         printf("method public static %s main(java.lang.String[]",type_name[(yyvsp[-2].int_types)].c_str());
                         
                 }
-#line 1959 "y.tab.c" /* yacc.c:1646  */
+#line 1963 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 553 "hw3.y" /* yacc.c:1646  */
+#line 557 "hw3.y" /* yacc.c:1646  */
     {
                 func_map[(yyvsp[-3].string_types)->c_str()]=(yyvsp[-2].arg_types);
                 if(*(yyvsp[-3].string_types)!="main")
@@ -1977,50 +1981,50 @@ yyreduce:
                 print_tab();
                 printf("{\n");
                 }
-#line 1981 "y.tab.c" /* yacc.c:1646  */
+#line 1985 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 570 "hw3.y" /* yacc.c:1646  */
+#line 574 "hw3.y" /* yacc.c:1646  */
     {print_tab();printf("}\n");exit_scope();}
-#line 1987 "y.tab.c" /* yacc.c:1646  */
+#line 1991 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 572 "hw3.y" /* yacc.c:1646  */
+#line 576 "hw3.y" /* yacc.c:1646  */
     {(yyval.arg_types)=new list<int>;}
-#line 1993 "y.tab.c" /* yacc.c:1646  */
+#line 1997 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 572 "hw3.y" /* yacc.c:1646  */
+#line 576 "hw3.y" /* yacc.c:1646  */
     {(yyval.arg_types)=(yyvsp[0].arg_types);}
-#line 1999 "y.tab.c" /* yacc.c:1646  */
+#line 2003 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 574 "hw3.y" /* yacc.c:1646  */
+#line 578 "hw3.y" /* yacc.c:1646  */
     {
                     list<int>* temp=new list<int>;
                     temp->push_front((yyvsp[0].int_types));
                     (yyval.arg_types)=temp;
                     inser_data(1,(yyvsp[-1].idnode).IDname->c_str(),"0",(yyvsp[0].int_types),VAR_ATTRIBUTE);
                 }
-#line 2010 "y.tab.c" /* yacc.c:1646  */
+#line 2014 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 580 "hw3.y" /* yacc.c:1646  */
+#line 584 "hw3.y" /* yacc.c:1646  */
     {
                     (yyvsp[-3].arg_types)->push_front((yyvsp[0].int_types));
                     (yyval.arg_types)=(yyvsp[-3].arg_types);
                     inser_data(1,(yyvsp[-1].idnode).IDname->c_str(),"0",(yyvsp[0].int_types),VAR_ATTRIBUTE);
                 }
-#line 2020 "y.tab.c" /* yacc.c:1646  */
+#line 2024 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 586 "hw3.y" /* yacc.c:1646  */
+#line 590 "hw3.y" /* yacc.c:1646  */
     {
                 map<string,list<int>*>::iterator temp=func_map.find((yyvsp[-3].idnode).IDname->c_str());
                 if(temp!=func_map.end())
@@ -2053,156 +2057,156 @@ yyreduce:
                 (yyval.idnode)=(yyvsp[-3].idnode);
                 (yyval.idnode).IDAttributes=VAR_ATTRIBUTE;
                 }
-#line 2057 "y.tab.c" /* yacc.c:1646  */
+#line 2061 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 618 "hw3.y" /* yacc.c:1646  */
+#line 622 "hw3.y" /* yacc.c:1646  */
     {(yyval.arg_types)=new list<int>;}
-#line 2063 "y.tab.c" /* yacc.c:1646  */
+#line 2067 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 618 "hw3.y" /* yacc.c:1646  */
+#line 622 "hw3.y" /* yacc.c:1646  */
     {(yyval.arg_types)=(yyvsp[0].arg_types);}
-#line 2069 "y.tab.c" /* yacc.c:1646  */
+#line 2073 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 620 "hw3.y" /* yacc.c:1646  */
+#line 624 "hw3.y" /* yacc.c:1646  */
     {
                     list<int>* temp=new list<int>;
                     temp->push_front((yyvsp[0].idnode).IDtype);
                     (yyval.arg_types)=temp;
                 }
-#line 2079 "y.tab.c" /* yacc.c:1646  */
+#line 2083 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 625 "hw3.y" /* yacc.c:1646  */
+#line 629 "hw3.y" /* yacc.c:1646  */
     {
                     (yyvsp[0].arg_types)->push_front((yyvsp[-2].idnode).IDtype);
                     (yyval.arg_types)=(yyvsp[0].arg_types);
                 }
-#line 2088 "y.tab.c" /* yacc.c:1646  */
+#line 2092 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 630 "hw3.y" /* yacc.c:1646  */
+#line 634 "hw3.y" /* yacc.c:1646  */
     {add_scope(current_scop+"_Compound");}
-#line 2094 "y.tab.c" /* yacc.c:1646  */
+#line 2098 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 631 "hw3.y" /* yacc.c:1646  */
+#line 635 "hw3.y" /* yacc.c:1646  */
     {exit_scope();}
-#line 2100 "y.tab.c" /* yacc.c:1646  */
+#line 2104 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 633 "hw3.y" /* yacc.c:1646  */
+#line 637 "hw3.y" /* yacc.c:1646  */
     {
                 printf("%s",outstring.c_str());
                 outstring="";
                 print_tab();
-                printf("ifeq L%s\n",to_string(count_L).c_str());
+                printf("ifeq L%s_%s\n",current_scop.c_str(),to_string(count_L).c_str());
                 }
-#line 2111 "y.tab.c" /* yacc.c:1646  */
+#line 2115 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 638 "hw3.y" /* yacc.c:1646  */
+#line 642 "hw3.y" /* yacc.c:1646  */
     {
                 print_tab();
-                printf("    goto L%s\n",to_string(count_L+1).c_str());
+                printf("    goto L%s_%s\n",current_scop.c_str(),to_string(count_L+1).c_str());
                 print_tab();
-                printf("L%s:\n",to_string(count_L).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L).c_str());
                 count_L++;
                 outstring="";
                 }
-#line 2124 "y.tab.c" /* yacc.c:1646  */
+#line 2128 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 646 "hw3.y" /* yacc.c:1646  */
-    {
-                print_tab();
-                printf("L%s:\n",to_string(count_L++).c_str());
-                outstring="";
-                }
-#line 2134 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 26:
 #line 650 "hw3.y" /* yacc.c:1646  */
     {
                 print_tab();
-                printf("L%s:\n",to_string(count_L++).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L++).c_str());
+                outstring="";
+                }
+#line 2138 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 26:
+#line 654 "hw3.y" /* yacc.c:1646  */
+    {
+                print_tab();
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L++).c_str());
                 outstring="";}
-#line 2143 "y.tab.c" /* yacc.c:1646  */
+#line 2147 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 655 "hw3.y" /* yacc.c:1646  */
+#line 659 "hw3.y" /* yacc.c:1646  */
     {add_scope(current_scop+"_loop");}
-#line 2149 "y.tab.c" /* yacc.c:1646  */
+#line 2153 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 656 "hw3.y" /* yacc.c:1646  */
+#line 660 "hw3.y" /* yacc.c:1646  */
     {
                 print_tab();
-                printf("L%s:\n",to_string(count_L++).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L++).c_str());
                 }
-#line 2158 "y.tab.c" /* yacc.c:1646  */
+#line 2162 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 659 "hw3.y" /* yacc.c:1646  */
+#line 663 "hw3.y" /* yacc.c:1646  */
     {
                 printf("%s",outstring.c_str());
                 outstring="";
                 print_tab();
-                printf("ifeq L%s\n",to_string(count_L).c_str());
+                printf("ifeq L%s_%s\n",current_scop.c_str(),to_string(count_L).c_str());
                 print_tab();
-                printf("goto L%s\n",to_string(count_L+1).c_str());
+                printf("goto L%s_%s\n",current_scop.c_str(),to_string(count_L+1).c_str());
                 print_tab();
-                printf("L%s:\n",to_string(count_L+2).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L+2).c_str());
                 }
-#line 2173 "y.tab.c" /* yacc.c:1646  */
+#line 2177 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 668 "hw3.y" /* yacc.c:1646  */
+#line 672 "hw3.y" /* yacc.c:1646  */
     {
                 print_tab();
-                printf("goto L%s\n",to_string(count_L-3).c_str());
+                printf("goto L%s_%s\n",current_scop.c_str(),to_string(count_L-3).c_str());
                 print_tab();
-                printf("L%s:\n",to_string(count_L+1).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L+1).c_str());
                 }
-#line 2184 "y.tab.c" /* yacc.c:1646  */
+#line 2188 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 673 "hw3.y" /* yacc.c:1646  */
+#line 677 "hw3.y" /* yacc.c:1646  */
     {
                 print_tab();
-                printf("goto L%s\n",to_string(count_L+2).c_str());
+                printf("goto L%s_%s\n",current_scop.c_str(),to_string(count_L+2).c_str());
                 print_tab();
-                printf("L%s:\n",to_string(count_L).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L).c_str());
                 count_L+=3;
                 exit_scope();}
-#line 2196 "y.tab.c" /* yacc.c:1646  */
+#line 2200 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 680 "hw3.y" /* yacc.c:1646  */
+#line 684 "hw3.y" /* yacc.c:1646  */
     {}
-#line 2202 "y.tab.c" /* yacc.c:1646  */
+#line 2206 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 689 "hw3.y" /* yacc.c:1646  */
+#line 693 "hw3.y" /* yacc.c:1646  */
     {
                     //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
                     if((yyvsp[-2].idnode).IDAttributes==CONST_ATTRIBUTE)
@@ -2236,11 +2240,11 @@ yyreduce:
                     update_data((yyvsp[-2].idnode).IDname->c_str(),(yyvsp[0].idnode).IDvalue->c_str());
                     
                 }
-#line 2240 "y.tab.c" /* yacc.c:1646  */
+#line 2244 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 722 "hw3.y" /* yacc.c:1646  */
+#line 726 "hw3.y" /* yacc.c:1646  */
     {
                     //if IDAttributes of IDENTIFERS is 1 than return 1 to expression error
                     if((yyvsp[-2].idnode).IDAttributes==CONST_ATTRIBUTE)
@@ -2257,11 +2261,11 @@ yyreduce:
                     }
                     update_data((yyvsp[-2].idnode).IDname->c_str(),(yyvsp[0].idnode).IDvalue->c_str());
                 }
-#line 2261 "y.tab.c" /* yacc.c:1646  */
+#line 2265 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 738 "hw3.y" /* yacc.c:1646  */
+#line 742 "hw3.y" /* yacc.c:1646  */
     {
                 string types_out=type_name[(yyvsp[0].idnode).IDtype];
                 if(types_out=="string")
@@ -2272,11 +2276,11 @@ yyreduce:
                 print_tab();
                 printf("invokevirtual void java.io.PrintStream.print(%s)\n",types_out.c_str());
                 outstring="";}
-#line 2276 "y.tab.c" /* yacc.c:1646  */
+#line 2280 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 749 "hw3.y" /* yacc.c:1646  */
+#line 753 "hw3.y" /* yacc.c:1646  */
     {
                 string types_out=type_name[(yyvsp[0].idnode).IDtype];
                 if(types_out=="string")
@@ -2288,21 +2292,21 @@ yyreduce:
                 printf("invokevirtual void java.io.PrintStream.println(%s)\n",types_out.c_str());
                 outstring="";
                 }
-#line 2292 "y.tab.c" /* yacc.c:1646  */
+#line 2296 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 761 "hw3.y" /* yacc.c:1646  */
+#line 765 "hw3.y" /* yacc.c:1646  */
     {
                 outstring="";
                 print_tab();
                 printf("return\n");
                 }
-#line 2302 "y.tab.c" /* yacc.c:1646  */
+#line 2306 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 766 "hw3.y" /* yacc.c:1646  */
+#line 770 "hw3.y" /* yacc.c:1646  */
     {
                 printf("%s",outstring.c_str());
                 outstring="";
@@ -2314,41 +2318,41 @@ yyreduce:
                 if((yyvsp[0].idnode).IDtype==VOIDTYPE)
                     printf("return\n");
                 (yyval.idnode)=(yyvsp[0].idnode);}
-#line 2318 "y.tab.c" /* yacc.c:1646  */
+#line 2322 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 782 "hw3.y" /* yacc.c:1646  */
+#line 786 "hw3.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 2324 "y.tab.c" /* yacc.c:1646  */
+#line 2328 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 783 "hw3.y" /* yacc.c:1646  */
+#line 787 "hw3.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 2330 "y.tab.c" /* yacc.c:1646  */
+#line 2334 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 784 "hw3.y" /* yacc.c:1646  */
+#line 788 "hw3.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 2336 "y.tab.c" /* yacc.c:1646  */
+#line 2340 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 785 "hw3.y" /* yacc.c:1646  */
+#line 789 "hw3.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 2342 "y.tab.c" /* yacc.c:1646  */
+#line 2346 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 786 "hw3.y" /* yacc.c:1646  */
+#line 790 "hw3.y" /* yacc.c:1646  */
     {(yyval.int_types)=(yyvsp[0].int_types);}
-#line 2348 "y.tab.c" /* yacc.c:1646  */
+#line 2352 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 788 "hw3.y" /* yacc.c:1646  */
+#line 792 "hw3.y" /* yacc.c:1646  */
     {
                 //if find the Id in table than return 1 to expression error
                 //else not do anything
@@ -2368,11 +2372,11 @@ yyreduce:
                     return 1;
                 }
                 }
-#line 2372 "y.tab.c" /* yacc.c:1646  */
+#line 2376 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 808 "hw3.y" /* yacc.c:1646  */
+#line 812 "hw3.y" /* yacc.c:1646  */
     {
                 // must find the value and the attrubutes to ASSIGNMENT in table
                 // if not find return 1 to expression error
@@ -2391,11 +2395,11 @@ yyreduce:
                 temp.idnode.IDname=new string(temp_id.get_IDname().c_str());
                 (yyval.idnode)=temp.idnode;
                 }
-#line 2395 "y.tab.c" /* yacc.c:1646  */
+#line 2399 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 835 "hw3.y" /* yacc.c:1646  */
+#line 839 "hw3.y" /* yacc.c:1646  */
     {
                     if ((yyvsp[-3].idnode).IDAttributes!=ARRAY_ATTRIBUTE){
                         printf("IDAttributes %d\n",(yyvsp[-3].idnode).IDAttributes);
@@ -2412,22 +2416,22 @@ yyreduce:
                         return 1;
                     }
                 }
-#line 2416 "y.tab.c" /* yacc.c:1646  */
+#line 2420 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 853 "hw3.y" /* yacc.c:1646  */
+#line 857 "hw3.y" /* yacc.c:1646  */
     {
                 //if SAVE_IccDENTIFERS not return 1 to expression error than creat the item in table
                     inser_data((yyvsp[-2].int_types),(yyvsp[-4].idnode).IDname->c_str(),"0",(yyvsp[0].int_types),ARRAY_ATTRIBUTE);
                     printf("/*array not support*/\n");
                     outstring="";
                 }
-#line 2427 "y.tab.c" /* yacc.c:1646  */
+#line 2431 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 862 "hw3.y" /* yacc.c:1646  */
+#line 866 "hw3.y" /* yacc.c:1646  */
     {
                     
                     if(current_scop=="goble"){
@@ -2450,11 +2454,11 @@ yyreduce:
                     inser_data(1,(yyvsp[-2].idnode).IDname->c_str(),(yyvsp[0].idnode).IDvalue->c_str(),(yyvsp[0].idnode).IDtype,CONST_ATTRIBUTE);
                     //printf("Const_declaration:%s\n",$4.IDvalue->c_str());
                 }
-#line 2454 "y.tab.c" /* yacc.c:1646  */
+#line 2458 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 886 "hw3.y" /* yacc.c:1646  */
+#line 890 "hw3.y" /* yacc.c:1646  */
     {
                     //if SAVE_IDENTIFERS not return 1 to expression error constant_exp is pass
                     //than creat the item in table
@@ -2479,11 +2483,11 @@ yyreduce:
                     outstring="";
                     //printf("Variables_declaration:%s\n",$5.IDvalue->c_str());
                 }
-#line 2483 "y.tab.c" /* yacc.c:1646  */
+#line 2487 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 910 "hw3.y" /* yacc.c:1646  */
+#line 914 "hw3.y" /* yacc.c:1646  */
     {
                     if(current_scop=="goble"){
                         print_tab();
@@ -2502,11 +2506,11 @@ yyreduce:
                     outstring="";
                     //printf("Variables_declaration:%s\n",$2);
                 }
-#line 2506 "y.tab.c" /* yacc.c:1646  */
+#line 2510 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 932 "hw3.y" /* yacc.c:1646  */
+#line 936 "hw3.y" /* yacc.c:1646  */
     {
                 if ((yyvsp[0].idnode).IDAttributes!=CONST_ATTRIBUTE){
                     yyerror("must be const");
@@ -2514,32 +2518,32 @@ yyreduce:
                 }
                 (yyval.idnode)=(yyvsp[0].idnode);
                 }
-#line 2518 "y.tab.c" /* yacc.c:1646  */
+#line 2522 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 943 "hw3.y" /* yacc.c:1646  */
+#line 947 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=(yyvsp[0].idnode);}
-#line 2524 "y.tab.c" /* yacc.c:1646  */
+#line 2528 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 943 "hw3.y" /* yacc.c:1646  */
+#line 947 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=(yyvsp[0].idnode);}
-#line 2530 "y.tab.c" /* yacc.c:1646  */
+#line 2534 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 944 "hw3.y" /* yacc.c:1646  */
+#line 948 "hw3.y" /* yacc.c:1646  */
     {
                 print_exp_tab();
                 outstring+="ldc \""+string((yyvsp[0].string_types)->c_str())+"\"\n";
                 (yyval.idnode)=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,(yyvsp[0].string_types)->c_str()).idnode;}
-#line 2539 "y.tab.c" /* yacc.c:1646  */
+#line 2543 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 952 "hw3.y" /* yacc.c:1646  */
+#line 956 "hw3.y" /* yacc.c:1646  */
     {
                 if ((yyvsp[0].idnode).IDAttributes!=CONST_ATTRIBUTE){
                     yyerror("must be const");
@@ -2547,183 +2551,183 @@ yyreduce:
                 }
                 (yyval.int_types)=atoi((yyvsp[0].idnode).IDvalue->c_str());
                 }
-#line 2551 "y.tab.c" /* yacc.c:1646  */
+#line 2555 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 961 "hw3.y" /* yacc.c:1646  */
+#line 965 "hw3.y" /* yacc.c:1646  */
     {(yyval.int_types)=atoi((yyvsp[0].idnode).IDvalue->c_str());}
-#line 2557 "y.tab.c" /* yacc.c:1646  */
+#line 2561 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 964 "hw3.y" /* yacc.c:1646  */
+#line 968 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=(yyvsp[-1].idnode);if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2563 "y.tab.c" /* yacc.c:1646  */
+#line 2567 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 965 "hw3.y" /* yacc.c:1646  */
+#line 969 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(ARITHMETIC_ADD,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2569 "y.tab.c" /* yacc.c:1646  */
+#line 2573 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 966 "hw3.y" /* yacc.c:1646  */
+#line 970 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(ARITHMETIC_SUB,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2575 "y.tab.c" /* yacc.c:1646  */
+#line 2579 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 967 "hw3.y" /* yacc.c:1646  */
+#line 971 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(ARITHMETIC_MUL,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2581 "y.tab.c" /* yacc.c:1646  */
+#line 2585 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 968 "hw3.y" /* yacc.c:1646  */
+#line 972 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(ARITHMETIC_DIV,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2587 "y.tab.c" /* yacc.c:1646  */
+#line 2591 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 969 "hw3.y" /* yacc.c:1646  */
+#line 973 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(EXPONENTIATION,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2593 "y.tab.c" /* yacc.c:1646  */
+#line 2597 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 970 "hw3.y" /* yacc.c:1646  */
+#line 974 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(MINUS,(yyvsp[0].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2599 "y.tab.c" /* yacc.c:1646  */
+#line 2603 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 971 "hw3.y" /* yacc.c:1646  */
+#line 975 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(PLAUS,(yyvsp[0].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2605 "y.tab.c" /* yacc.c:1646  */
+#line 2609 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 972 "hw3.y" /* yacc.c:1646  */
+#line 976 "hw3.y" /* yacc.c:1646  */
     {
                 (yyval.idnode)=(yyvsp[0].idnode);
                 if ((yyval.idnode).IDAttributes!=CONST_ATTRIBUTE&&(yyval.idnode).IDAttributes!=VAR_ATTRIBUTE){
                 printf("must be a number\n");
                 return 1;}}
-#line 2615 "y.tab.c" /* yacc.c:1646  */
+#line 2619 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 979 "hw3.y" /* yacc.c:1646  */
+#line 983 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=(yyvsp[-1].idnode);if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2621 "y.tab.c" /* yacc.c:1646  */
+#line 2625 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 980 "hw3.y" /* yacc.c:1646  */
+#line 984 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(RELATIONAL_BIG,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2627 "y.tab.c" /* yacc.c:1646  */
+#line 2631 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 981 "hw3.y" /* yacc.c:1646  */
+#line 985 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(RELATIONAL_LEAST,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2633 "y.tab.c" /* yacc.c:1646  */
+#line 2637 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 982 "hw3.y" /* yacc.c:1646  */
+#line 986 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(RELATIONAL_LEAST_EQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2639 "y.tab.c" /* yacc.c:1646  */
+#line 2643 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 983 "hw3.y" /* yacc.c:1646  */
+#line 987 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(RELATIONAL_BIG_EQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2645 "y.tab.c" /* yacc.c:1646  */
+#line 2649 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 984 "hw3.y" /* yacc.c:1646  */
+#line 988 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(RELATIONAL_EQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2651 "y.tab.c" /* yacc.c:1646  */
+#line 2655 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 985 "hw3.y" /* yacc.c:1646  */
+#line 989 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(RELATIONAL_NEQ,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2657 "y.tab.c" /* yacc.c:1646  */
+#line 2661 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 986 "hw3.y" /* yacc.c:1646  */
+#line 990 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(AND,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2663 "y.tab.c" /* yacc.c:1646  */
+#line 2667 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 987 "hw3.y" /* yacc.c:1646  */
+#line 991 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(OR,(yyvsp[-2].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2669 "y.tab.c" /* yacc.c:1646  */
+#line 2673 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 988 "hw3.y" /* yacc.c:1646  */
+#line 992 "hw3.y" /* yacc.c:1646  */
     {(yyval.idnode)=slove(NOT,(yyvsp[0].idnode),(yyvsp[0].idnode));if ((yyval.idnode).IDAttributes==ERROR_ATTRIBUTE) return 1;}
-#line 2675 "y.tab.c" /* yacc.c:1646  */
+#line 2679 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 989 "hw3.y" /* yacc.c:1646  */
-    {
-                print_exp_tab();
-                outstring+="iconst_"+std::to_string((yyvsp[0].bool_types))+"\n";
-                (yyval.idnode)=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string((yyvsp[0].bool_types))).idnode;}
-#line 2684 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 91:
 #line 993 "hw3.y" /* yacc.c:1646  */
     {
                 print_exp_tab();
                 outstring+="iconst_"+std::to_string((yyvsp[0].bool_types))+"\n";
                 (yyval.idnode)=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string((yyvsp[0].bool_types))).idnode;}
-#line 2693 "y.tab.c" /* yacc.c:1646  */
+#line 2688 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 91:
+#line 997 "hw3.y" /* yacc.c:1646  */
+    {
+                print_exp_tab();
+                outstring+="iconst_"+std::to_string((yyvsp[0].bool_types))+"\n";
+                (yyval.idnode)=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string((yyvsp[0].bool_types))).idnode;}
+#line 2697 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 92:
-#line 1000 "hw3.y" /* yacc.c:1646  */
+#line 1004 "hw3.y" /* yacc.c:1646  */
     {
                 print_exp_tab();
                 outstring+="sipush "+std::to_string((yyvsp[0].int_types))+"\n";
                 (yyval.idnode)=create_idnode(CONST_ATTRIBUTE,INTTYPE,1,std::to_string((yyvsp[0].int_types))).idnode;
                 }
-#line 2703 "y.tab.c" /* yacc.c:1646  */
+#line 2707 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 1005 "hw3.y" /* yacc.c:1646  */
+#line 1009 "hw3.y" /* yacc.c:1646  */
     {
                 print_exp_tab();
                 outstring+="sipush "+std::to_string((yyvsp[0].real_types))+"\n";
                 (yyval.idnode)=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string((yyvsp[0].real_types))).idnode;
                 }
-#line 2713 "y.tab.c" /* yacc.c:1646  */
+#line 2717 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 1010 "hw3.y" /* yacc.c:1646  */
+#line 1014 "hw3.y" /* yacc.c:1646  */
     {
                 print_exp_tab();
                 outstring+="invokestatic "+type_name[(yyvsp[0].idnode).IDtype]+" "+app_name+".";
                 outstring+=string((yyvsp[0].idnode).IDname->c_str())+get_format((yyvsp[0].idnode).IDname->c_str())+"\n";
                 (yyval.idnode)=(yyvsp[0].idnode);}
-#line 2723 "y.tab.c" /* yacc.c:1646  */
+#line 2727 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 95:
-#line 1015 "hw3.y" /* yacc.c:1646  */
+#line 1019 "hw3.y" /* yacc.c:1646  */
     {
                 string index="iload "+current_lookout_index((yyvsp[0].idnode).IDname->c_str());
                 if(index=="iload -1"){
@@ -2733,20 +2737,20 @@ yyreduce:
                 print_exp_tab();
                 outstring+=index+"\n";
                 (yyval.idnode)=(yyvsp[0].idnode);}
-#line 2737 "y.tab.c" /* yacc.c:1646  */
+#line 2741 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 1024 "hw3.y" /* yacc.c:1646  */
+#line 1028 "hw3.y" /* yacc.c:1646  */
     {
                 print_exp_tab();
                 outstring+="not support array\n";
                 (yyval.idnode)=(yyvsp[0].idnode);}
-#line 2746 "y.tab.c" /* yacc.c:1646  */
+#line 2750 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2750 "y.tab.c" /* yacc.c:1646  */
+#line 2754 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2974,7 +2978,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1029 "hw3.y" /* yacc.c:1906  */
+#line 1033 "hw3.y" /* yacc.c:1906  */
 
 
 

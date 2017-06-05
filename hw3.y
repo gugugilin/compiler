@@ -24,6 +24,7 @@ string outstring="";
 string app_name="";
 int id_counter=0;
 map<string,list<int>*> func_map;
+list<int> scope_Llab;
 
 
 template<typename Out>
@@ -93,6 +94,7 @@ void add_scope(string name){
     temp.set_counter(id_counter);
     scope_name.push_front(name);
     scope_list.push_front(temp);
+    scope_Llab.push_front(count_L);
     current_scop=name;
 }
 int get_current_counter(){
@@ -101,6 +103,8 @@ int get_current_counter(){
 void exit_scope(){
     scope_name.pop_front();
     scope_list.pop_front();
+    count_L=scope_Llab.front();
+    scope_Llab.pop_front();
     current_scop=scope_name.front();
 }
 int inser_data(int idcount,string idname,string idvalue,int idtype, int idattrubutes){
@@ -270,15 +274,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifgt L"+to_string(count_L)+"\n";
+            outstring+="    ifgt L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_BIG_EQ:
@@ -292,15 +296,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifge L"+to_string(count_L)+"\n";
+            outstring+="    ifge L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_LEAST:
@@ -314,15 +318,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    iflt L"+to_string(count_L)+"\n";
+            outstring+="    iflt L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_LEAST_EQ:
@@ -336,15 +340,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifle L"+to_string(count_L)+"\n";
+            outstring+="    ifle L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_EQ:
@@ -359,15 +363,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifeq L"+to_string(count_L)+"\n";
+            outstring+="    ifeq L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case RELATIONAL_NEQ:
@@ -381,15 +385,15 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             print_exp_tab();
             outstring+="    isub\n";
             print_exp_tab();
-            outstring+="    ifne L"+to_string(count_L)+"\n";
+            outstring+="    ifne L"+current_scop+"_"+to_string(count_L)+"\n";
             print_exp_tab();
             outstring+="    iconst_0\n";
             print_exp_tab();
-            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            outstring+="    goto L"+current_scop+"_"+to_string(count_L+1)+"\n";
             print_exp_tab();
-            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            outstring+="L"+current_scop+"_"+to_string(count_L)+": iconst_1\n";
             print_exp_tab();
-            outstring+="L"+to_string(++count_L)+":\n";
+            outstring+="L"+current_scop+"_"+to_string(++count_L)+":\n";
             count_L++;
             break;
         case AND:
@@ -634,47 +638,47 @@ Conditionals:    IF LEFT_PARENTHESE bool_expression{
                 printf("%s",outstring.c_str());
                 outstring="";
                 print_tab();
-                printf("ifeq L%s\n",to_string(count_L).c_str());
+                printf("ifeq L%s_%s\n",current_scop.c_str(),to_string(count_L).c_str());
                 }RIGHT_PARENTHESE Compound{
                 print_tab();
-                printf("    goto L%s\n",to_string(count_L+1).c_str());
+                printf("    goto L%s_%s\n",current_scop.c_str(),to_string(count_L+1).c_str());
                 print_tab();
-                printf("L%s:\n",to_string(count_L).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L).c_str());
                 count_L++;
                 outstring="";
                 };
 Conditional:    Conditionals ELSE Compound{
                 print_tab();
-                printf("L%s:\n",to_string(count_L++).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L++).c_str());
                 outstring="";
                 }|Conditionals{
                 print_tab();
-                printf("L%s:\n",to_string(count_L++).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L++).c_str());
                 outstring="";};
 
 ex_loop:        FOR LEFT_PARENTHESE{add_scope(current_scop+"_loop");};
 LOOP:           ex_loop statements {
                 print_tab();
-                printf("L%s:\n",to_string(count_L++).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L++).c_str());
                 }  SEMICOLON bool_expression {
                 printf("%s",outstring.c_str());
                 outstring="";
                 print_tab();
-                printf("ifeq L%s\n",to_string(count_L).c_str());
+                printf("ifeq L%s_%s\n",current_scop.c_str(),to_string(count_L).c_str());
                 print_tab();
-                printf("goto L%s\n",to_string(count_L+1).c_str());
+                printf("goto L%s_%s\n",current_scop.c_str(),to_string(count_L+1).c_str());
                 print_tab();
-                printf("L%s:\n",to_string(count_L+2).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L+2).c_str());
                 }SEMICOLON statements RIGHT_PARENTHESE{
                 print_tab();
-                printf("goto L%s\n",to_string(count_L-3).c_str());
+                printf("goto L%s_%s\n",current_scop.c_str(),to_string(count_L-3).c_str());
                 print_tab();
-                printf("L%s:\n",to_string(count_L+1).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L+1).c_str());
                 } Compound{
                 print_tab();
-                printf("goto L%s\n",to_string(count_L+2).c_str());
+                printf("goto L%s_%s\n",current_scop.c_str(),to_string(count_L+2).c_str());
                 print_tab();
-                printf("L%s:\n",to_string(count_L).c_str());
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L).c_str());
                 count_L+=3;
                 exit_scope();};
 Procedure:      GO func_invo{};

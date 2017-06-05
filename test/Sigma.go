@@ -18,10 +18,19 @@ func void main( ) {
     for (c=2;c<=3;c=c+1){
         var b int = 1
         b=b+1
-        println c
-        println b
+        var n int =1
+        for(n=1;n<3;n=n+1){
+            println n
+        }
+        println "======="
+        if(c>2){
+            println "test"
+        }else{
+            println "test2"
+        }
     }
     b=b+5
+    println "======="
     println b
     const d = 4
     if (b<max){
@@ -35,6 +44,10 @@ func void main( ) {
     }
     else{
         println fact(2,d)
+    }
+    var n int =1
+    for(n=1;n<3;n=n+1){
+        println n
     }
     return 
 }
