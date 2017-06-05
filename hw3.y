@@ -860,9 +860,25 @@ arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expressi
 
 consts_declaration:
                 CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp{
-                    inser_data(1,$2.IDname->c_str(),$4.IDvalue->c_str(),$4.IDtype,CONST_ATTRIBUTE);
-                    //printf("%s",outstring.c_str());
+                    
+                    if(current_scop=="goble"){
+                        print_tab();
+                        printf("field static %s %s = %s\n",type_name[$4.IDtype].c_str(),$2.IDname->c_str(),$4.IDvalue->c_str());
+                    }
+                    else{
+                        printf("%s",outstring.c_str());                        
+                        print_tab();
+                        if(get_current_counter()>0)
+                        {
+                            printf("istore %d\n",get_current_counter());
+                        }
+                        else
+                        {
+                            printf("istore 0\n");
+                        }
+                    }
                     outstring="";
+                    inser_data(1,$2.IDname->c_str(),$4.IDvalue->c_str(),$4.IDtype,CONST_ATTRIBUTE);
                     //printf("Const_declaration:%s\n",$4.IDvalue->c_str());
                 };
                 

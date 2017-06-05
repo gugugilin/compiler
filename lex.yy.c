@@ -1054,7 +1054,7 @@ case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
 #line 227 "hw1.l"
-{linenum++;printf("%d: %s\n",linenum,buf);clear_linebuf(buf);}
+{linenum++;clear_linebuf(buf);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP

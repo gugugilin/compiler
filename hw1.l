@@ -224,7 +224,7 @@ error_simple .
 {Comments_one} LIST
 {Comments_start_mul} {BEGIN comment;LIST}
 <comment>{Comments_end_mul} {BEGIN 0;LIST}
-<comment>\n {linenum++;printf("%d: %s\n",linenum,buf);clear_linebuf(buf);}
+<comment>\n {linenum++;clear_linebuf(buf);}
 <comment>. {LIST}
 
 
