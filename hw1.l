@@ -19,7 +19,7 @@
 #define tokenInteger(t,i) {LIST; printf("<%s:%d>\n","t",i);}
 #define tokenid(t,s) {LIST; printf("<%s:%s>\n","t",s);}
 using namespace std;
-string type_name[6]={"None","BOOL","INT","REAL","STRING","VOID"};
+string type_name[6]={"none","bool","int","int","string","void"};
 string attr_name[5]={"ERROR","FUNC","CONST","VAR","ARRAY"};
 int linenum = 0;
 char buf[MAX_LINE_LENG];
@@ -79,8 +79,9 @@ private:
 
 class Hash { 
 public: 
-    Hash(){
+    Hash(string name){
         counter=0;
+        scope_name=name;
     } 
     int lookout(string s){
         map<string,id_node>::iterator temp=hash_table_string.find(s);
@@ -121,14 +122,17 @@ public:
             printf("------------------------- \n ",it->first);
         }
     }
+    int get_counter(){return counter;}
+    string get_name(){return scope_name;}
 private:
     int counter;
+    string scope_name;
     map<int,id_node> hash_table_int;
     map<string,id_node> hash_table_string;
 };
 
 Hash create_table(){
-    Hash temp;
+    Hash temp("table");
     return temp;
 }
 void clear_linebuf(char* s){
@@ -231,7 +235,7 @@ error_simple .
             linenum++;
             temp_buf.assign(buf);
             if(temp_buf.compare("")!=0)
-                printf("%d: %s\n",linenum,buf);
+                //printf("/* %d: %s*/\n ",linenum,buf);
             clear_linebuf(buf);
             clear_linebuf(temp);
             %}

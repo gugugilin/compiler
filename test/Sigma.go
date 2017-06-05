@@ -1,19 +1,17 @@
-/* Sigma.go
- *
- * Compute sum = 1 + 2 + ... + n
- */
-
-// variables
-const n = 10
-var sum int = 0
-var index int
-  
+var a int = 5
+var c int
+// function declaration
+func int add(a int, b int) {
+return a+b
+}
 // main function
-func void main ( ) {
-  for (index = 0; index <= n; ) {
-    sum = sum + index
-    index = index + 1
-  } 
-  print "The sum is "
-  println sum
+func void main( ) {
+    c = add(a, 10)
+    if (c > 10) {
+        print -c
+    }
+    else {
+        print c
+    }
+    println "Hello World"
 }

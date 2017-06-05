@@ -40,7 +40,7 @@ func void main(){
     }
     var m1 string =c0//trace you can assigment the const Var
     m1=a6// trace you can assces var a6 string = "S6"
-    a6=lala2(a0[0]+a0[1],2,3,4,5)//return the func
+    a6=lala2(a0[0]+a0[0],lala(),3,4,5)//return the func
     go lala2(1,2,3,4,5)
     //a6 = go lala() //no return
     var test int = 4
@@ -49,6 +49,7 @@ func void main(){
         var test int = 5//test the for and scope
         b0=c2//check the value or type is change by b0=a0[5]
     }
+    var aaaaa int = 5
     if (c2>b0){
         print test
         a0[0]=test

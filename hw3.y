@@ -2,27 +2,77 @@
 #include <list>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
 #include <sstream>  
 #include <math.h>
 #include <map>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <iterator>
+
 #include "lex.yy.c"
 #define Trace(t) {printf("[%d]:%s",linenum,t);}
 const int MINUS=500;
 const int PLAUS=501;
 using namespace std;
-Hash out_scope_table;
+int count_L=0;
+Hash out_scope_table("out_table");
 list<string> scope_name;
 list<Hash> scope_list;
 string current_scop;
-
+string outstring="";
 map<string,list<int>*> func_map;
 
+
+template<typename Out>
+void split(const std::string &s, char delim, Out result) {
+    std::stringstream ss;
+    ss.str(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        *(result++) = item;
+    }
+}
+
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+}
+
+string get_format(string name){
+    string out ="(";
+    map<string,list<int>*>::iterator temp=func_map.find(name);
+    if(temp!=func_map.end())
+    {
+        list<int>::iterator it1=temp->second->begin();
+        int count;
+        for(it1,count=0;it1!=temp->second->end();++it1,++count)
+        {
+            if(it1!=--temp->second->end())
+                out+=type_name[*it1]+",";
+            else
+                out+=type_name[*it1];
+        }
+    }
+    return out+=")";
+}
+
+void print_exp_tab(){
+    int i=0,m=scope_list.size();
+    for(;i<m;++i)
+        outstring+="    ";
+}
+void print_tab(){
+    int i=0,m=scope_list.size();
+    for(;i<m;++i)
+        printf("    ");
+}
 int idcount;
 void yyerror(char * msg);
-void scope_init(){              
-    string name="goble";        
-    Hash temp;
+void scope_init(string name){
+    Hash temp(name);
     scope_name.push_front(name);
     scope_list.push_front(temp);
     current_scop="goble";
@@ -35,10 +85,13 @@ void dump_table(){
     out_scope_table.dump();
 }
 void add_scope(string name){
-    Hash temp;
+    Hash temp(name);
     scope_name.push_front(name);
     scope_list.push_front(temp);
     current_scop=name;
+}
+int get_current_counter(){
+    return scope_list.front().get_counter();
 }
 void exit_scope(){
     scope_name.pop_front();
@@ -78,6 +131,7 @@ id_node current_lookout_data(string name){//for create the variables to check
     }
     return temp.get_data(name);
 }
+
 id_node lookout_data(string name){//for check the use variables
     list<Hash>::iterator it=scope_list.begin();
     for(;it!=scope_list.end();++it){
@@ -88,8 +142,26 @@ id_node lookout_data(string name){//for check the use variables
     id_node new_data(1,name,-1,-1,"0",current_scop);
     return new_data;
 }
+
+string current_lookout_index(string name){//for check the use variables
+    Hash temp=scope_list.front();
+    if (temp.lookout(name)==-1)
+    {
+        return "-1";
+    }
+    return to_string(temp.get_data(name).get_count()-1);
+}
+string lookout_index(string name){//for check the use variables
+    list<Hash>::iterator it=scope_list.begin();
+    for(;it!=scope_list.end();++it){
+        if(it->lookout(name)!=-1){
+            return it->get_name();
+        }
+    }
+    return current_scop;
+}
 void insert_scope(string name){
-    Hash temp;
+    Hash temp(name);
     scope_name.push_front(name);
     scope_list.push_front(temp);
     current_scop=name;
@@ -121,6 +193,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="iadd\n";
             break;
         case ARITHMETIC_SUB:
             if(isnum(t1,t2)){
@@ -130,6 +204,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="isub\n";
             break;
         case ARITHMETIC_MUL:
             if(isnum(t1,t2)){
@@ -139,6 +215,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="imul\n";
             break;
         case ARITHMETIC_DIV:
             if(isnum(t1,t2)){
@@ -152,6 +230,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="idiv\n";
             break;
         case EXPONENTIATION:
             if(isnum(t1,t2)){
@@ -161,7 +241,6 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
-            
             break;
         case MINUS:
             if(isnum(t1,t1)){
@@ -170,6 +249,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="ineg\n";
             break;
         case PLAUS:
             if(isnum(t1,t1)){temp=t1;}
@@ -183,6 +264,19 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="    isub\n";
+            print_exp_tab();
+            outstring+="    ifgt L"+to_string(count_L)+"\n";
+            print_exp_tab();
+            outstring+="    iconst_0\n";
+            print_exp_tab();
+            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            print_exp_tab();
+            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            print_exp_tab();
+            outstring+="L"+to_string(++count_L)+":\n";
+            count_L++;
             break;
         case RELATIONAL_BIG_EQ:
             if(isnum(t1,t2)){
@@ -192,6 +286,19 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="    isub\n";
+            print_exp_tab();
+            outstring+="    ifge L"+to_string(count_L)+"\n";
+            print_exp_tab();
+            outstring+="    iconst_0\n";
+            print_exp_tab();
+            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            print_exp_tab();
+            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            print_exp_tab();
+            outstring+="L"+to_string(++count_L)+":\n";
+            count_L++;
             break;
         case RELATIONAL_LEAST:
             if(isnum(t1,t2)){
@@ -201,6 +308,19 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="    isub\n";
+            print_exp_tab();
+            outstring+="    iflt L"+to_string(count_L)+"\n";
+            print_exp_tab();
+            outstring+="    iconst_0\n";
+            print_exp_tab();
+            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            print_exp_tab();
+            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            print_exp_tab();
+            outstring+="L"+to_string(++count_L)+":\n";
+            count_L++;
             break;
         case RELATIONAL_LEAST_EQ:
             if(isnum(t1,t2)){
@@ -210,6 +330,19 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="    isub\n";
+            print_exp_tab();
+            outstring+="    ifle L"+to_string(count_L)+"\n";
+            print_exp_tab();
+            outstring+="    iconst_0\n";
+            print_exp_tab();
+            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            print_exp_tab();
+            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            print_exp_tab();
+            outstring+="L"+to_string(++count_L)+":\n";
+            count_L++;
             break;
         case RELATIONAL_EQ:
             if(isnum(t1,t2)){
@@ -218,7 +351,21 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             t1.IDtype=BOOLTYPE;
             temp=t1;
             }
-            else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            else 
+                temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="    isub\n";
+            print_exp_tab();
+            outstring+="    ifeq L"+to_string(count_L)+"\n";
+            print_exp_tab();
+            outstring+="    iconst_0\n";
+            print_exp_tab();
+            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            print_exp_tab();
+            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            print_exp_tab();
+            outstring+="L"+to_string(++count_L)+":\n";
+            count_L++;
             break;
         case RELATIONAL_NEQ:
             if(isnum(t1,t2)){
@@ -228,6 +375,19 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="    isub\n";
+            print_exp_tab();
+            outstring+="    ifne L"+to_string(count_L)+"\n";
+            print_exp_tab();
+            outstring+="    iconst_0\n";
+            print_exp_tab();
+            outstring+="    goto L"+to_string(count_L+1)+"\n";
+            print_exp_tab();
+            outstring+="L"+to_string(count_L)+": iconst_1\n";
+            print_exp_tab();
+            outstring+="L"+to_string(++count_L)+":\n";
+            count_L++;
             break;
         case AND:
             if(t1.IDtype==BOOLTYPE&&t2.IDtype==BOOLTYPE){
@@ -236,6 +396,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="iand\n";
             break;
         case OR:
             if(t1.IDtype==BOOLTYPE&&t2.IDtype==BOOLTYPE){
@@ -244,6 +406,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="ior\n";
             break;
         case NOT:
             if(t1.IDtype==BOOLTYPE&&t1.IDtype==BOOLTYPE){
@@ -252,6 +416,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             temp=t1;
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
+            print_exp_tab();
+            outstring+="ixor\n";
             break;
     }
     return temp;
@@ -373,11 +539,31 @@ ex_function:    FUNC type SAVE_IDENTIFERS LEFT_PARENTHESE {
                     add_scope($3.IDname->c_str());
                     inser_data(1,$3.IDname->c_str(),"0",$2,FUNC_ATTRIBUTE);
                     $$=new string($3.IDname->c_str());
+                    print_tab();
+                    if(*$3.IDname!="main")
+                        printf("method public static %s %s(",type_name[$2].c_str(),$3.IDname->c_str());
+                    else
+                        printf("method public static %s main(java.lang.String[]",type_name[$2].c_str());
+                        
                 };
 ex1_function:   ex_function formal_arguments RIGHT_PARENTHESE LEFT_BRACKETS{
                 func_map[$1->c_str()]=$2;
+                if(*$1!="main")
+                for (std::list<int>::iterator it=$2->begin(); it != $2->end(); ++it){
+                    if(it!=--$2->end())
+                        printf("%s,",type_name[*it].c_str());
+                    else
+                        printf("%s",type_name[*it].c_str());
+                }
+                printf(")\n");
+                print_tab();
+                printf("max_stack 15\n");
+                print_tab();
+                printf("max_locals 15\n");
+                print_tab();
+                printf("{\n");
                 };
-function:       ex1_function statements RIGHT_BRACKETS{exit_scope();};
+function:       ex1_function statements RIGHT_BRACKETS{print_tab();printf("}\n");exit_scope();};
 
 formal_arguments:/*empty*/{$$=new list<int>;}|formal_argument{$$=$1;};
 
@@ -387,10 +573,10 @@ formal_argument: SAVE_IDENTIFERS type{
                     $$=temp;
                     inser_data(1,$1.IDname->c_str(),"0",$2,VAR_ATTRIBUTE);
                 }|
-                SAVE_IDENTIFERS type COMMA formal_argument{
-                    $4->push_front($2);
-                    $$=$4;
-                    inser_data(1,$1.IDname->c_str(),"0",$2,VAR_ATTRIBUTE);
+                  formal_argument COMMA SAVE_IDENTIFERS type{
+                    $1->push_front($4);
+                    $$=$1;
+                    inser_data(1,$3.IDname->c_str(),"0",$4,VAR_ATTRIBUTE);
                 };
 
 func_invo:      IDENTIFERS LEFT_PARENTHESE comm_expression RIGHT_PARENTHESE{
@@ -440,11 +626,48 @@ comm_expressions:
 ex_compound:    LEFT_BRACKETS{add_scope(current_scop+"_Compound");};
 Compound:       ex_compound statements RIGHT_BRACKETS{exit_scope();};
 
-Conditional:    IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound ELSE Compound|
-                IF LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE Compound{};
+Conditionals:    IF LEFT_PARENTHESE bool_expression{
+                printf("%s\n",outstring.c_str());
+                outstring="";
+                print_tab();
+                printf("ifeq L%s\n",to_string(count_L).c_str());
+                }RIGHT_PARENTHESE Compound{
+                print_tab();
+                printf("    goto L%s\n",to_string(count_L+1).c_str());
+                print_tab();
+                printf("L%s:\n",to_string(count_L).c_str());
+                count_L++;
+                };
+Conditional:    Conditionals ELSE Compound{
+                print_tab();
+                printf("L%s:\n",to_string(count_L++).c_str());
+                }|Conditionals;
 
 ex_loop:        FOR LEFT_PARENTHESE{add_scope(current_scop+"_loop");};
-LOOP:           ex_loop statements SEMICOLON bool_expression SEMICOLON statements RIGHT_PARENTHESE Compound{exit_scope();};
+LOOP:           ex_loop statements {
+                print_tab();
+                printf("L%s:\n",to_string(count_L++).c_str());
+                }  SEMICOLON bool_expression {
+                printf("%s\n",outstring.c_str());
+                outstring="";
+                print_tab();
+                printf("ifeq L%s\n",to_string(count_L).c_str());
+                print_tab();
+                printf("goto L%s\n",to_string(count_L+1).c_str());
+                print_tab();
+                printf("L%s:\n",to_string(count_L+2).c_str());
+                }SEMICOLON statements RIGHT_PARENTHESE{
+                print_tab();
+                printf("goto L%s\n",to_string(count_L-3).c_str());
+                print_tab();
+                printf("L%s:\n",to_string(count_L+1).c_str());
+                } Compound{
+                print_tab();
+                printf("goto L%s\n",to_string(count_L+2).c_str());
+                print_tab();
+                printf("L%s:\n",to_string(count_L).c_str());
+                count_L+=3;
+                exit_scope();};
 Procedure:      GO func_invo{};
 
 statements:     declarations statements  |
@@ -473,6 +696,17 @@ statement:      Compound|LOOP|function|Conditional|Procedure|
                             return 1;
                         }
                     }
+                    
+                    string index="istore "+current_lookout_index($1.IDname->c_str());
+                    if(index=="istore -1"){
+                        index="putstatic "+type_name[$1.IDtype]+" ";
+                        index+=lookout_index($1.IDname->c_str())+"."+$1.IDname->c_str();
+                    }
+                    print_exp_tab();
+                    outstring+=index+"\n";
+                    printf("%s\n",outstring.c_str());
+                    outstring="";
+                    
                     update_data($1.IDname->c_str(),$3.IDvalue->c_str());
                     
                 }|
@@ -492,11 +726,38 @@ statement:      Compound|LOOP|function|Conditional|Procedure|
                     }
                     update_data($1.IDname->c_str(),$3.IDvalue->c_str());
                 }|
-                PRINT expression{printf("\nexe_code : %s \n",$2.IDvalue->c_str());}|
-                PRINTLN expression{printf("\nexe_code : %s \n\n",$2.IDvalue->c_str());}|
+                PRINT expression{
+                string types_out=type_name[$2.IDtype];
+                if(types_out=="string")
+                    types_out="java.lang.String";
+                print_tab();
+                printf("getstatic java.io.PrintStream java.lang.System.out\n");
+                printf("%s",outstring.c_str());
+                print_tab();
+                printf("invokevirtual void java.io.PrintStream.print(%s)\n",types_out.c_str());
+                outstring="";}|
+                
+                PRINTLN expression{
+                string types_out=type_name[$2.IDtype];
+                if(types_out=="string")
+                    types_out="java.lang.String";
+                print_tab();
+                printf("getstatic java.io.PrintStream java.lang.System.out\n");
+                printf("%s",outstring.c_str());
+                print_tab();
+                printf("invokevirtual void java.io.PrintStream.println(%s)\n",types_out.c_str());
+                outstring="";
+                }|
                 READ IDENTIFERS|
-                RETURN |
-                RETURN expression{$$=$2;};
+                RETURN {
+                outstring="";
+                }|
+                RETURN expression{
+                printf("%s\n",outstring.c_str());
+                outstring="";
+                print_tab();
+                printf("ireturn\n");
+                $$=$2;};
 
                                 
                 
@@ -577,12 +838,16 @@ arrays_declaration:VAR SAVE_IDENTIFERS LEFT_SQUARE_BRACKETS const_index_expressi
                 {
                 //if SAVE_IccDENTIFERS not return 1 to expression error than creat the item in table
                     inser_data($4,$2.IDname->c_str(),"0",$6,ARRAY_ATTRIBUTE);
+                    printf("/*array not support*/\n");
+                    outstring="";
                 };                
                 
 
 consts_declaration:
                 CONST SAVE_IDENTIFERS ASSIGNMENT constant_exp{
                     inser_data(1,$2.IDname->c_str(),$4.IDvalue->c_str(),$4.IDtype,CONST_ATTRIBUTE);
+                    //printf("%s",outstring.c_str());
+                    outstring="";
                     //printf("Const_declaration:%s\n",$4.IDvalue->c_str());
                 };
                 
@@ -595,11 +860,30 @@ Variables_declaration:
                         yyerror("type not match");
                         return 1;
                     }
+                    if(current_scop=="goble"){
+                        print_tab();
+                        printf("field static %s %s = %s\n",type_name[$3].c_str(),$2.IDname->c_str(),$5.IDvalue->c_str());
+                    }
+                    else{
+                        printf("%s",outstring.c_str());
+                        print_tab();
+                        printf("istore %d\n",get_current_counter()-1);
+                    }
                     inser_data(1,$2.IDname->c_str(),$5.IDvalue->c_str(),$3,VAR_ATTRIBUTE);
+                    outstring="";
                     //printf("Variables_declaration:%s\n",$5.IDvalue->c_str());
                 }|
                 VAR SAVE_IDENTIFERS type{
+                    if(current_scop=="goble"){
+                        print_tab();
+                        printf("field static %s %s\n",type_name[$3].c_str(),$2.IDname->c_str());
+                    }
+                    else{
+                        print_tab();
+                        printf("istore %d\n",get_current_counter()-1);
+                    }
                     inser_data(1,$2.IDname->c_str(),"0",$3,VAR_ATTRIBUTE);
+                    outstring="";
                     //printf("Variables_declaration:%s\n",$2);
                 }|
                 arrays_declaration;
@@ -618,7 +902,10 @@ constant_exp:  expression{
 // expression                
 expression:     
                 number_expression{$$=$1;}|bool_expression{$$=$1;}|
-                STRING_CONSTANTS{$$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1->c_str()).idnode;};
+                STRING_CONSTANTS{
+                print_exp_tab();
+                outstring+="ldc \""+string($1->c_str())+"\"\n";
+                $$=create_idnode(CONST_ATTRIBUTE,STRINGTYPE,1,$1->c_str()).idnode;};
                 
                 
 
@@ -660,20 +947,45 @@ bool_expression:LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE{$$=$2;if ($$.ID
                 bool_expression AND bool_expression{$$=slove(AND,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 bool_expression OR bool_expression{$$=slove(OR,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 NOT bool_expression{$$=slove(NOT,$2,$2);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
-                BOOLEAN_CONSTANTS_FALSE{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1)).idnode;}|
-                BOOLEAN_CONSTANTS_TRUE{$$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1)).idnode;};
+                BOOLEAN_CONSTANTS_FALSE{
+                print_exp_tab();
+                outstring+="iconst_"+std::to_string($1)+"\n";
+                $$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1)).idnode;}|
+                BOOLEAN_CONSTANTS_TRUE{
+                print_exp_tab();
+                outstring+="iconst_"+std::to_string($1)+"\n";
+                $$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1)).idnode;};
                             
                 
 commponent:     
                 INTEGER_CONSTANTS{
+                print_exp_tab();
+                outstring+="sipush "+std::to_string($1)+"\n";
                 $$=create_idnode(CONST_ATTRIBUTE,INTTYPE,1,std::to_string($1)).idnode;
                 }|
                 REAL_CONSTANTS{
+                print_exp_tab();
+                outstring+="sipush "+std::to_string($1)+"\n";
                 $$=create_idnode(CONST_ATTRIBUTE,REALTYPE,1,std::to_string($1)).idnode;
                 }|
-                func_invo{$$=$1;}|
-                IDENTIFERS{$$=$1;}|
-                arrays_variable{$$=$1;};
+                func_invo{
+                print_exp_tab();
+                outstring+="invokestatic "+type_name[$1.IDtype]+" example.";
+                outstring+=string($1.IDname->c_str())+get_format($1.IDname->c_str())+"\n";
+                $$=$1;}|
+                IDENTIFERS{
+                string index="iload "+current_lookout_index($1.IDname->c_str());
+                if(index=="iload -1"){
+                    index="getstatic "+type_name[$1.IDtype]+" ";
+                    index+=lookout_index($1.IDname->c_str())+"."+$1.IDname->c_str();
+                }
+                print_exp_tab();
+                outstring+=index+"\n";
+                $$=$1;}|
+                arrays_variable{
+                print_exp_tab();
+                outstring+="not support array\n";
+                $$=$1;};
                 
 %%
 
@@ -691,15 +1003,20 @@ int main(int argc,char** argv)
         exit(1);
     }
     yyin = fopen(argv[1], "r");         /* open input file */
-    scope_init();
+    
     int count=0;
+    std::vector<std::string> name_class_temp = split(argv[1], '/');
+    std::vector<std::string> name_class = split(name_class_temp.back().c_str(), '.');
+    scope_init(name_class.front());
+    printf("class %s\n{\n",name_class.front().c_str());
     if (yyparse() == 1)                 /* parsing */
     {
         count++;
         yyerror("Parsing error !");    /* syntax error */
     }
     if(count==0){
-        dump_table();
+        //dump_table();
+        printf("}\n");
         yyerror("\nsave pass!!\n");
     }
     else
