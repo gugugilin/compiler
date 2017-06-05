@@ -21,6 +21,8 @@ list<string> scope_name;
 list<Hash> scope_list;
 string current_scop;
 string outstring="";
+string app_name="";
+int id_counter=0;
 map<string,list<int>*> func_map;
 
 
@@ -78,6 +80,8 @@ void scope_init(string name){
     current_scop="goble";
     idcount=0;
 }
+
+
 string get_scope(){             
     return scope_name.front();
 }
@@ -86,6 +90,7 @@ void dump_table(){
 }
 void add_scope(string name){
     Hash temp(name);
+    temp.set_counter(id_counter);
     scope_name.push_front(name);
     scope_list.push_front(temp);
     current_scop=name;
@@ -110,6 +115,7 @@ int inser_data(int idcount,string idname,string idvalue,int idtype, int idattrub
     new_data.set_name(current_scop+"_"+idname); //avoid the redefine the variables name
     out_scope_table.insert(new_data); //insert the data to dump table
     scope_list.push_front(temp);
+    id_counter++;
     return 1;
 }
 void update_data(string name,string value){//For ASSIGNMENT to update the value
@@ -144,19 +150,16 @@ id_node lookout_data(string name){//for check the use variables
 }
 
 string current_lookout_index(string name){//for check the use variables
-    Hash temp=scope_list.front();
-    if (temp.lookout(name)==-1)
-    {
-        return "-1";
-    }
-    return to_string(temp.get_data(name).get_count()-1);
+    list<Hash>::iterator it=scope_list.begin();
+    for(;it!=(--scope_list.end());++it)
+        if (it->lookout(name)!=-1)
+            return to_string(it->get_data(name).get_count());
+    return "-1";
 }
 string lookout_index(string name){//for check the use variables
-    list<Hash>::iterator it=scope_list.begin();
-    for(;it!=scope_list.end();++it){
-        if(it->lookout(name)!=-1){
-            return it->get_name();
-        }
+    list<Hash>::iterator it=(--scope_list.end());
+    if(it->lookout(name)!=-1){
+        return it->get_name();
     }
     return current_scop;
 }
@@ -536,6 +539,7 @@ program:        functions|declarations;
 functions:      function functions|/*empty*/;
 ex_function:    FUNC type SAVE_IDENTIFERS LEFT_PARENTHESE {
                     inser_data(1,$3.IDname->c_str(),"0",$2,FUNC_ATTRIBUTE);
+                    id_counter=-1;
                     add_scope($3.IDname->c_str());
                     inser_data(1,$3.IDname->c_str(),"0",$2,FUNC_ATTRIBUTE);
                     $$=new string($3.IDname->c_str());
@@ -627,7 +631,7 @@ ex_compound:    LEFT_BRACKETS{add_scope(current_scop+"_Compound");};
 Compound:       ex_compound statements RIGHT_BRACKETS{exit_scope();};
 
 Conditionals:    IF LEFT_PARENTHESE bool_expression{
-                printf("%s\n",outstring.c_str());
+                printf("%s",outstring.c_str());
                 outstring="";
                 print_tab();
                 printf("ifeq L%s\n",to_string(count_L).c_str());
@@ -637,18 +641,23 @@ Conditionals:    IF LEFT_PARENTHESE bool_expression{
                 print_tab();
                 printf("L%s:\n",to_string(count_L).c_str());
                 count_L++;
+                outstring="";
                 };
 Conditional:    Conditionals ELSE Compound{
                 print_tab();
                 printf("L%s:\n",to_string(count_L++).c_str());
-                }|Conditionals;
+                outstring="";
+                }|Conditionals{
+                print_tab();
+                printf("L%s:\n",to_string(count_L++).c_str());
+                outstring="";};
 
 ex_loop:        FOR LEFT_PARENTHESE{add_scope(current_scop+"_loop");};
 LOOP:           ex_loop statements {
                 print_tab();
                 printf("L%s:\n",to_string(count_L++).c_str());
                 }  SEMICOLON bool_expression {
-                printf("%s\n",outstring.c_str());
+                printf("%s",outstring.c_str());
                 outstring="";
                 print_tab();
                 printf("ifeq L%s\n",to_string(count_L).c_str());
@@ -704,7 +713,7 @@ statement:      Compound|LOOP|function|Conditional|Procedure|
                     }
                     print_exp_tab();
                     outstring+=index+"\n";
-                    printf("%s\n",outstring.c_str());
+                    printf("%s",outstring.c_str());
                     outstring="";
                     
                     update_data($1.IDname->c_str(),$3.IDvalue->c_str());
@@ -751,12 +760,19 @@ statement:      Compound|LOOP|function|Conditional|Procedure|
                 READ IDENTIFERS|
                 RETURN {
                 outstring="";
+                print_tab();
+                printf("return\n");
                 }|
                 RETURN expression{
-                printf("%s\n",outstring.c_str());
+                printf("%s",outstring.c_str());
                 outstring="";
                 print_tab();
-                printf("ireturn\n");
+                if($2.IDtype==REALTYPE)
+                    printf("dreturn\n");
+                if($2.IDtype==INTTYPE||$2.IDtype==BOOLTYPE)
+                    printf("ireturn\n");
+                if($2.IDtype==VOIDTYPE)
+                    printf("return\n");
                 $$=$2;};
 
                                 
@@ -828,7 +844,6 @@ arrays_variable:IDENTIFERS LEFT_SQUARE_BRACKETS index_expression RIGHT_SQUARE_BR
                         $$.IDnumber=1;
                     }
                     else{ 
-                        printf("xd:%d %d\n",$1.IDnumber,$3);
                         yyerror("ARRAY index error");
                         return 1;
                     }
@@ -867,7 +882,10 @@ Variables_declaration:
                     else{
                         printf("%s",outstring.c_str());
                         print_tab();
-                        printf("istore %d\n",get_current_counter()-1);
+                        if(get_current_counter()>0)
+                            printf("istore %d\n",get_current_counter());
+                        else
+                            printf("istore 0\n");
                     }
                     inser_data(1,$2.IDname->c_str(),$5.IDvalue->c_str(),$3,VAR_ATTRIBUTE);
                     outstring="";
@@ -880,7 +898,12 @@ Variables_declaration:
                     }
                     else{
                         print_tab();
-                        printf("istore %d\n",get_current_counter()-1);
+                        printf("sipush 0\n");
+                        print_tab();
+                        if(get_current_counter()>0)
+                            printf("istore %d\n",get_current_counter());
+                        else
+                            printf("istore 0\n");
                     }
                     inser_data(1,$2.IDname->c_str(),"0",$3,VAR_ATTRIBUTE);
                     outstring="";
@@ -970,7 +993,7 @@ commponent:
                 }|
                 func_invo{
                 print_exp_tab();
-                outstring+="invokestatic "+type_name[$1.IDtype]+" example.";
+                outstring+="invokestatic "+type_name[$1.IDtype]+" "+app_name+".";
                 outstring+=string($1.IDname->c_str())+get_format($1.IDname->c_str())+"\n";
                 $$=$1;}|
                 IDENTIFERS{
@@ -1007,8 +1030,9 @@ int main(int argc,char** argv)
     int count=0;
     std::vector<std::string> name_class_temp = split(argv[1], '/');
     std::vector<std::string> name_class = split(name_class_temp.back().c_str(), '.');
-    scope_init(name_class.front());
-    printf("class %s\n{\n",name_class.front().c_str());
+    app_name=name_class.front();
+    scope_init(app_name);
+    printf("class %s\n{\n",app_name.c_str());
     if (yyparse() == 1)                 /* parsing */
     {
         count++;

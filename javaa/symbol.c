@@ -23,7 +23,7 @@ static int NestLevel = StartNestLevel;
 int IsTypeSymbol(char *name)
 {
   Symbol *sym;
-  
+
   if (!(sym = FindSymbol(0,name))) return(0);
   if (sym->M.C == TypedefClass) return(1);
   else                          return(0);
@@ -61,7 +61,7 @@ int GetNestLevel(void) {
    return(NestLevel);
 }
 
-Symbol *RetrieveSymbol(char *name) 
+Symbol *RetrieveSymbol(char *name)
 {
    Symbol *sym;
    sym = LookupSymbol(0,name);
@@ -103,7 +103,7 @@ Symbol *GetSymbol(void) {
          FreeSymbols = &(newblock[i]);
       }
    }
-              
+
 
    sym =  FreeSymbols;
    FreeSymbols = FreeSymbols->next;
@@ -131,7 +131,7 @@ Symbol *FindSymbol(int level, char *name)
    return(NULL);
 }
 
-Symbol *LookupSymbol(int level, char *name) 
+Symbol *LookupSymbol(int level, char *name)
 {
    Symbol *sym;
 
@@ -139,7 +139,7 @@ Symbol *LookupSymbol(int level, char *name)
 
    sym =  GetSymbol();
 
-   sym->name = (char *)malloc(strlen(name)+2);
+   sym->name = (char *)malloc(sizeof(char)*(strlen(name)+2));
    sym->InUse = 0;  /* not yet initialized */
    sym->SymbolID = ++NumSymbols;
    strcpy(sym->name,name);

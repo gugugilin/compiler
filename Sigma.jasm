@@ -1,0 +1,83 @@
+class Sigma
+{
+    field static int a = 5
+    field static int c
+        method public static int add(int,int)
+        max_stack 15
+        max_locals 15
+        {
+        iload 0
+        iload 1
+        iadd
+        sipush 10
+            isub
+            ifgt L0
+            iconst_0
+            goto L1
+        L0: iconst_1
+        L1:
+        ireturn
+        }
+        method public static void main(java.lang.String[])
+        max_stack 15
+        max_locals 15
+        {
+        sipush 0
+        istore 0
+            sipush 2
+            putstatic int Sigma.c
+            L2:
+            getstatic int Sigma.c
+            sipush 3
+                isub
+                ifle L3
+                iconst_0
+                goto L4
+            L3: iconst_1
+            L4:
+            ifeq L5
+            goto L6
+            L7:
+            getstatic int Sigma.c
+            sipush 1
+            iadd
+            putstatic int Sigma.c
+            goto L2
+            L6:
+                sipush 1
+                istore 1
+                iload 1
+                sipush 1
+                iadd
+                istore 1
+                getstatic java.io.PrintStream java.lang.System.out
+                getstatic int Sigma.c
+                invokevirtual void java.io.PrintStream.println(int)
+                getstatic java.io.PrintStream java.lang.System.out
+                iload 1
+                invokevirtual void java.io.PrintStream.println(int)
+            goto L7
+            L5:
+        sipush 5
+        istore 0
+        getstatic java.io.PrintStream java.lang.System.out
+        iload 0
+        invokevirtual void java.io.PrintStream.println(int)
+        sipush 10
+        istore 1
+        iconst_0
+        ifeq L8
+            getstatic java.io.PrintStream java.lang.System.out
+            sipush 5
+            sipush 3
+            invokestatic int Sigma.add(int,int)
+            invokevirtual void java.io.PrintStream.println(int)
+            goto L9
+        L8:
+            getstatic java.io.PrintStream java.lang.System.out
+            iload 1
+            invokevirtual void java.io.PrintStream.println(int)
+        L9:
+        return
+        }
+}

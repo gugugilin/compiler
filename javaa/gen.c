@@ -35,11 +35,11 @@ int ConstTypeArrayCounter;
 ConstPoolEntry ConstPool[1000];
 int ConstPoolArrayIndex; /*current Const Pool array number*/
 int ConstPoolIndex; /*current Const Pool index number (as Java VM thinks it is)*/
-int ConstPoolRealIndex[1000];  /* this holds the "real" index into the 
-				constant pool.  The indexes in the
-				ConstPoolEntry type are really indexes into
-				this array which holds the "true" index, in
-				case we want to implement priority */
+int ConstPoolRealIndex[1000];  /* this holds the "real" index into the
+                constant pool.  The indexes in the
+                ConstPoolEntry type are really indexes into
+                this array which holds the "true" index, in
+                case we want to implement priority */
 thisclassstruct ThisClass;
 short SuperClass;
 FieldInfo field[50];
@@ -101,9 +101,9 @@ void outlonglong2char(long long int mylong, FILE* myoutfp)
 {
   // fwrite(&mylong,8,1,myoutfp);
   fputc(mylong >> 56, myoutfp);
-  fputc((mylong & 0xFFFFFFFFFFFFFF) >> 48, myoutfp);
-  fputc((mylong & 0xFFFFFFFFFFFF) >> 40, myoutfp);
-  fputc((mylong & 0xFFFFFFFFFF) >> 32, myoutfp);
+  fputc((mylong & 0xFFFFFFFFFFFFFFLL) >> 48, myoutfp);
+  fputc((mylong & 0xFFFFFFFFFFFFLL) >> 40, myoutfp);
+  fputc((mylong & 0xFFFFFFFFFFLL) >> 32, myoutfp);
   fputc((mylong & 0xFFFFFFFF) >> 24, myoutfp);
   fputc((mylong & 0xFFFFFF) >> 16, myoutfp);
   fputc((mylong & 0xFFFF) >> 8, myoutfp);
@@ -116,9 +116,9 @@ void outdouble2char(double mydouble, FILE* myoutfp)
   long long int  mylong;
   memcpy(&mylong, &mydouble, 8);
   fputc(mylong >> 56, myoutfp);
-  fputc((mylong & 0xFFFFFFFFFFFFFF) >> 48, myoutfp);
-  fputc((mylong & 0xFFFFFFFFFFFF) >> 40, myoutfp);
-  fputc((mylong & 0xFFFFFFFFFF) >> 32, myoutfp);
+  fputc((mylong & 0xFFFFFFFFFFFFFFLL) >> 48, myoutfp);
+  fputc((mylong & 0xFFFFFFFFFFFFLL) >> 40, myoutfp);
+  fputc((mylong & 0xFFFFFFFFFFLL) >> 32, myoutfp);
   fputc((mylong & 0xFFFFFFFF) >> 24, myoutfp);
   fputc((mylong & 0xFFFFFF) >> 16, myoutfp);
   fputc((mylong & 0xFFFF) >> 8, myoutfp);
@@ -137,24 +137,24 @@ void AddShortToCode(short myshort)
 {
   // memcpy(&currentmethod.Code[currentmethod.CodeCounter],&myshort,2);
   // currentmethod.CodeCounter +=2;
-  currentmethod.Code[currentmethod.CodeCounter++] = 
-	  		(char) myshort >> 8;
-  currentmethod.Code[currentmethod.CodeCounter++] = 
-	  		(char) myshort & 0xFF;
+  currentmethod.Code[currentmethod.CodeCounter++] =
+            (char) myshort >> 8;
+  currentmethod.Code[currentmethod.CodeCounter++] =
+            (char) myshort & 0xFF;
 }
 
 void AddLongToCode(long mylong)
 {
   // memcpy(&currentmethod.Code[currentmethod.CodeCounter],&mylong,4);
   // currentmethod.CodeCounter +=4;
-  currentmethod.Code[currentmethod.CodeCounter++] = 
-	  		(char) mylong >> 24;
   currentmethod.Code[currentmethod.CodeCounter++] =
-	  		(char)(mylong&0xFFFFFF)>>16;
+            (char) mylong >> 24;
   currentmethod.Code[currentmethod.CodeCounter++] =
-	 		(char)(mylong&0xFFFF)>>8;
-  currentmethod.Code[currentmethod.CodeCounter++] = 
-	  		(char) mylong & 0xFF;
+            (char)(mylong&0xFFFFFF)>>16;
+  currentmethod.Code[currentmethod.CodeCounter++] =
+            (char)(mylong&0xFFFF)>>8;
+  currentmethod.Code[currentmethod.CodeCounter++] =
+            (char) mylong & 0xFF;
 }
 
 void EnterConstType(int myconsttype, char mybyteval)
@@ -176,10 +176,10 @@ char GetConstType(int myconsttype)
    if (i < ConstTypeArrayCounter) return ConstTypeArray[i].byteval;
    else oops("Looking for non-existent constant type");
 }
- 
-/* these functions return an index to the myconsttype if it's already in the 
+
+/* these functions return an index to the myconsttype if it's already in the
 pool, otherwise, it returns -1
-*/ 
+*/
 short int InConstPool(char myconsttype, char* mystringval)
 {
   int i;
@@ -189,10 +189,10 @@ short int InConstPool(char myconsttype, char* mystringval)
     case CONSTANT_Utf8:
     {
       i = 1;
-      while (i < ConstPoolArrayIndex) 
+      while (i < ConstPoolArrayIndex)
       {
         if ((myconsttype == ConstPool[i].consttype) &&
-            (strcmp(mystringval, ConstPool[i].stringval) == 0)) 
+            (strcmp(mystringval, ConstPool[i].stringval) == 0))
           return ConstPool[i].myindex;
         else
           i++;
@@ -206,10 +206,10 @@ short int InConstPool(char myconsttype, char* mystringval)
       temp = InConstPool(CONSTANT_Utf8, mystringval);
       if (temp == -1) return -1;  /* no Utf8 with that name */
       i = 1;
-      while (i < ConstPoolArrayIndex) 
+      while (i < ConstPoolArrayIndex)
       {
          if ((myconsttype == ConstPool[i].consttype) &&
-             (ConstPool[i].index1 == temp)) 
+             (ConstPool[i].index1 == temp))
           return ConstPool[i].myindex;
         else
           i++;
@@ -239,11 +239,11 @@ short int InConstPool(char myconsttype, char* mystringval1, char* mystringval2)
       temp2 = InConstPool(CONSTANT_Utf8, mystringval2);
       if (temp2 == -1) return -1;  /* no Utf8 with that name */
       i = 1;
-      while (i < ConstPoolArrayIndex) 
+      while (i < ConstPoolArrayIndex)
       {
          if ((myconsttype == ConstPool[i].consttype) &&
              (ConstPool[i].index1 == temp1) &&
-             (ConstPool[i].index2 == temp2)) 
+             (ConstPool[i].index2 == temp2))
           return ConstPool[i].myindex;
         else
           i++;
@@ -260,7 +260,7 @@ short int InConstPool(char myconsttype, char* mystringval1, char* mystringval2)
 }
 
 short int InConstPool(char myconsttype, char* mystringval1, char* mystringval2,
-		      char* mystringval3)
+              char* mystringval3)
 {
   int i;
   int temp1;
@@ -276,11 +276,11 @@ short int InConstPool(char myconsttype, char* mystringval1, char* mystringval2,
       temp2 = InConstPool(CONSTANT_NameAndType, mystringval2, mystringval3);
       if (temp2 == -1) return -1;  /* no NameAndType */
       i = 1;
-      while (i < ConstPoolArrayIndex) 
+      while (i < ConstPoolArrayIndex)
       {
          if ((myconsttype == ConstPool[i].consttype) &&
              (ConstPool[i].index1 == temp1) &&
-             (ConstPool[i].index2 == temp2)) 
+             (ConstPool[i].index2 == temp2))
           return ConstPool[i].myindex;
         else
           i++;
@@ -307,10 +307,10 @@ short int InConstPool(char myconsttype, long int mylong)
     case CONSTANT_Integer:
     {
       i = 0;
-      while (i < ConstPoolArrayIndex) 
+      while (i < ConstPoolArrayIndex)
       {
          if ((myconsttype == ConstPool[i].consttype) &&
-             (ConstPool[i].intval == mylong)) 
+             (ConstPool[i].intval == mylong))
           return ConstPool[i].myindex;
         else
           i++;
@@ -336,10 +336,10 @@ short int InConstPool(char myconsttype, float myfloat)
     case CONSTANT_Float:
     {
       i = 0;
-      while (i < ConstPoolArrayIndex) 
+      while (i < ConstPoolArrayIndex)
       {
          if ((myconsttype == ConstPool[i].consttype) &&
-             (ConstPool[i].floatval == myfloat)) 
+             (ConstPool[i].floatval == myfloat))
           return ConstPool[i].myindex;
         else
           i++;
@@ -366,10 +366,10 @@ short int InConstPool(char myconsttype, long long int mylong)
     case CONSTANT_Long:
     {
       i = 0;
-      while (i < ConstPoolArrayIndex) 
+      while (i < ConstPoolArrayIndex)
       {
          if ((myconsttype == ConstPool[i].consttype) &&
-             (ConstPool[i].longval == mylong)) 
+             (ConstPool[i].longval == mylong))
           return ConstPool[i].myindex;
         else
           i++;
@@ -395,10 +395,10 @@ short int InConstPool(char myconsttype, double mydouble)
     case CONSTANT_Double:
     {
       i = 0;
-      while (i < ConstPoolArrayIndex) 
+      while (i < ConstPoolArrayIndex)
       {
          if ((myconsttype == ConstPool[i].consttype) &&
-             (ConstPool[i].doubleval == mydouble))  
+             (ConstPool[i].doubleval == mydouble))
           return ConstPool[i].myindex;
         else
           i++;
@@ -417,7 +417,7 @@ short int InConstPool(char myconsttype, double mydouble)
 
 
 
-/* These routines generate a constant pool entry according to the 
+/* These routines generate a constant pool entry according to the
 specified paramenters.  If the requested entry already exists, it just
 returns the index to that entry.
 */
@@ -438,7 +438,7 @@ short GenConst(char myconsttype, char* mystringval)
   switch(myconsttype) {
     case CONSTANT_Utf8:
     {
-      ConstPool[touse].stringval = (char *) malloc(strlen(mystringval));
+      ConstPool[touse].stringval = (char *) malloc(sizeof(char)*(1+strlen(mystringval)));
       strcpy(ConstPool[touse].stringval, mystringval);
       break;
     }
@@ -490,14 +490,14 @@ short GenConst(char myconsttype, char* mystringval1, char* mystringval2)
 
 
 short GenConst(char myconsttype, char* mystringval1, char* mystringval2,
-	       char* mystringval3)
+           char* mystringval3)
 {
   short int checkresult;
   short int toreturn;
   short int touse;
   //message("In GenConst");
-  checkresult = InConstPool(myconsttype, mystringval1, mystringval2, 
-			    mystringval3);
+  checkresult = InConstPool(myconsttype, mystringval1, mystringval2,
+                mystringval3);
   if (checkresult >= 0) return checkresult;
   toreturn = ConstPoolIndex;
   touse = ConstPoolArrayIndex;
@@ -512,7 +512,7 @@ short GenConst(char myconsttype, char* mystringval1, char* mystringval2,
     {
       ConstPool[touse].index1 = GenConst(CONSTANT_Class,mystringval1);
       ConstPool[touse].index2 = GenConst(CONSTANT_NameAndType,
-					    mystringval2, mystringval3);
+                        mystringval2, mystringval3);
       break;
     }
     default:
@@ -531,7 +531,7 @@ short GenConst(char myconsttype, long int mylong)
   short int toreturn;
   short int touse;
   //message("In GenConst");
-  checkresult = InConstPool(myconsttype, mylong); 
+  checkresult = InConstPool(myconsttype, mylong);
   if (checkresult >= 0) return checkresult;
   toreturn = ConstPoolIndex;
   touse = ConstPoolArrayIndex;
@@ -542,7 +542,7 @@ short GenConst(char myconsttype, long int mylong)
   switch(myconsttype) {
     case CONSTANT_Integer:
     {
-      ConstPool[touse].intval = mylong; 
+      ConstPool[touse].intval = mylong;
       break;
     }
     default:
@@ -561,7 +561,7 @@ short GenConst(char myconsttype, float myfloat)
   short int toreturn;
   short int touse;
   //message("In GenConst");
-  checkresult = InConstPool(myconsttype, myfloat); 
+  checkresult = InConstPool(myconsttype, myfloat);
   if (checkresult >= 0) return checkresult;
   toreturn = ConstPoolIndex;
   touse = ConstPoolArrayIndex;
@@ -572,7 +572,7 @@ short GenConst(char myconsttype, float myfloat)
   switch(myconsttype) {
     case CONSTANT_Float:
     {
-      ConstPool[touse].floatval = myfloat; 
+      ConstPool[touse].floatval = myfloat;
       break;
     }
     default:
@@ -591,7 +591,7 @@ short GenConst(char myconsttype, long long int mylong)
   short int toreturn;
   short int touse;
   //message("In GenConst");
-  checkresult = InConstPool(myconsttype, mylong); 
+  checkresult = InConstPool(myconsttype, mylong);
   if (checkresult >= 0) return checkresult;
   toreturn = ConstPoolIndex;
   touse = ConstPoolArrayIndex;
@@ -603,7 +603,7 @@ short GenConst(char myconsttype, long long int mylong)
   switch(myconsttype) {
     case CONSTANT_Long:
     {
-      ConstPool[toreturn].longval = mylong; 
+      ConstPool[toreturn].longval = mylong;
       break;
     }
     default:
@@ -622,7 +622,7 @@ short GenConst(char myconsttype, double mydouble)
   short int toreturn;
   short int touse;
   //message("In GenConst");
-  checkresult = InConstPool(myconsttype,mydouble); 
+  checkresult = InConstPool(myconsttype,mydouble);
   if (checkresult >= 0) return checkresult;
   toreturn = ConstPoolIndex;
   touse = ConstPoolArrayIndex;
@@ -634,7 +634,7 @@ short GenConst(char myconsttype, double mydouble)
   switch(myconsttype) {
     case CONSTANT_Double:
     {
-      ConstPool[touse].doubleval = mydouble; 
+      ConstPool[touse].doubleval = mydouble;
       break;
     }
     default:
@@ -680,7 +680,7 @@ void SetThisClass(short access_flags, char* classname, char* superclassname)
 char* GetThisClass()
 {
   return ThisClass.classname;
-} 
+}
 
 char* GetSuperClass()
 {
@@ -691,8 +691,7 @@ char* GetSuperClass()
 void SetSourceFile(char* name)
 {
   ThisClass.sourcefileindex = GenConst(CONSTANT_Utf8, name);
-  GenConst(CONSTANT_Utf8, "SourceFile"); /* will be used when outputting this
-					    attribute */
+  GenConst(CONSTANT_Utf8, "SourceFile"); /* will be used when outputting this attribute */
 }
 
 void AddToInterfaceList(char* name)
@@ -704,9 +703,9 @@ void AddToInterfaceList(char* name)
   ThisClass.interfacehead = toadd;
   ThisClass.interfacecount++;
 }
- 
 
- 
+
+
 void InitAssembler()
 {
    OpCodeArrayCounter = 0;
@@ -926,7 +925,7 @@ void InitAssembler()
    EnterConstType(CONSTANT_Utf8, 1);
    ConstPoolIndex = 1;
    ConstPoolArrayIndex = 1;
-   for (int i=1;i<1000;i++) ConstPoolRealIndex[i]=i; 
+   for (int i=1;i<1000;i++) ConstPoolRealIndex[i]=i;
    //message("Done with InitAssembler");
    //printf("OpCodeArrayCounter is %i\n", OpCodeArrayCounter);
    MethodCount = 0;
@@ -944,7 +943,7 @@ void ConstPoolDump(FILE* myoutfp)
     switch(ConstPool[i].consttype) {
       case CONSTANT_Utf8:
       {
-	mylen = strlen(ConstPool[i].stringval);
+    mylen = strlen(ConstPool[i].stringval);
         outshort2char(mylen, myoutfp);
         for(int j=0;j<mylen;j++)
         {
@@ -961,7 +960,7 @@ void ConstPoolDump(FILE* myoutfp)
       case CONSTANT_NameAndType:
       case CONSTANT_Fieldref:
       case CONSTANT_Methodref:
-      case CONSTANT_InterfaceMethodref: 
+      case CONSTANT_InterfaceMethodref:
       {
         outshort2char(ConstPoolRealIndex[ConstPool[i].index1], myoutfp);
         outshort2char(ConstPoolRealIndex[ConstPool[i].index2], myoutfp);
@@ -989,8 +988,8 @@ void ConstPoolDump(FILE* myoutfp)
       }
       default:
       {
-	oops("Bad Consttype in ConstPoolDump");
-    	break;
+    oops("Bad Consttype in ConstPoolDump");
+        break;
       }
     }
   }
@@ -1012,16 +1011,16 @@ void CopyMethod(char* aname, FILE* myoutfp)
    }
    fclose(myinfp);
 }
-      
-  
+
+
 
 void MethodDump(MethodInfo mymethod, FILE* outfp)
 {
   int i;
   int lastlocal;
   int codeattlen;
-  short additionalattrib; 
-  short additionalcodeattrib; 
+  short additionalattrib;
+  short additionalcodeattrib;
   throwsentry* tempthrow;
   throwsentry* todiethrow;
   linenumberentry* templinenum;
@@ -1038,9 +1037,9 @@ void MethodDump(MethodInfo mymethod, FILE* outfp)
   if (mymethod.CodeCounter > 0)
   {
     outshort2char(GenConst(CONSTANT_Utf8,"Code"), outfp);
-           /* this should really only be a lookup here since the 
+           /* this should really only be a lookup here since the
               constant pool is already dumped. But it won't be dumped
-	      yet if we dump methods to separate files first!*/
+          yet if we dump methods to separate files first!*/
 
     /* stack local codelen, exceptiontbllen, attribcnt */
     // codeattlen = mymethod.CodeCounter+8;
@@ -1051,7 +1050,7 @@ void MethodDump(MethodInfo mymethod, FILE* outfp)
     if (mymethod.LineNumberCounter > 0)
        codeattlen += 8 + (mymethod.LineNumberCounter * 4);
     if (mymethod.UserLocalVarCounter > 0) /*use user-defined local var table
-					    first */
+                        first */
     {
        codeattlen += 8 + (mymethod.UserLocalVarCounter * 10);
     }
@@ -1066,8 +1065,8 @@ void MethodDump(MethodInfo mymethod, FILE* outfp)
        actual class file appears to be u1 u1 u2 */
     //outshort2char(5,outfp); /* max stack - let user specify? */
     //outshort2char(0,outfp); /* max_locals - can let user specify or
-//				  can derive from signature and other vars? */
-        
+//                can derive from signature and other vars? */
+
     //outlong2char(mymethod.CodeCounter,outfp);
     //putc(5,outfp);
     //putc(2,outfp);
@@ -1094,20 +1093,20 @@ void MethodDump(MethodInfo mymethod, FILE* outfp)
       i++;
     }
     /* output exceptions table */
-    outshort2char(mymethod.ExceptionsCounter,outfp); 
+    outshort2char(mymethod.ExceptionsCounter,outfp);
     for(exceptionentry* tempexception = mymethod.exceptionhead;
         tempexception != NULL; tempexception = tempexception->next)
     {
-      outshort2char(tempexception->start_pc, outfp); 
-      outshort2char(tempexception->end_pc, outfp); 
-      outshort2char(tempexception->handler_pc, outfp); 
-      outshort2char(tempexception->catch_type, outfp); 
+      outshort2char(tempexception->start_pc, outfp);
+      outshort2char(tempexception->end_pc, outfp);
+      outshort2char(tempexception->handler_pc, outfp);
+      outshort2char(tempexception->catch_type, outfp);
     }
 
     /*calculate the number of additional attributes*/
     additionalcodeattrib = 0;
     if (mymethod.LineNumberCounter > 0) additionalcodeattrib++;
-    if ((mymethod.UserLocalVarCounter > 0) || (mymethod.LocalVarCounter >= 0)) 
+    if ((mymethod.UserLocalVarCounter > 0) || (mymethod.LocalVarCounter >= 0))
        additionalcodeattrib++;
     outshort2char(additionalcodeattrib, outfp);
 
@@ -1181,10 +1180,10 @@ void MethodDump(MethodInfo mymethod, FILE* outfp)
       free(todiethrow);
     }
   }
-    
+
 }
 
-        
+
 
 
 void EndAssembler()
@@ -1207,7 +1206,7 @@ void EndAssembler()
    putc(0x02, outfp);
    putc(0x00, outfp); /* major version */
    putc(0x2E, outfp);
-   
+
    i = 0;
    printf("\nConstPool Dump:\n");
    ConstPoolDump(outfp);
@@ -1226,7 +1225,7 @@ void EndAssembler()
      tempinterface = tempinterface->next;
      free(todieinterface);
    }
- 
+
    /* output fields */
    outshort2char(FieldCount, outfp);
    for (int k=1;k<=FieldCount;k++)
@@ -1252,7 +1251,7 @@ void EndAssembler()
       them into outfp */
    tempmethodname = methodnameshead;
    while(tempmethodname != NULL)
-   {  
+   {
      CopyMethod(tempmethodname->name, outfp);
      remove(tempmethodname->name);
      todiemethodname = tempmethodname;
@@ -1271,8 +1270,8 @@ void EndAssembler()
    else
    {
      outshort2char(1, outfp); /*attributes count*/
-     outshort2char(GenConst(CONSTANT_Utf8,"SourceFile"), outfp); /* just a 
-						lookup at this point */
+     outshort2char(GenConst(CONSTANT_Utf8,"SourceFile"), outfp); /* just a
+                        lookup at this point */
      outlong2char(2, outfp);  /*attribute length*/
      outshort2char(ThisClass.sourcefileindex, outfp);
    }
@@ -1307,7 +1306,7 @@ void GenOneArgCode(int opcode, ArgType arg1)
        switch (arg1.type) {
          case STRING_LITERAL:
          {
- 	   //printf("Calling GenConst with %s", arg1.stringval);
+       //printf("Calling GenConst with %s", arg1.stringval);
            mytemp = GenConst(CONSTANT_String,arg1.stringval);
            break;
          }
@@ -1315,7 +1314,7 @@ void GenOneArgCode(int opcode, ArgType arg1)
          {
            mytemp = GenConst(CONSTANT_Integer,(long)arg1.intval);
            break;
-         } 
+         }
          case FLOATCONSTANT:
          {
            mytemp = GenConst(CONSTANT_Float,arg1.floatval);
@@ -1323,34 +1322,34 @@ void GenOneArgCode(int opcode, ArgType arg1)
          }
          case LONGCONSTANT:
          {
-	   AddToCode(GetOpCode(LDC2_W));
-	   AddShortToCode(GenConst(CONSTANT_Long,arg1.longval));
- 	   warning("Long argument: using LDC2_W");
+       AddToCode(GetOpCode(LDC2_W));
+       AddShortToCode(GenConst(CONSTANT_Long,arg1.longval));
+       warning("Long argument: using LDC2_W");
            return;
-	 }
+     }
          case DOUBLECONSTANT:
          {
-	   AddToCode(GetOpCode(LDC2_W));
-	   AddShortToCode(GenConst(CONSTANT_Double ,arg1.doubleval));
- 	   warning("Double argument: using LDC2_W");
+       AddToCode(GetOpCode(LDC2_W));
+       AddShortToCode(GenConst(CONSTANT_Double ,arg1.doubleval));
+       warning("Double argument: using LDC2_W");
            return;
-	 }
+     }
          default:
          {
            oops("bad argument type");
          }
-       } 
+       }
        if (mytemp > CHAR_MAX)
        {
          AddToCode(GetOpCode(LDC_W));
          AddShortToCode(mytemp);
-	 if (opcode != LDC_W) message("Using LDC_W");
+     if (opcode != LDC_W) message("Using LDC_W");
        }
        else
-       { 
+       {
          AddToCode(GetOpCode(LDC));
          AddToCode((char) (mytemp & 0x00FF));
-	 if (opcode != LDC) message("Using LDC");
+     if (opcode != LDC) message("Using LDC");
        }
        break;
      }
@@ -1359,16 +1358,16 @@ void GenOneArgCode(int opcode, ArgType arg1)
        switch (arg1.type) {
          case LONGCONSTANT:
          {
-	   AddToCode(GetOpCode(opcode));
-	   AddShortToCode(GenConst(CONSTANT_Long,arg1.longval));
+       AddToCode(GetOpCode(opcode));
+       AddShortToCode(GenConst(CONSTANT_Long,arg1.longval));
            break;
-	 }
+     }
          case DOUBLECONSTANT:
          {
-	   AddToCode(GetOpCode(opcode));
-	   AddShortToCode(GenConst(CONSTANT_Double ,arg1.doubleval));
+       AddToCode(GetOpCode(opcode));
+       AddShortToCode(GenConst(CONSTANT_Double ,arg1.doubleval));
            break;
-	 }
+     }
          default:
          {
            oops("bad argument type to LDC2_W");
@@ -1379,11 +1378,11 @@ void GenOneArgCode(int opcode, ArgType arg1)
      case (BIPUSH):
      {
        if(arg1.type != INTCONSTANT)
-	 oops("Bad argument type to BIPUSH.");
+     oops("Bad argument type to BIPUSH.");
        if(arg1.intval > 128)
-	 oops("Argument too large for BIPUSH.");
+     oops("Argument too large for BIPUSH.");
        if(arg1.intval < -127)
-	 oops("Argument too small for BIPUSH.");
+     oops("Argument too small for BIPUSH.");
        AddToCode(GetOpCode(opcode));
        AddToCode(arg1.intval);
        break;
@@ -1391,11 +1390,11 @@ void GenOneArgCode(int opcode, ArgType arg1)
      case (SIPUSH):
      {
        if(arg1.type != INTCONSTANT)
-	 oops("Bad argument type to SIPUSH.");
+     oops("Bad argument type to SIPUSH.");
        if(arg1.intval > 32767)
-	 oops("Argument too large for SIPUSH.");
+     oops("Argument too large for SIPUSH.");
        if(arg1.intval < -32768)
-	 oops("Argument too small for SIPUSH.");
+     oops("Argument too small for SIPUSH.");
        AddToCode(GetOpCode(opcode));
        AddShortToCode(arg1.intval);
        break;
@@ -1430,19 +1429,19 @@ void GenMethodArgCode(int opcode, char* arg1, char* arg2, char* arg3)
 {
    //message("In GenMethodArgCode");
    AddToCode(GetOpCode(opcode));
-   AddShortToCode(GenConst(CONSTANT_Methodref, arg1, 
-	   	           arg2, arg3));
+   AddShortToCode(GenConst(CONSTANT_Methodref, arg1,
+                   arg2, arg3));
 }
 
 void GenINVOKEINTERFACECode(int opcode, char* arg1, char* arg2, char* arg3,
-			    int nargs)
+                int nargs)
 {
    //message("In GenMethodArgCode");
    AddToCode(GetOpCode(opcode));
-   AddShortToCode(GenConst(CONSTANT_InterfaceMethodref, arg1, 
-	   	           arg2, arg3));
+   AddShortToCode(GenConst(CONSTANT_InterfaceMethodref, arg1,
+                   arg2, arg3));
    if (nargs > CHAR_MAX)
-  	oops("Number of argument words too big for invokeinterface.");
+    oops("Number of argument words too big for invokeinterface.");
    AddToCode(nargs);
    AddToCode(0);  /* for reserved spot */
 }
@@ -1452,25 +1451,25 @@ void GenFieldArgCode(int opcode, char* arg1, char* arg2, char* arg3)
    //message("In GenFieldArgCode");
    //printf("OpCode: %i GetOpCode: %i",opcode,(int)GetOpCode(opcode));
    AddToCode(GetOpCode(opcode));
-   AddShortToCode(GenConst(CONSTANT_Fieldref, arg1, 
-	   	           arg2, arg3));
+   AddShortToCode(GenConst(CONSTANT_Fieldref, arg1,
+                   arg2, arg3));
 }
 
 void GenClassArgCode(int opcode, char* arg1)
 {
    //message("In GenFieldArgCode");
    AddToCode(GetOpCode(opcode));
-   AddShortToCode(GenConst(CONSTANT_Class, arg1)); 
+   AddShortToCode(GenConst(CONSTANT_Class, arg1));
 }
 
 void GenMULTIANEWARRAYCode(int opcode, char* arg1, int dimensions)
 {
    //message("In GenMULTIANEWARRAYCode");
    if (dimensions > CHAR_MAX)
-   	oops("Dimensions too big for MULTIANEWARRAY.");
+    oops("Dimensions too big for MULTIANEWARRAY.");
    AddToCode(GetOpCode(opcode));
    AddShortToCode(GenConst(CONSTANT_Class, arg1));
-   AddToCode((char) dimensions); 
+   AddToCode((char) dimensions);
 }
 
 void GenLabelArgCode(int opcode, char* arg1)
@@ -1479,10 +1478,10 @@ void GenLabelArgCode(int opcode, char* arg1)
    signed long offset;
    /* need to see if offset big enough to need goto_w, jsr_w, etc. */
    //message("In GenLabelArgCode");
-   location = GetLabel(arg1, currentmethod.CodeCounter, 
-			currentmethod.CodeCounter + 1);
+   location = GetLabel(arg1, currentmethod.CodeCounter,
+            currentmethod.CodeCounter + 1);
    offset = location - (currentmethod.CodeCounter); /* not a valid
-					value if location is -1 */	
+                    value if location is -1 */
    switch (opcode)
    {
      case (IFEQ):
@@ -1505,18 +1504,18 @@ void GenLabelArgCode(int opcode, char* arg1)
        AddToCode(GetOpCode(opcode));
        if (location == -1) /* label not yet defined */
        {
-	 AddShortToCode((signed short) 0); /*place holder*/
+     AddShortToCode((signed short) 0); /*place holder*/
        }
        else
        {
          if ((offset > 32767) || (offset < -32768))
-	 {
-	   oops("instruction used label that's too far away.");
-	 }
-	 else
-	 {
-	   AddShortToCode((signed short) offset);
-	 }
+     {
+       oops("instruction used label that's too far away.");
+     }
+     else
+     {
+       AddShortToCode((signed short) offset);
+     }
        }
        break;
      }
@@ -1525,23 +1524,23 @@ void GenLabelArgCode(int opcode, char* arg1)
        if (location == -1) /* label not yet defined */
        {
          // AddToCode(GetOpCode(GOTO_W));
-	 // AddLongToCode((signed long) 0); /*place holder*/
+     // AddLongToCode((signed long) 0); /*place holder*/
           AddToCode(GetOpCode(GOTO));
-	  AddShortToCode((signed short) 0); /*place holder*/
+      AddShortToCode((signed short) 0); /*place holder*/
        }
        else
        {
          if ((offset > 32767) || (offset < -32768))
-	 {
-	   message("Using GOTO_W");
+     {
+       message("Using GOTO_W");
            AddToCode(GetOpCode(GOTO_W));
-	   AddLongToCode(offset);
-	 }
-	 else
-	 {
+       AddLongToCode(offset);
+     }
+     else
+     {
            AddToCode(GetOpCode(opcode));
-	   AddShortToCode((signed short) offset);
-	 }
+       AddShortToCode((signed short) offset);
+     }
        }
        break;
      }
@@ -1550,21 +1549,21 @@ void GenLabelArgCode(int opcode, char* arg1)
        if (location == -1) /* label not yet defined */
        {
          AddToCode(GetOpCode(JSR_W));
-	 AddLongToCode((signed long) 0); /*place holder*/
+     AddLongToCode((signed long) 0); /*place holder*/
        }
        else
        {
          if ((offset > 32767) || (offset < -32768))
-	 {
-	   message("Using JSR_W");
+     {
+       message("Using JSR_W");
            AddToCode(GetOpCode(JSR_W));
-	   AddLongToCode(offset); 
-	 }
-	 else
-	 {
+       AddLongToCode(offset);
+     }
+     else
+     {
            AddToCode(GetOpCode(opcode));
-	   AddShortToCode((signed short) offset);
-	 }
+       AddShortToCode((signed short) offset);
+     }
        }
        break;
      }
@@ -1573,21 +1572,21 @@ void GenLabelArgCode(int opcode, char* arg1)
        if (location == -1) /* label not yet defined */
        {
          AddToCode(GetOpCode(opcode));
-	 AddLongToCode((signed long) 0); /*place holder*/
+     AddLongToCode((signed long) 0); /*place holder*/
        }
        else
        {
          if ((offset > 32767) || (offset < -32768))
-	 {
+     {
            AddToCode(GetOpCode(opcode));
-	   AddLongToCode(offset); 
-	 }
-	 else
-	 {
-	   message("Optimizing: using GOTO");
+       AddLongToCode(offset);
+     }
+     else
+     {
+       message("Optimizing: using GOTO");
            AddToCode(GetOpCode(GOTO));
-	   AddShortToCode((signed short) offset);
-	 }
+       AddShortToCode((signed short) offset);
+     }
        }
        break;
      }
@@ -1596,21 +1595,21 @@ void GenLabelArgCode(int opcode, char* arg1)
        if (location == -1) /* label not yet defined */
        {
          AddToCode(GetOpCode(opcode));
-	 AddLongToCode((signed long) 0); /*place holder*/
+     AddLongToCode((signed long) 0); /*place holder*/
        }
        else
        {
          if ((offset > 32767) || (offset < -32768))
-	 {
+     {
            AddToCode(GetOpCode(opcode));
-	   AddLongToCode(offset); 
-	 }
-	 else
-	 {
-	   message("Optimizing: using JSR");
+       AddLongToCode(offset);
+     }
+     else
+     {
+       message("Optimizing: using JSR");
            AddToCode(GetOpCode(JSR));
-	   AddShortToCode((signed short) offset);
-	 }
+       AddShortToCode((signed short) offset);
+     }
        }
        break;
      }
@@ -1628,44 +1627,44 @@ void GenLocalVarArgCode(int opcode, int index)
      switch (tempsig[0])  /*only need to look at first char of signature */
      {
         /* are bytes, chars, shorts, and booleans considered as ints? */
-  	case 'B':
-	case 'C':
-	case 'S':
-	case 'Z':
-	case 'I':
-	{
-	  opcode = ILOAD;
-	  message("Using ILOAD.");
-	  break;
-	}
-	case 'F':
-	{
-	  opcode = FLOAD;
-	  message("Using FLOAD.");
-	  break;
-	}
-	case 'J':
-	{
-	  opcode = LLOAD;
-	  message("Using LLOAD.");
-	  break;
-	}
-	case 'D':
-	{
-	  opcode = DLOAD;
-	  message("Using DLOAD.");
-	  break;
-	}
-	case 'L':
-	case '[':
-	{
-	  opcode = ALOAD;
-	  message("Using ALOAD.");
-	  break;
-	}
-  	default:
+    case 'B':
+    case 'C':
+    case 'S':
+    case 'Z':
+    case 'I':
+    {
+      opcode = ILOAD;
+      message("Using ILOAD.");
+      break;
+    }
+    case 'F':
+    {
+      opcode = FLOAD;
+      message("Using FLOAD.");
+      break;
+    }
+    case 'J':
+    {
+      opcode = LLOAD;
+      message("Using LLOAD.");
+      break;
+    }
+    case 'D':
+    {
+      opcode = DLOAD;
+      message("Using DLOAD.");
+      break;
+    }
+    case 'L':
+    case '[':
+    {
+      opcode = ALOAD;
+      message("Using ALOAD.");
+      break;
+    }
+    default:
         { oops("Bad signature in GenLocalVarArgCode.");
- 	}
+    }
       }
    }
    if(opcode == STORE)
@@ -1674,54 +1673,54 @@ void GenLocalVarArgCode(int opcode, int index)
      switch (tempsig[0])  /*only need to look at first char of signature */
      {
         /* are bytes, chars, shorts, and booleans considered as ints? */
-  	case 'B':
-	case 'C':
-	case 'S':
-	case 'Z':
-	case 'I':
-	{
-	  opcode = ISTORE;
-	  message("Using ISTORE.");
-	  break;
-	}
-	case 'F':
-	{
-	  opcode = FSTORE;
-	  message("Using FSTORE.");
-	  break;
-	}
-	case 'J':
-	{
-	  opcode = LSTORE;
-	  message("Using LSTORE.");
-	  break;
-	}
-	case 'D':
-	{
-	  opcode = DSTORE;
-	  message("Using DSTORE.");
-	  break;
-	}
-	case 'L':
-	case '[':
-	{
-	  opcode = ASTORE;
-	  message("Using ASTORE.");
-	  break;
-	}
-  	default:
+    case 'B':
+    case 'C':
+    case 'S':
+    case 'Z':
+    case 'I':
+    {
+      opcode = ISTORE;
+      message("Using ISTORE.");
+      break;
+    }
+    case 'F':
+    {
+      opcode = FSTORE;
+      message("Using FSTORE.");
+      break;
+    }
+    case 'J':
+    {
+      opcode = LSTORE;
+      message("Using LSTORE.");
+      break;
+    }
+    case 'D':
+    {
+      opcode = DSTORE;
+      message("Using DSTORE.");
+      break;
+    }
+    case 'L':
+    case '[':
+    {
+      opcode = ASTORE;
+      message("Using ASTORE.");
+      break;
+    }
+    default:
         { oops("Bad signature in GenLocalVarArgCode.");
- 	}
+    }
       }
    }
-   
+
    /* need to check if index is big enough to need use of wide statement */
    if (index > CHAR_MAX)
    {
-     /* make sure the user didn't put out a wide statement already*/ 
+     /* make sure the user didn't put out a wide statement already*/
      if(currentmethod.Code[currentmethod.CodeCounter-1] !=
-	 GetOpCode(WIDE))
-     {  
+     GetOpCode(WIDE))
+     {
        AddToCode(GetOpCode(WIDE));
      }
      AddToCode(GetOpCode(opcode));
@@ -1731,336 +1730,336 @@ void GenLocalVarArgCode(int opcode, int index)
    {
      switch(opcode)
      {
-     	case (ILOAD):
+        case (ILOAD):
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(ILOAD_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(ILOAD_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(ILOAD_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(ILOAD_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (FLOAD):
+      switch(index)
+      {
+        case 0:
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(FLOAD_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(FLOAD_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(FLOAD_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(FLOAD_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (ALOAD):
+          AddToCode(GetOpCode(ILOAD_0));
+          break;
+        }
+        case 1:
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(ALOAD_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(ALOAD_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(ALOAD_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(ALOAD_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (LLOAD):
+          AddToCode(GetOpCode(ILOAD_1));
+          break;
+        }
+        case 2:
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(LLOAD_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(LLOAD_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(LLOAD_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(LLOAD_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (DLOAD):
+          AddToCode(GetOpCode(ILOAD_2));
+          break;
+        }
+        case 3:
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(DLOAD_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(DLOAD_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(DLOAD_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(DLOAD_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (ISTORE):
+          AddToCode(GetOpCode(ILOAD_3));
+          break;
+        }
+        default:
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(ISTORE_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(ISTORE_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(ISTORE_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(ISTORE_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (FSTORE):
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (FLOAD):
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(FSTORE_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(FSTORE_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(FSTORE_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(FSTORE_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (ASTORE):
+      switch(index)
+      {
+        case 0:
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(ASTORE_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(ASTORE_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(ASTORE_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(ASTORE_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (LSTORE):
+          AddToCode(GetOpCode(FLOAD_0));
+          break;
+        }
+        case 1:
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(LSTORE_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(LSTORE_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(LSTORE_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(LSTORE_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (DSTORE):
+          AddToCode(GetOpCode(FLOAD_1));
+          break;
+        }
+        case 2:
         {
-	  switch(index)
-  	  {
-	    case 0:
-	    {
-	      AddToCode(GetOpCode(DSTORE_0));
-	      break;
-	    }
-	    case 1:
-	    {
-	      AddToCode(GetOpCode(DSTORE_1));
-	      break;
-	    }
-	    case 2:
-	    {
-	      AddToCode(GetOpCode(DSTORE_2));
-	      break;
-	    }
-	    case 3:
-	    {
-	      AddToCode(GetOpCode(DSTORE_3));
-	      break;
-	    }
-	    default:
-	    {
-	      AddToCode(GetOpCode(opcode));
-	      AddToCode(index & 0x00FF);
-    	    }
-	  }
-	  break;
-   	}
-     	case (RET):
+          AddToCode(GetOpCode(FLOAD_2));
+          break;
+        }
+        case 3:
         {
-	   AddToCode(GetOpCode(opcode));
-	   AddToCode(index & 0x00FF);
-	   break;
-   	}
-	default:
-	{ 
-	  oops("Bad opcode to GenLocalVariable.");
-	}
+          AddToCode(GetOpCode(FLOAD_3));
+          break;
+        }
+        default:
+        {
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (ALOAD):
+        {
+      switch(index)
+      {
+        case 0:
+        {
+          AddToCode(GetOpCode(ALOAD_0));
+          break;
+        }
+        case 1:
+        {
+          AddToCode(GetOpCode(ALOAD_1));
+          break;
+        }
+        case 2:
+        {
+          AddToCode(GetOpCode(ALOAD_2));
+          break;
+        }
+        case 3:
+        {
+          AddToCode(GetOpCode(ALOAD_3));
+          break;
+        }
+        default:
+        {
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (LLOAD):
+        {
+      switch(index)
+      {
+        case 0:
+        {
+          AddToCode(GetOpCode(LLOAD_0));
+          break;
+        }
+        case 1:
+        {
+          AddToCode(GetOpCode(LLOAD_1));
+          break;
+        }
+        case 2:
+        {
+          AddToCode(GetOpCode(LLOAD_2));
+          break;
+        }
+        case 3:
+        {
+          AddToCode(GetOpCode(LLOAD_3));
+          break;
+        }
+        default:
+        {
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (DLOAD):
+        {
+      switch(index)
+      {
+        case 0:
+        {
+          AddToCode(GetOpCode(DLOAD_0));
+          break;
+        }
+        case 1:
+        {
+          AddToCode(GetOpCode(DLOAD_1));
+          break;
+        }
+        case 2:
+        {
+          AddToCode(GetOpCode(DLOAD_2));
+          break;
+        }
+        case 3:
+        {
+          AddToCode(GetOpCode(DLOAD_3));
+          break;
+        }
+        default:
+        {
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (ISTORE):
+        {
+      switch(index)
+      {
+        case 0:
+        {
+          AddToCode(GetOpCode(ISTORE_0));
+          break;
+        }
+        case 1:
+        {
+          AddToCode(GetOpCode(ISTORE_1));
+          break;
+        }
+        case 2:
+        {
+          AddToCode(GetOpCode(ISTORE_2));
+          break;
+        }
+        case 3:
+        {
+          AddToCode(GetOpCode(ISTORE_3));
+          break;
+        }
+        default:
+        {
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (FSTORE):
+        {
+      switch(index)
+      {
+        case 0:
+        {
+          AddToCode(GetOpCode(FSTORE_0));
+          break;
+        }
+        case 1:
+        {
+          AddToCode(GetOpCode(FSTORE_1));
+          break;
+        }
+        case 2:
+        {
+          AddToCode(GetOpCode(FSTORE_2));
+          break;
+        }
+        case 3:
+        {
+          AddToCode(GetOpCode(FSTORE_3));
+          break;
+        }
+        default:
+        {
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (ASTORE):
+        {
+      switch(index)
+      {
+        case 0:
+        {
+          AddToCode(GetOpCode(ASTORE_0));
+          break;
+        }
+        case 1:
+        {
+          AddToCode(GetOpCode(ASTORE_1));
+          break;
+        }
+        case 2:
+        {
+          AddToCode(GetOpCode(ASTORE_2));
+          break;
+        }
+        case 3:
+        {
+          AddToCode(GetOpCode(ASTORE_3));
+          break;
+        }
+        default:
+        {
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (LSTORE):
+        {
+      switch(index)
+      {
+        case 0:
+        {
+          AddToCode(GetOpCode(LSTORE_0));
+          break;
+        }
+        case 1:
+        {
+          AddToCode(GetOpCode(LSTORE_1));
+          break;
+        }
+        case 2:
+        {
+          AddToCode(GetOpCode(LSTORE_2));
+          break;
+        }
+        case 3:
+        {
+          AddToCode(GetOpCode(LSTORE_3));
+          break;
+        }
+        default:
+        {
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (DSTORE):
+        {
+      switch(index)
+      {
+        case 0:
+        {
+          AddToCode(GetOpCode(DSTORE_0));
+          break;
+        }
+        case 1:
+        {
+          AddToCode(GetOpCode(DSTORE_1));
+          break;
+        }
+        case 2:
+        {
+          AddToCode(GetOpCode(DSTORE_2));
+          break;
+        }
+        case 3:
+        {
+          AddToCode(GetOpCode(DSTORE_3));
+          break;
+        }
+        default:
+        {
+          AddToCode(GetOpCode(opcode));
+          AddToCode(index & 0x00FF);
+            }
+      }
+      break;
+    }
+        case (RET):
+        {
+       AddToCode(GetOpCode(opcode));
+       AddToCode(index & 0x00FF);
+       break;
+    }
+    default:
+    {
+      oops("Bad opcode to GenLocalVariable.");
+    }
     }
   }
 }
@@ -2075,10 +2074,10 @@ void GenIINCCode(int opcode, int index, int myconst)
    printf("%i\n",myconst);
    if (index > CHAR_MAX)
    {
-     /* make sure the user didn't put out a wide statement already*/ 
+     /* make sure the user didn't put out a wide statement already*/
      if(currentmethod.Code[currentmethod.CodeCounter-1] !=
-	 GetOpCode(WIDE))
-     {  
+     GetOpCode(WIDE))
+     {
        AddToCode(GetOpCode(WIDE));
      }
      AddToCode(GetOpCode(opcode));
@@ -2115,7 +2114,7 @@ void GenLOOKUPSWITCHCode(int opcode, char* mydefault, lookupentry* head)
    }
    /* add mydefault offset */
    AddLongToCode(opcodelocation - GetLabel(mydefault,opcodelocation,
-			  	     	   currentmethod.CodeCounter));
+                           currentmethod.CodeCounter));
    /* count npairs */
    j = 0;
    tempptr = head;
@@ -2131,15 +2130,15 @@ void GenLOOKUPSWITCHCode(int opcode, char* mydefault, lookupentry* head)
    {
      AddLongToCode(tempptr->match);
      AddLongToCode(opcodelocation - GetLabel(tempptr->alabel,opcodelocation,
-			  	     	   currentmethod.CodeCounter));
+                           currentmethod.CodeCounter));
      todie = tempptr;
      tempptr = tempptr->next;
      free(todie);
    }
 }
 
-void GenTABLESWITCHCode(int opcode, int mylow, int myhigh, 
-			char* mydefault, tableentry* head)
+void GenTABLESWITCHCode(int opcode, int mylow, int myhigh,
+            char* mydefault, tableentry* head)
 {
    int opcodelocation;
    long j;
@@ -2155,7 +2154,7 @@ void GenTABLESWITCHCode(int opcode, int mylow, int myhigh,
    }
    /* add mydefault offset */
    AddLongToCode(opcodelocation - GetLabel(mydefault,opcodelocation,
-			  	     	   currentmethod.CodeCounter));
+                           currentmethod.CodeCounter));
    /* count npairs */
    AddLongToCode(mylow);
    AddLongToCode(myhigh);
@@ -2165,22 +2164,22 @@ void GenTABLESWITCHCode(int opcode, int mylow, int myhigh,
    while (tempptr != NULL)
    {
      AddLongToCode(opcodelocation - GetLabel(tempptr->alabel,opcodelocation,
-			  	     	   currentmethod.CodeCounter));
+                           currentmethod.CodeCounter));
      todie = tempptr;
      tempptr = tempptr->next;
      free(todie);
    }
 }
-     
+
 
 void NewNewMethod(int access)
 {
    MethodCount++;
-   currentmethod.access_flags = access;  
+   currentmethod.access_flags = access;
    currentmethod.CodeCounter = 0;
    GenConst(CONSTANT_Utf8, "Code");  /* note: don't need this if no code
-					ever generated */
-   currentmethod.LabelCounter = 0; 
+                    ever generated */
+   currentmethod.LabelCounter = 0;
    currentmethod.LocalVarCounter = -1;
    currentmethod.ExceptionsCounter = 0;
    currentmethod.exceptionhead = NULL;
@@ -2193,11 +2192,11 @@ void NewNewMethod(int access)
    if ((currentmethod.access_flags & 0x0008) > 0)
       /* this is a static method, no default 0 variable */
    {
-      currentmethod.currentslot = 0; 
+      currentmethod.currentslot = 0;
    }
    else
    {
-      currentmethod.currentslot = 1; 
+      currentmethod.currentslot = 1;
    }
 }
 
@@ -2230,20 +2229,20 @@ void EndMethod()
    {
      while (tempmethodname != NULL)
      {
-	prevmethodname = tempmethodname;
-	tempmethodname = tempmethodname->next;
+    prevmethodname = tempmethodname;
+    tempmethodname = tempmethodname->next;
      }
      prevmethodname->next = newmethodname;
    }
 
    /* create a temp file name and open a new file */
-   tmpnam(newmethodname->name); 
+   tmpnam(newmethodname->name);
    if ((myoutfp = fopen(newmethodname->name, "w")) == 0)
      perror("cannot open file"), exit(1);
    MethodDump(currentmethod,myoutfp);
    fclose(myoutfp);
 }
-   
+
 
 /* maybe overload this for the case of constants */
 void NewField(int access, char* name, char* signature, ArgType constantval)
@@ -2255,7 +2254,7 @@ void NewField(int access, char* name, char* signature, ArgType constantval)
    if (constantval.type != 0)  /* a constant was passed up */
    {
      GenConst(CONSTANT_Utf8,"ConstantValue"); /* will be referenced later */
-     switch (signature[0]) 
+     switch (signature[0])
      {
        case 'B':
        case 'C':
@@ -2263,39 +2262,39 @@ void NewField(int access, char* name, char* signature, ArgType constantval)
        case 'S':
        case 'Z':
        {
-	 if (constantval.type != INTCONSTANT) 
-		oops("Constant type does not match field type.");
-	 field[FieldCount].constantvalue_index = 
-		GenConst(CONSTANT_Integer, (long)constantval.intval);
-	 break;
+     if (constantval.type != INTCONSTANT)
+        oops("Constant type does not match field type.");
+     field[FieldCount].constantvalue_index =
+        GenConst(CONSTANT_Integer, (long)constantval.intval);
+     break;
        }
        case 'F':
        {
-	 if (constantval.type != FLOATCONSTANT) 
-		oops("Constant type does not match field type.");
-	 field[FieldCount].constantvalue_index = 
-		GenConst(CONSTANT_Float,constantval.floatval);
-	 break;
+     if (constantval.type != FLOATCONSTANT)
+        oops("Constant type does not match field type.");
+     field[FieldCount].constantvalue_index =
+        GenConst(CONSTANT_Float,constantval.floatval);
+     break;
        }
        case 'J':
        {
-	 if (constantval.type != LONGCONSTANT) 
-		oops("Constant type does not match field type.");
-	 field[FieldCount].constantvalue_index = 
-		GenConst(CONSTANT_Long,constantval.longval);
-	 break;
+     if (constantval.type != LONGCONSTANT)
+        oops("Constant type does not match field type.");
+     field[FieldCount].constantvalue_index =
+        GenConst(CONSTANT_Long,constantval.longval);
+     break;
        }
        case 'D':
        {
-	 if (constantval.type != DOUBLECONSTANT) 
-		oops("Constant type does not match field type.");
-	 field[FieldCount].constantvalue_index = 
-		GenConst(CONSTANT_Double,constantval.doubleval);
-	 break;
+     if (constantval.type != DOUBLECONSTANT)
+        oops("Constant type does not match field type.");
+     field[FieldCount].constantvalue_index =
+        GenConst(CONSTANT_Double,constantval.doubleval);
+     break;
        }
        default:
        {
-	 oops("Can't have a constant value for a field of this type.");
+     oops("Can't have a constant value for a field of this type.");
        }
      }
    }
@@ -2306,8 +2305,8 @@ void NewField(int access, char* name, char* signature, ArgType constantval)
 }
 
 
-/*What exactly do start_pc and length mean?  Does length simply go to the last 
-reference to that variable, or should this be user-defined? */ 
+/*What exactly do start_pc and length mean?  Does length simply go to the last
+reference to that variable, or should this be user-defined? */
 
 void NewLocalVar(char* name, char* signature)
 {
@@ -2319,9 +2318,9 @@ void NewLocalVar(char* name, char* signature)
    if (name != NULL)
    {
       currentmethod.LocalVar[currentspot].name_index =
-				GenConst(CONSTANT_Utf8, name);
-      currentmethod.LocalVar[currentspot].name = 
-			(char *) malloc(strlen(name));
+                GenConst(CONSTANT_Utf8, name);
+      currentmethod.LocalVar[currentspot].name =
+            (char *) malloc(sizeof(char)*(1+strlen(name)));
       strcpy(currentmethod.LocalVar[currentspot].name, name);
    }
    else
@@ -2330,45 +2329,45 @@ void NewLocalVar(char* name, char* signature)
       currentmethod.LocalVar[currentspot].name = NULL;
    }
    currentmethod.LocalVar[currentspot].signature_index =
-				GenConst(CONSTANT_Utf8, signature);
-   currentmethod.LocalVar[currentspot].signature = 
-			(char *) malloc(strlen(signature));
+                GenConst(CONSTANT_Utf8, signature);
+   currentmethod.LocalVar[currentspot].signature =
+            (char *) malloc(sizeof(char)*(1+strlen(signature)));
    strcpy(currentmethod.LocalVar[currentspot].signature, signature);
-   currentmethod.LocalVar[currentspot].start_pc = -1; 
+   currentmethod.LocalVar[currentspot].start_pc = -1;
    currentmethod.LocalVar[currentspot].length = 0;
 
    /* assign the slot number then increment currentslot based on the
       signature of this variable */
-   currentmethod.LocalVar[currentspot].slot = 
-		currentmethod.currentslot;
+   currentmethod.LocalVar[currentspot].slot =
+        currentmethod.currentslot;
    tempslot = currentmethod.currentslot;
-   if ((strcmp(signature, "J") ==0) || (strcmp(signature, "D") ==0))  
+   if ((strcmp(signature, "J") ==0) || (strcmp(signature, "D") ==0))
       /* long or double so takes up two slots */
    {
       currentmethod.currentslot = tempslot +2;
       //message("Incremented slot by 2.");
    }
-   else 
+   else
    {
       currentmethod.currentslot = tempslot +1;
       //message("Incremented slot by 1.");
    }
 
-   GenConst(CONSTANT_Utf8, "LocalVariableTable");  /* note: don't need this if 
-					no local var table ever generated */
+   GenConst(CONSTANT_Utf8, "LocalVariableTable");  /* note: don't need this if
+                    no local var table ever generated */
 }
 
 void IncrementLocalVarSlot(char* signature)
 {
    short tempslot;
    tempslot = currentmethod.currentslot;
-   if ((strcmp(signature, "J") ==0) || (strcmp(signature, "D") ==0))  
+   if ((strcmp(signature, "J") ==0) || (strcmp(signature, "D") ==0))
       /* long or double so takes up two slots */
    {
       currentmethod.currentslot = tempslot +2;
       //message("Incremented slot by 2.");
    }
-   else 
+   else
    {
       currentmethod.currentslot = tempslot +1;
       //message("Incremented slot by 1.");
@@ -2381,7 +2380,7 @@ char* GetLocalVarSigFromSlot(int index)
    for(i = 0; i <= currentmethod.LocalVarCounter &&
                   currentmethod.LocalVar[i].slot != index; i++);
    if (i > currentmethod.LocalVarCounter)
-	oops("Generic load/store instruction used, but no local variable found for this slot.");
+    oops("Generic load/store instruction used, but no local variable found for this slot.");
    return currentmethod.LocalVar[i].signature;
 }
 
@@ -2389,15 +2388,15 @@ short GetLocalVar(char* name)
 {
    int i;
    for(i = 0; i <= currentmethod.LocalVarCounter &&
- 		  (currentmethod.LocalVar[i].name == NULL ||
-		  strcmp(currentmethod.LocalVar[i].name,name) !=0); i++);
+          (currentmethod.LocalVar[i].name == NULL ||
+          strcmp(currentmethod.LocalVar[i].name,name) !=0); i++);
    if (i > currentmethod.LocalVarCounter)
-	oops(ConsStrings("Local Variable not declared: ",name));
+    oops(ConsStrings("Local Variable not declared: ",name));
    if (currentmethod.LocalVar[i].start_pc == -1)
         currentmethod.LocalVar[i].start_pc =
-					currentmethod.CodeCounter;
-   currentmethod.LocalVar[i].length = currentmethod.CodeCounter - 
-				currentmethod.LocalVar[i].start_pc;
+                    currentmethod.CodeCounter;
+   currentmethod.LocalVar[i].length = currentmethod.CodeCounter -
+                currentmethod.LocalVar[i].start_pc;
    return currentmethod.LocalVar[i].slot;
 }
 
@@ -2420,63 +2419,63 @@ void DefineLabel(char* name)
    {
      if (currentmethod.Label[labelptr].index == -1)/*label not yet defined*/
      {
-    	currentmethod.Label[labelptr].index 
-		= currentmethod.CodeCounter;
-	j = currentmethod.Label[labelptr].unresolvedindexhead;
-	while (j != NULL) /* fix all unresolved references */
- 	{
- 	  if((currentmethod.Code[j->location-1] == GetOpCode(IFEQ))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IFLT))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IFLE))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IFGT))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IFGE))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IFNE))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IFNULL))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IFNONNULL))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPEQ))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPNE))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPLT))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPGT))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPLE))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPGE))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ACMPEQ))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ACMPNE))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(GOTO))
- 	   ||(currentmethod.Code[j->location-1] == GetOpCode(JSR)))
-	  {
-	    if ((currentmethod.CodeCounter-(j->location-1) > 32767)
-	     || (currentmethod.CodeCounter-(j->location-1) < -32768))
-		oops("instruction used label that's too far away.");
-	    copyshort2char(&currentmethod.Code[j->location],
-		(signed short) currentmethod.CodeCounter
-			       - (j->opcodelocation));
-	    todie = j;
-	    j = j->next;
- 	    free(todie);
-	  }
-	  else
-	  {
-	    copylong2char(&currentmethod.Code[j->location],
-			currentmethod.CodeCounter-(j->opcodelocation));
-	    todie = j;
-	    j = j->next;
- 	    free(todie);
-	  }
-	  currentmethod.Label[labelptr].unresolvedindexhead = NULL;
-      	}
+        currentmethod.Label[labelptr].index
+        = currentmethod.CodeCounter;
+    j = currentmethod.Label[labelptr].unresolvedindexhead;
+    while (j != NULL) /* fix all unresolved references */
+    {
+      if((currentmethod.Code[j->location-1] == GetOpCode(IFEQ))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IFLT))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IFLE))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IFGT))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IFGE))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IFNE))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IFNULL))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IFNONNULL))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPEQ))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPNE))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPLT))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPGT))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPLE))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ICMPGE))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ACMPEQ))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(IF_ACMPNE))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(GOTO))
+       ||(currentmethod.Code[j->location-1] == GetOpCode(JSR)))
+      {
+        if ((currentmethod.CodeCounter-(j->location-1) > 32767)
+         || (currentmethod.CodeCounter-(j->location-1) < -32768))
+        oops("instruction used label that's too far away.");
+        copyshort2char(&currentmethod.Code[j->location],
+        (signed short) currentmethod.CodeCounter
+                   - (j->opcodelocation));
+        todie = j;
+        j = j->next;
+        free(todie);
+      }
+      else
+      {
+        copylong2char(&currentmethod.Code[j->location],
+            currentmethod.CodeCounter-(j->opcodelocation));
+        todie = j;
+        j = j->next;
+        free(todie);
+      }
+      currentmethod.Label[labelptr].unresolvedindexhead = NULL;
+        }
      }
      else
      {
- 	oops("label already defined!");
+    oops("label already defined!");
      }
    }
    else /* label not yet defined */
    {
-	currentmethod.Label[currentmethod.LabelCounter].name = name;
-	currentmethod.Label[currentmethod.LabelCounter].index = 
-		currentmethod.CodeCounter;
-	currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead = NULL;
-	currentmethod.LabelCounter++;
+    currentmethod.Label[currentmethod.LabelCounter].name = name;
+    currentmethod.Label[currentmethod.LabelCounter].index =
+        currentmethod.CodeCounter;
+    currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead = NULL;
+    currentmethod.LabelCounter++;
         //message(ConsStrings("Label added: ", name));
    }
 }
@@ -2505,59 +2504,59 @@ signed long GetLabel(char* name, long myopcodelocation, long mylocation)
    {
      if (currentmethod.Label[labelptr].index >= 0)
      {
-	/* let's just return the index instead of the actual offset 
-	   (for cases like tableswitch and lookupswitch where the offset
-	    is calculated from a few bytes back, not just one. */
+    /* let's just return the index instead of the actual offset
+       (for cases like tableswitch and lookupswitch where the offset
+        is calculated from a few bytes back, not just one. */
         return currentmethod.Label[labelptr].index;
      }
-     else /*add this to list of unresolved indexes*/ 
+     else /*add this to list of unresolved indexes*/
      {
-	lastindex = currentmethod.Label[labelptr].unresolvedindexhead;
-	currentmethod.Label[labelptr].unresolvedindexhead =
-			(unresolvedindex*) malloc(sizeof(unresolvedindex));
-	currentmethod.Label[labelptr].unresolvedindexhead->location =
-			mylocation;
-	currentmethod.Label[labelptr].unresolvedindexhead->opcodelocation 
-			= myopcodelocation;
-	currentmethod.Label[labelptr].unresolvedindexhead->next =
-			lastindex;
-	return -1;
+    lastindex = currentmethod.Label[labelptr].unresolvedindexhead;
+    currentmethod.Label[labelptr].unresolvedindexhead =
+            (unresolvedindex*) malloc(sizeof(unresolvedindex));
+    currentmethod.Label[labelptr].unresolvedindexhead->location =
+            mylocation;
+    currentmethod.Label[labelptr].unresolvedindexhead->opcodelocation
+            = myopcodelocation;
+    currentmethod.Label[labelptr].unresolvedindexhead->next =
+            lastindex;
+    return -1;
      }
    }
    else /*put label in list with no index*/
    {
      currentmethod.Label[currentmethod.LabelCounter].name = name;
      currentmethod.Label[currentmethod.LabelCounter].index = -1;
-     currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead 
-			= (unresolvedindex*) malloc(sizeof(unresolvedindex));
-     currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead->location 
-			= mylocation;
-     currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead->opcodelocation 
-			= myopcodelocation;
-     currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead->next 
-			= NULL; 
+     currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead
+            = (unresolvedindex*) malloc(sizeof(unresolvedindex));
+     currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead->location
+            = mylocation;
+     currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead->opcodelocation
+            = myopcodelocation;
+     currentmethod.Label[currentmethod.LabelCounter].unresolvedindexhead->next
+            = NULL;
      currentmethod.LabelCounter++;
      return -1;
    }
 }
- 
+
 
 lookupentry* AddToLookupList(lookupentry* head, int mymatch, char* thelabel)
 {
   lookupentry* toreturn;
   toreturn = (lookupentry *) malloc(sizeof(lookupentry));
   toreturn->match = mymatch;
-  toreturn->alabel = (char *) malloc(strlen(thelabel));
+  toreturn->alabel = (char *) malloc(sizeof(char)*(1+strlen(thelabel)));
   strcpy(toreturn->alabel,thelabel);
   toreturn->next = head;
   return toreturn;
 }
-	
+
 tableentry* AddToTableList(tableentry* head, char* thelabel)
 {
   tableentry* toreturn;
   toreturn = (tableentry *) malloc(sizeof(tableentry));
-  toreturn->alabel = (char *) malloc(strlen(thelabel));
+  toreturn->alabel = (char *) malloc(sizeof(char)*(1+strlen(thelabel)));
   strcpy(toreturn->alabel,thelabel);
   toreturn->next = head;
   return toreturn;
@@ -2571,11 +2570,11 @@ void AddToThrowsList(char* name)
   toadd->next = currentmethod.throwshead;
   currentmethod.throwshead = toadd;
   currentmethod.ThrowsCounter++;
-} 
-  
+}
+
 
 void AddToExceptionList(char* start_pc, char* end_pc, char* handler_pc,
-		   char* catch_type)
+           char* catch_type)
 {
   exceptionentry* newexception;
   exceptionentry* tempexception;
@@ -2584,11 +2583,11 @@ void AddToExceptionList(char* start_pc, char* end_pc, char* handler_pc,
   tempoffset = GetLabel(start_pc, 0, 0);
   if (tempoffset == -1) oops("Label not defined.");
   if (tempoffset > 65536) oops("Offset to this label larger than 2 bytes.");
-  newexception->start_pc = tempoffset; 
+  newexception->start_pc = tempoffset;
   tempoffset = GetLabel(end_pc, 0, 0);
   if (tempoffset == -1) oops("Label not defined.");
   if (tempoffset > 65536) oops("Offset to this label larger than 2 bytes.");
-  newexception->end_pc = tempoffset; 
+  newexception->end_pc = tempoffset;
   tempoffset = GetLabel(handler_pc, 0, 0);
   if (tempoffset == -1) oops("Label not defined.");
   if (tempoffset > 65536) oops("Offset to this label larger than 2 bytes.");
@@ -2598,7 +2597,7 @@ void AddToExceptionList(char* start_pc, char* end_pc, char* handler_pc,
     newexception->catch_type = 0;
   }
   else
-  { 
+  {
     newexception->catch_type = GenConst(CONSTANT_Class, catch_type);
   }
   newexception->next = NULL;
@@ -2642,7 +2641,7 @@ void AddToLineNumberList(char* alabel, short line_number)
 }
 
 void AddToUserLocalVarList(char* startlabel, char* endlabel, char* signature,
-			   char* name, short slot)
+               char* name, short slot)
 {
   userlocalvarentry* toadd;
   userlocalvarentry* temp;
@@ -2671,4 +2670,4 @@ void AddToUserLocalVarList(char* startlabel, char* endlabel, char* signature,
   }
   currentmethod.UserLocalVarCounter++;
 }
-	
+

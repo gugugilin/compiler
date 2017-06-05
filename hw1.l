@@ -19,7 +19,7 @@
 #define tokenInteger(t,i) {LIST; printf("<%s:%d>\n","t",i);}
 #define tokenid(t,s) {LIST; printf("<%s:%s>\n","t",s);}
 using namespace std;
-string type_name[6]={"none","bool","int","int","string","void"};
+string type_name[6]={"none","int","int","int","string","void"};
 string attr_name[5]={"ERROR","FUNC","CONST","VAR","ARRAY"};
 int linenum = 0;
 char buf[MAX_LINE_LENG];
@@ -123,6 +123,7 @@ public:
         }
     }
     int get_counter(){return counter;}
+    int set_counter(int index){counter=index;}
     string get_name(){return scope_name;}
 private:
     int counter;

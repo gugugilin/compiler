@@ -9,7 +9,6 @@ class HelloWorldApp
     getstatic java.io.PrintStream java.lang.System.out
     ldc "Hello World and Mars!"
     invokevirtual void java.io.PrintStream.println(java.lang.String)
-        int j
         ldc 300
         ldc 400
     invokestatic void test(int,int)     

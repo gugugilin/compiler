@@ -5,7 +5,7 @@ void echo(char *);
 void StartMessage(void);
 void EndMessage(void);
 void message(char *);
-void oops(char *); 
+void oops(char *);
 void warning(char *);
 void ABORT(int, int);
 int LineNumber(void);

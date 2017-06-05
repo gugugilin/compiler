@@ -14,7 +14,7 @@
    while (len-- > 0) *(start++) = (unsigned char) 0;
 } */
 
-void RangeCheck(int lower, int value, int upper, char *errormessage) 
+void RangeCheck(int lower, int value, int upper, char *errormessage)
 {
    if ((value < lower) | (value > upper)) {
       StartMessage();
@@ -41,7 +41,7 @@ char *ArbName(void) {
    return(&(ans[1]));
 }
 
-char *ConsStrings(char *str1, char *str2)
+char *ConsStrings(const char *str1, const char *str2)
 {
    char *ans;
    unsigned char c;
@@ -51,6 +51,9 @@ char *ConsStrings(char *str1, char *str2)
    ans = (char *) malloc(c+2);
    strcpy(&(ans[1]),str1);
    strcpy(&(ans[strlen(str1)+1]),str2);
+   //strcat(&ans[1],str1);
+   //strcat(&ans[1],str2);
+   //ans[c+1]='\0';
    ans[0] = c;
    return(&(ans[1]));
 }
