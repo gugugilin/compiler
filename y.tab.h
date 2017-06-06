@@ -88,8 +88,8 @@ extern int yydebug;
     BOOLEAN_CONSTANTS_FALSE = 298,
     BOOLEAN_CONSTANTS_TRUE = 299,
     AND = 300,
-    NOT = 301,
-    OR = 302,
+    OR = 301,
+    NOT = 302,
     COMMENTS_ONE = 303,
     COMMENTS_START_MUL = 304,
     COMMENTS_END_MUL = 305,
@@ -159,8 +159,8 @@ extern int yydebug;
 #define BOOLEAN_CONSTANTS_FALSE 298
 #define BOOLEAN_CONSTANTS_TRUE 299
 #define AND 300
-#define NOT 301
-#define OR 302
+#define OR 301
+#define NOT 302
 #define COMMENTS_ONE 303
 #define COMMENTS_START_MUL 304
 #define COMMENTS_END_MUL 305
@@ -190,7 +190,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 441 "hw3.y" /* yacc.c:1909  */
+#line 443 "hw3.y" /* yacc.c:1909  */
 
     bool bool_types;
     int int_types;

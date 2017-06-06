@@ -42,6 +42,15 @@ class Sigma
         {
         sipush 0
         istore 0
+        iconst_1
+        istore 1
+        iload 1
+        iconst_1
+        ixor
+        istore 1
+        getstatic java.io.PrintStream java.lang.System.out
+        iload 1
+        invokevirtual void java.io.PrintStream.println(int)
             sipush 2
             putstatic int Sigma.c
             Lmain4_loop5_0:
@@ -63,17 +72,17 @@ class Sigma
             goto Lmain4_loop5_0
             Lmain4_loop5_4:
                 sipush 1
-                istore 1
-                iload 1
+                istore 2
+                iload 2
                 sipush 1
                 iadd
-                istore 1
-                sipush 1
                 istore 2
+                sipush 1
+                istore 3
                     sipush 1
-                    istore 2
+                    istore 3
                     Lmain4_loop5_Compound6_loop7_3:
-                    iload 2
+                    iload 3
                     sipush 3
                         isub
                         iflt Lmain4_loop5_Compound6_loop7_4
@@ -84,14 +93,14 @@ class Sigma
                     ifeq Lmain4_loop5_Compound6_loop7_6
                     goto Lmain4_loop5_Compound6_loop7_7
                     Lmain4_loop5_Compound6_loop7_8:
-                    iload 2
+                    iload 3
                     sipush 1
                     iadd
-                    istore 2
+                    istore 3
                     goto Lmain4_loop5_Compound6_loop7_3
                     Lmain4_loop5_Compound6_loop7_7:
                         getstatic java.io.PrintStream java.lang.System.out
-                        iload 2
+                        iload 3
                         invokevirtual void java.io.PrintStream.println(int)
                     goto Lmain4_loop5_Compound6_loop7_8
                     Lmain4_loop5_Compound6_loop7_6:
@@ -129,7 +138,7 @@ class Sigma
         iload 0
         invokevirtual void java.io.PrintStream.println(int)
         sipush 4
-        istore 1
+        istore 2
             iload 0
             getstatic int Sigma.max
                 isub
@@ -140,11 +149,11 @@ class Sigma
             Lmain4_IF12_1:
             ifeq Lmain4_IF12_2
                 sipush 0
-                istore 4
+                istore 5
                     sipush 1
-                    istore 4
+                    istore 5
                     Lmain4_IF12_Compound13_loop14_2:
-                    iload 4
+                    iload 5
                     sipush 2
                         isub
                         iflt Lmain4_IF12_Compound13_loop14_3
@@ -155,10 +164,10 @@ class Sigma
                     ifeq Lmain4_IF12_Compound13_loop14_5
                     goto Lmain4_IF12_Compound13_loop14_6
                     Lmain4_IF12_Compound13_loop14_7:
-                    iload 4
+                    iload 5
                     sipush 1
                     iadd
-                    istore 4
+                    istore 5
                     goto Lmain4_IF12_Compound13_loop14_2
                     Lmain4_IF12_Compound13_loop14_6:
                         getstatic java.io.PrintStream java.lang.System.out
@@ -168,7 +177,7 @@ class Sigma
                         invokevirtual void java.io.PrintStream.println(int)
                     goto Lmain4_IF12_Compound13_loop14_7
                     Lmain4_IF12_Compound13_loop14_5:
-                    iload 4
+                    iload 5
                     sipush 2
                         isub
                         ifeq Lmain4_IF12_Compound13_IF16_2
@@ -178,14 +187,14 @@ class Sigma
                     Lmain4_IF12_Compound13_IF16_3:
                     ifeq Lmain4_IF12_Compound13_IF16_4
                         getstatic java.io.PrintStream java.lang.System.out
-                        iload 4
+                        iload 5
                         invokevirtual void java.io.PrintStream.println(int)
                     Lmain4_IF12_Compound13_IF16_4:
                 goto Lmain4_IF12_3
             Lmain4_IF12_2:
                 getstatic java.io.PrintStream java.lang.System.out
                 sipush 2
-                iload 1
+                iload 2
                 invokestatic int Sigma.fact(int,int)
                 invokevirtual void java.io.PrintStream.println(int)
             Lmain4_IF12_3:
@@ -203,16 +212,16 @@ class Sigma
             Lmain4_IF19_0:
                 getstatic java.io.PrintStream java.lang.System.out
                 sipush 2
-                iload 1
+                iload 2
                 invokestatic int Sigma.fact(int,int)
                 invokevirtual void java.io.PrintStream.println(int)
             Lmain4_IF19_1:
         sipush 1
-        istore 2
+        istore 3
             sipush 1
-            istore 2
+            istore 3
             Lmain4_loop22_0:
-            iload 2
+            iload 3
             sipush 3
                 isub
                 iflt Lmain4_loop22_1
@@ -223,14 +232,14 @@ class Sigma
             ifeq Lmain4_loop22_3
             goto Lmain4_loop22_4
             Lmain4_loop22_5:
-            iload 2
+            iload 3
             sipush 1
             iadd
-            istore 2
+            istore 3
             goto Lmain4_loop22_0
             Lmain4_loop22_4:
                 getstatic java.io.PrintStream java.lang.System.out
-                iload 2
+                iload 3
                 invokevirtual void java.io.PrintStream.println(int)
             goto Lmain4_loop22_5
             Lmain4_loop22_3:

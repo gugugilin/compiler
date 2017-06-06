@@ -15,6 +15,9 @@ func int fact(a int ,b int){
 }
 func void main( ) {
     var b int
+    var testbool bool = true
+    testbool=(!testbool)
+    println testbool
     for (c=2;c<=3;c=c+1){
         var b int = 1
         b=b+1

@@ -428,6 +428,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
             }
             else temp=create_idnode(ERROR_ATTRIBUTE,-1,1,"0").idnode;
             print_exp_tab();
+            outstring+="iconst_1\n";
+            print_exp_tab();
             outstring+="ixor\n";
             break;
     }
@@ -494,8 +496,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
 %token <bool_types> BOOLEAN_CONSTANTS_FALSE
 %token <bool_types> BOOLEAN_CONSTANTS_TRUE
 %token AND
-%token NOT
 %token OR
+%token NOT
 
 %token COMMENTS_ONE
 %token COMMENTS_START_MUL
@@ -523,8 +525,8 @@ id_union::node slove(int op,id_union::node& t1,id_union::node& t2){//slove the e
 %token ERROR_SIMPLE
 
 
-%left OR
-%left AND
+
+%left AND OR
 %left NOT
 
 %left RELATIONAL_LEAST RELATIONAL_LEAST_EQ  RELATIONAL_EQ RELATIONAL_BIG RELATIONAL_BIG_EQ RELATIONAL_NEQ
@@ -691,7 +693,16 @@ LOOP:           ex_loop statements {
                 printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L).c_str());
                 count_L+=3;
                 exit_scope();};
-Procedure:      GO func_invo{};
+Procedure:      GO func_invo{
+                    if($2.IDtype==VOIDTYPE){
+                        print_exp_tab();
+                        outstring+="invokestatic "+type_name[$2.IDtype]+" "+app_name+".";
+                        outstring+=string($2.IDname->c_str())+get_format($2.IDname->c_str())+"\n";
+                    }else{
+                        yyerror("must be void func\n");
+                        return 1;
+                    }
+                };
 
 statements:     declarations statements  |
                 statement statements|
@@ -999,7 +1010,8 @@ bool_expression:LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE{$$=$2;if ($$.ID
                 number_expression RELATIONAL_NEQ number_expression{$$=slove(RELATIONAL_NEQ,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 bool_expression AND bool_expression{$$=slove(AND,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 bool_expression OR bool_expression{$$=slove(OR,$1,$3);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
-                NOT bool_expression{$$=slove(NOT,$2,$2);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
+                NOT bool_expression{
+                $$=slove(NOT,$2,$2);if ($$.IDAttributes==ERROR_ATTRIBUTE) return 1;}|
                 BOOLEAN_CONSTANTS_FALSE{
                 print_exp_tab();
                 outstring+="iconst_"+std::to_string($1)+"\n";
@@ -1007,7 +1019,17 @@ bool_expression:LEFT_PARENTHESE bool_expression RIGHT_PARENTHESE{$$=$2;if ($$.ID
                 BOOLEAN_CONSTANTS_TRUE{
                 print_exp_tab();
                 outstring+="iconst_"+std::to_string($1)+"\n";
-                $$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1)).idnode;};
+                $$=create_idnode(CONST_ATTRIBUTE,BOOLTYPE,1,std::to_string($1)).idnode;}|
+                IDENTIFERS{
+                string index="iload "+current_lookout_index($1.IDname->c_str());
+                if(index=="iload -1"){
+                    index="getstatic "+type_name[$1.IDtype]+" ";
+                    index+=lookout_index($1.IDname->c_str())+"."+$1.IDname->c_str();
+                }
+                print_exp_tab();
+                outstring+=index+"\n";
+                $$=$1;}
+                ;
                             
                 
 commponent:     

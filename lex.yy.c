@@ -724,7 +724,7 @@ int token(string name,int TokenIndex){
     clear_linebuf(temp);
     return TokenIndex;
 }
-string temp_s[45]={"bool","break","case","const","continue","default","else","for","func","go","if","import","int","nil","print","println","real","return","string","struct","switch","type","var","void","while","read","+","-","*","/","<","<=",">=",">","==","!=","+=","-=","*=","/=","false","true","&","!","|"};
+string temp_s[45]={"bool","break","case","const","continue","default","else","for","func","go","if","import","int","nil","print","println","real","return","string","struct","switch","type","var","void","while","read","+","-","*","/","<","<=",">=",">","==","!=","+=","-=","*=","/=","false","true","&","|","!"};
 int slove_sparce(){
     int init=258,i=0;
     for(i=0;i<45;i++,init++){
