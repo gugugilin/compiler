@@ -34,11 +34,18 @@ func void main( ) {
     println b
     const d = 4
     if (b<max){
-        println fact(2,3)
+        var nn int
+        for(nn=1;nn<2;nn=nn+1){
+            println fact(2,3)
+        }
+        if(nn==2){
+            println nn
+        }
     }
     else{
         println fact(2,d)
     }
+    println "======="
     if (false){
         println fact(2,3)
     }

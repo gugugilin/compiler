@@ -16,6 +16,8 @@ const int MINUS=500;
 const int PLAUS=501;
 using namespace std;
 int count_L=0;
+int count_L_old=0;
+int scope_number=0;
 Hash out_scope_table("out_table");
 list<string> scope_name;
 list<Hash> scope_list;
@@ -90,11 +92,13 @@ void dump_table(){
     out_scope_table.dump();
 }
 void add_scope(string name){
+    name=name+to_string(scope_number++);
     Hash temp(name);
     temp.set_counter(id_counter);
     scope_name.push_front(name);
     scope_list.push_front(temp);
     scope_Llab.push_front(count_L);
+    count_L_old=count_L;
     current_scop=name;
 }
 int get_current_counter(){
@@ -634,27 +638,33 @@ comm_expressions:
 ex_compound:    LEFT_BRACKETS{add_scope(current_scop+"_Compound");};
 Compound:       ex_compound statements RIGHT_BRACKETS{exit_scope();};
 
-Conditionals:    IF LEFT_PARENTHESE bool_expression{
+ex_IF:          IF {add_scope(current_scop+"_IF");}LEFT_PARENTHESE bool_expression {
                 printf("%s",outstring.c_str());
                 outstring="";
                 print_tab();
                 printf("ifeq L%s_%s\n",current_scop.c_str(),to_string(count_L).c_str());
-                }RIGHT_PARENTHESE Compound{
+                };
+Conditionals:    ex_IF RIGHT_PARENTHESE Compound ELSE{
                 print_tab();
                 printf("    goto L%s_%s\n",current_scop.c_str(),to_string(count_L+1).c_str());
                 print_tab();
                 printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L).c_str());
                 count_L++;
                 outstring="";
+                }|
+                ex_IF RIGHT_PARENTHESE Compound{
+                print_tab();
+                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L).c_str());
+                count_L++;
+                outstring="";
+                exit_scope();
                 };
-Conditional:    Conditionals ELSE Compound{
+Conditional:    Conditionals Compound{
                 print_tab();
                 printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L++).c_str());
                 outstring="";
-                }|Conditionals{
-                print_tab();
-                printf("L%s_%s:\n",current_scop.c_str(),to_string(count_L++).c_str());
-                outstring="";};
+                exit_scope();
+                }|Conditionals;
 
 ex_loop:        FOR LEFT_PARENTHESE{add_scope(current_scop+"_loop");};
 LOOP:           ex_loop statements {
