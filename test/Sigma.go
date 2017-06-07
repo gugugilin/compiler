@@ -1,5 +1,5 @@
 /* final test*/
-const max = 100
+const max = 500
 var a int = 5
 var c int
 // main function
@@ -38,7 +38,7 @@ func void main( ) {
     const d = 4
     if (b<max){
         var nn int
-        for(nn=1;nn<2;nn=nn+1){
+        for(nn=1;nn<max;nn=nn+1){
             println fact(2,3)
         }
         if(nn==2){

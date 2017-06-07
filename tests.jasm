@@ -125,6 +125,17 @@ class Sigma
                         ldc "test2"
                         invokevirtual void java.io.PrintStream.println(java.lang.String)
                     Lmain4_loop5_Compound6_IF9_6:
+                    iconst_1
+                    ifeq Lmain4_loop5_Compound6_IF12_3
+                        getstatic java.io.PrintStream java.lang.System.out
+                        ldc "test3"
+                        invokevirtual void java.io.PrintStream.println(java.lang.String)
+                        goto Lmain4_loop5_Compound6_IF12_4
+                    Lmain4_loop5_Compound6_IF12_3:
+                        getstatic java.io.PrintStream java.lang.System.out
+                        ldc "test4"
+                        invokevirtual void java.io.PrintStream.println(java.lang.String)
+                    Lmain4_loop5_Compound6_IF12_4:
             goto Lmain4_loop5_5
             Lmain4_loop5_3:
         iload 0
@@ -142,107 +153,107 @@ class Sigma
             iload 0
             getstatic int Sigma.max
                 isub
-                iflt Lmain4_IF12_0
+                iflt Lmain4_IF15_0
                 iconst_0
-                goto Lmain4_IF12_1
-            Lmain4_IF12_0: iconst_1
-            Lmain4_IF12_1:
-            ifeq Lmain4_IF12_2
+                goto Lmain4_IF15_1
+            Lmain4_IF15_0: iconst_1
+            Lmain4_IF15_1:
+            ifeq Lmain4_IF15_2
                 sipush 0
                 istore 5
                     sipush 1
                     istore 5
-                    Lmain4_IF12_Compound13_loop14_2:
+                    Lmain4_IF15_Compound16_loop17_2:
                     iload 5
                     getstatic int Sigma.max
                         isub
-                        iflt Lmain4_IF12_Compound13_loop14_3
+                        iflt Lmain4_IF15_Compound16_loop17_3
                         iconst_0
-                        goto Lmain4_IF12_Compound13_loop14_4
-                    Lmain4_IF12_Compound13_loop14_3: iconst_1
-                    Lmain4_IF12_Compound13_loop14_4:
-                    ifeq Lmain4_IF12_Compound13_loop14_5
-                    goto Lmain4_IF12_Compound13_loop14_6
-                    Lmain4_IF12_Compound13_loop14_7:
+                        goto Lmain4_IF15_Compound16_loop17_4
+                    Lmain4_IF15_Compound16_loop17_3: iconst_1
+                    Lmain4_IF15_Compound16_loop17_4:
+                    ifeq Lmain4_IF15_Compound16_loop17_5
+                    goto Lmain4_IF15_Compound16_loop17_6
+                    Lmain4_IF15_Compound16_loop17_7:
                     iload 5
                     sipush 1
                     iadd
                     istore 5
-                    goto Lmain4_IF12_Compound13_loop14_2
-                    Lmain4_IF12_Compound13_loop14_6:
+                    goto Lmain4_IF15_Compound16_loop17_2
+                    Lmain4_IF15_Compound16_loop17_6:
                         getstatic java.io.PrintStream java.lang.System.out
                         sipush 2
                         sipush 3
                         invokestatic int Sigma.fact(int,int)
                         invokevirtual void java.io.PrintStream.println(int)
-                    goto Lmain4_IF12_Compound13_loop14_7
-                    Lmain4_IF12_Compound13_loop14_5:
+                    goto Lmain4_IF15_Compound16_loop17_7
+                    Lmain4_IF15_Compound16_loop17_5:
                     iload 5
                     sipush 2
                         isub
-                        ifeq Lmain4_IF12_Compound13_IF16_2
+                        ifeq Lmain4_IF15_Compound16_IF19_2
                         iconst_0
-                        goto Lmain4_IF12_Compound13_IF16_3
-                    Lmain4_IF12_Compound13_IF16_2: iconst_1
-                    Lmain4_IF12_Compound13_IF16_3:
-                    ifeq Lmain4_IF12_Compound13_IF16_4
+                        goto Lmain4_IF15_Compound16_IF19_3
+                    Lmain4_IF15_Compound16_IF19_2: iconst_1
+                    Lmain4_IF15_Compound16_IF19_3:
+                    ifeq Lmain4_IF15_Compound16_IF19_4
                         getstatic java.io.PrintStream java.lang.System.out
                         iload 5
                         invokevirtual void java.io.PrintStream.println(int)
-                    Lmain4_IF12_Compound13_IF16_4:
-                goto Lmain4_IF12_3
-            Lmain4_IF12_2:
+                    Lmain4_IF15_Compound16_IF19_4:
+                goto Lmain4_IF15_3
+            Lmain4_IF15_2:
                 getstatic java.io.PrintStream java.lang.System.out
                 sipush 2
                 iload 2
                 invokestatic int Sigma.fact(int,int)
                 invokevirtual void java.io.PrintStream.println(int)
-            Lmain4_IF12_3:
+            Lmain4_IF15_3:
         getstatic java.io.PrintStream java.lang.System.out
         ldc "======="
         invokevirtual void java.io.PrintStream.println(java.lang.String)
             iconst_0
-            ifeq Lmain4_IF19_0
+            ifeq Lmain4_IF22_0
                 getstatic java.io.PrintStream java.lang.System.out
                 sipush 2
                 sipush 3
                 invokestatic int Sigma.fact(int,int)
                 invokevirtual void java.io.PrintStream.println(int)
-                goto Lmain4_IF19_1
-            Lmain4_IF19_0:
+                goto Lmain4_IF22_1
+            Lmain4_IF22_0:
                 getstatic java.io.PrintStream java.lang.System.out
                 sipush 2
                 iload 2
                 invokestatic int Sigma.fact(int,int)
                 invokevirtual void java.io.PrintStream.println(int)
-            Lmain4_IF19_1:
+            Lmain4_IF22_1:
         sipush 1
         istore 3
             sipush 1
             istore 3
-            Lmain4_loop22_0:
+            Lmain4_loop25_0:
             iload 3
             sipush 3
                 isub
-                iflt Lmain4_loop22_1
+                iflt Lmain4_loop25_1
                 iconst_0
-                goto Lmain4_loop22_2
-            Lmain4_loop22_1: iconst_1
-            Lmain4_loop22_2:
-            ifeq Lmain4_loop22_3
-            goto Lmain4_loop22_4
-            Lmain4_loop22_5:
+                goto Lmain4_loop25_2
+            Lmain4_loop25_1: iconst_1
+            Lmain4_loop25_2:
+            ifeq Lmain4_loop25_3
+            goto Lmain4_loop25_4
+            Lmain4_loop25_5:
             iload 3
             sipush 1
             iadd
             istore 3
-            goto Lmain4_loop22_0
-            Lmain4_loop22_4:
+            goto Lmain4_loop25_0
+            Lmain4_loop25_4:
                 getstatic java.io.PrintStream java.lang.System.out
                 iload 3
                 invokevirtual void java.io.PrintStream.println(int)
-            goto Lmain4_loop22_5
-            Lmain4_loop22_3:
+            goto Lmain4_loop25_5
+            Lmain4_loop25_3:
         return
         }
 }
